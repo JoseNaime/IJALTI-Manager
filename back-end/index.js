@@ -36,16 +36,44 @@ app.get('/trySelect',(req,res)=>{
 });
 
 //probamos meter datos nuevos a my_table
-app.put('/newData',(req,res)=>{
+app.post('/crearTablaUsuario',(req,res)=>{
     //Asi se hacen los querys que no regresan nada
-    db.none("INSERT INTO my_table (name, email) VALUES ('Joel', 'correo4@google.com');");
+    console.log(req.body);
+    db.none("DROP TABLE IF EXISTS usuario;");
+    db.none("CREATE TABLE usuario (username VARCHAR(255) PRIMARY KEY, password VARCHAR(255) NOT NULL, nombre VARCHAR(255), apellido VARCHAR(255), sexo VARCHAR(55), rolActual VARCHAR(255),fechaNacimiento DATE, nacionalidad VARCHAR(50), estadoCivil VARCHAR(50), papelesVigentes BOOLEAN, correoCuenta VARCHAR(255), correoContacto VARCHAR(255), telefonoCuenta VARCHAR(50), telefonoContacto VARCHAR(50), linkedinContacto VARCHAR(255), githubContacto VARCHAR(255), nombreArchivoCV VARCHAR(255), biografia VARCHAR(2550), ciudad VARCHAR(50), estado VARCHAR(50), rfc VARCHAR(255)); ");
     res.send("success");
 });
 
+app.post('/newUser',(req,res)=>{
+    //Asi se hacen los querys que no regresan nada
+    console.log(req.body);
+    db.none(`INSERT INTO usuario(username, password, nombre, apellido, sexo, fechaNacimiento, nacionalidad, estadoCivil, papelesVigentes, rfc, correoCuenta, telefonoCuenta, estado, ciudad) VALUES ('${req.body.username}', '${req.body.password}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.sexo}', '${req.body.fechaNacimiento}', '${req.body.nacionalidad}', '${req.body.estadoCivil}', ${req.body.papelesVigentes}, '${req.body.rfc}', '${req.body.correoCuenta}', '${req.body.telefonoCuenta}', '${req.body.estado}', '${req.body.ciudad}');`);
+    //db.none(`INSERT INTO usuario(username, password) VALUES ('${req.body.username}', 'contra');`)
+    res.send("success");
+});
+
+app.get('/usuarios', (req,res)=>{
+    db.any('SELECT * FROM usuario;', [true])
+    .then(data => {
+        //si encuentra los datos, los manda
+        res.send(data);
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send(error);
+    });
+});
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
+
+
+
+
+app.post('/', )
+db.none("INSERT INTO my_table (name, email) VALUES ('Gael', 'correo5@google.com');");
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
