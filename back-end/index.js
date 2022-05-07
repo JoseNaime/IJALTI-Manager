@@ -70,11 +70,6 @@ app.get('/', (req, res) => {
 });
 
 
-
-
-app.post('/', )
-db.none("INSERT INTO my_table (name, email) VALUES ('Gael', 'correo5@google.com');");
-
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log('Server is running on port: ' + PORT);
