@@ -3,7 +3,12 @@ module.exports = {
         "./src/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
-        extend: {},
+        container: {
+            center: true,
+            screens:{
+                DEFAULT: "900px"
+            }
+        }
     },
     plugins: [],
 }
