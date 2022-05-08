@@ -1,3 +1,85 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSIsImZpbGUiOiJpbmRleC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJAdGFpbHdpbmQgYmFzZTtcbkB0YWlsd2luZCBjb21wb25lbnRzO1xuQHRhaWx3aW5kIHV0aWxpdGllczsiXX0= */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	-webkit-box-shadow : 0 0 0 30px var(--main-container-bg) inset !important;
+	
+}
+input:focus, textarea:focus, select:focus {
+	outline : none;
+}
+
+:root {
+	--main-container-bg : #F4F4F4;
+	--primary           : #4064AC;
+}
+
+html, body, #root {
+	height : 100%;
+}
+
+.main-container {
+	height           : 100%;
+	background-color : var(--main-container-bg);
+}
+
+#login .left {
+	box-shadow : 5px 0 50px rgba(0, 0, 0, 0.5);
+}
+
+form {
+	gap : 1rem;
+}
+
+.form-field {
+	color          : #6C6C6C;
+	border-color   : #6C6C6C;
+	flex-direction : column-reverse;
+	text-align     : left;
+	
+}
+
+.form-field > * {
+	transition : all 0.3s ease-in-out;
+}
+
+.form-field label {
+	margin-bottom : 8px;
+}
+
+.form-field input {
+	border        : none;
+	height        : 20px;
+	background    : none;
+	border-bottom : 1px solid #CCCCCC;
+}
+
+.error{
+	color : red;
+}
+
+input:focus {
+	color        : #6298CB;
+	border-color : #6298CB;
+}
+
+input:focus + label {
+	color : #6298CB;
+}
+
+button.primary-squared {
+	background-color : var(--primary);
+	width            : 100%;
+	color            : white;
+	font-weight      : lighter;
+	height           : 40px;
+}
+
+button[disabled] {
+	opacity : 0.5;
+}
