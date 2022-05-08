@@ -1,5 +1,6 @@
-import React, { createContext, useReducer } from 'react';
+import React, {createContext, useReducer} from 'react';
 import {AppReducer} from './AppReducer';
+import axios from "axios";
 
 const initialState = {
     user: null
@@ -7,7 +8,7 @@ const initialState = {
 
 export const GlobalContext = createContext(initialState);
 
-export const GlobalProvider = ({ children }) => {
+export const GlobalProvider = ({children}) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
     // Actions for changing state
@@ -18,14 +19,39 @@ export const GlobalProvider = ({ children }) => {
             payload: user
         });
     }
+
     function logout() {
         dispatch({
             type: 'LOGOUT',
         });
     }
 
-    return(
-        <GlobalContext.Provider value = {{user: state.user, login, logout}}>
+    function getRequest(url, data) {
+        const requestUrl = process.env.REACT_APP_API_URL + url;
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: data
+        }
+        return axios(requestUrl, requestOptions);
+    }
+
+    function postRequest(url, body) {
+        const requestUrl = process.env.REACT_APP_API_URL + url;
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: body
+        }
+        return axios(requestUrl, requestOptions).then(res => res.data);
+    }
+
+    return (
+        <GlobalContext.Provider value={{user: state.user, login, logout, getRequest, postRequest}}>
             {children}
         </GlobalContext.Provider>
     )

@@ -14,7 +14,6 @@ function Login(props) {
                         <h1 className="text-3xl font-bold text-center">Logo</h1>
                     </div>
                     <div className="w-full">
-                        <h2 className="mb-10 text-4xl">LOGIN</h2>
                         <LoginForm/>
                     </div>
                     <div>
