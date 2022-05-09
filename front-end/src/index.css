@@ -47,20 +47,28 @@ form {
 .form-field > * {
 	transition : all 0.3s ease-in-out;
 }
+.form-field:hover input{
+	border-color : #6298CB;
+}
 
 .form-field label {
-	margin-bottom : 8px;
+	margin-bottom : 2px;
+	font-weight: 300;
+	font-size: 0.9rem;
 }
 
 .form-field input {
 	border        : none;
-	height        : 20px;
+	height        : 30px;
 	background    : none;
 	border-bottom : 1px solid #CCCCCC;
+	padding-bottom: 5px;
 }
 
 .error{
+	text-align: right;
 	color : red;
+	font-size: 0.8rem;
 }
 
 input:focus {
@@ -78,6 +86,10 @@ button.primary-squared {
 	color            : white;
 	font-weight      : lighter;
 	height           : 40px;
+}
+
+button[type="submit"]{
+	margin-top: 15px;
 }
 
 button[disabled] {
