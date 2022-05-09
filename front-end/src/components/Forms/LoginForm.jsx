@@ -1,7 +1,13 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
+import {GlobalContext} from "../GlobalProvider";
+import {useNavigate} from "react-router-dom";
 
 function LoginForm() {
+    const {postRequest, login} = useContext(GlobalContext);
+    const [submitError, setSubmitError] = useState(null);
+    const navigate = useNavigate();
+
     return (
         <Formik
             initialValues={{email: '', password: ''}}
@@ -21,28 +27,43 @@ function LoginForm() {
                 return errors;
             }}
             onSubmit={(values, {setSubmitting}) => {
-                setTimeout(() => {
-                    alert(JSON.stringify(values, null, 2));
+                console.log(values)
+
+                postRequest("/login", {email: values.email, password: values.password}).then(res => {
+                    console.log(res)
+                    if (res.status === 200) {
+                        alert("Login Successful")
+                        login(res.data)
+                        navigate("/")
+                    } else {
+                        setSubmitError(res.data)
+                    }
+                }).then(() => {
                     setSubmitting(false);
-                }, 400);
+                })
+
             }}
         >
             {({isSubmitting}) => (
-                <Form className="flex flex-col">
-                    <div className="flex flex-col form-field">
-                        <ErrorMessage name="email" className="error" component="div" />
-                        <Field type="email" name="email" />
-                        <label>Email:</label>
-                    </div>
-                    <div className="flex flex-col form-field">
-                        <ErrorMessage name="password" className="error" component="div" />
-                        <Field type="password" name="password" />
-                        <label>Password:</label>
-                    </div>
-                    <button className="primary-squared" type="submit" disabled={isSubmitting}>
-                        Submit
-                    </button>
-                </Form>
+                <>
+                    <h2 className="mb-10 text-4xl">LOGIN</h2>
+                    <Form className="flex flex-col">
+                        <div className="flex flex-col form-field">
+                            <ErrorMessage name="email" className="error" component="div" />
+                            <Field type="email" name="email" />
+                            <label>Email:</label>
+                        </div>
+                        <div className="flex flex-col form-field">
+                            <ErrorMessage name="password" className="error" component="div" />
+                            <Field type="password" name="password" />
+                            <label>Password:</label>
+                        </div>
+                        <button className="primary-squared" type="submit" disabled={isSubmitting}>
+                            Submit
+                        </button>
+                        {submitError && <div className="error">{submitError}</div>}
+                    </Form>
+                </>
             )}
         </Formik>
     );

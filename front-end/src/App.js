@@ -1,20 +1,24 @@
 import React, {useContext, useEffect} from 'react'
+import {Route, Routes} from 'react-router-dom';
+import Login from "./routes/Login";
 import {GlobalContext} from "./components/GlobalProvider";
-
-import {useNavigate} from 'react-router-dom';
+import Home from "./routes/Home";
 
 function App() {
-    const {user} = useContext(GlobalContext);
-    const navigate = useNavigate();
-
+    const {login} = useContext(GlobalContext);
     useEffect(() => {
-        if (!user) {
-            navigate('/login', {replace: true})
+        const userInLocalStorage = JSON.parse(localStorage.getItem('user'));
+        if (userInLocalStorage) {
+            console.log(userInLocalStorage)
+            login(userInLocalStorage);
         }
-    });
-
+    }, [login]);
     return (
         <>
+            <Routes>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/login" element={<Login/>} />
+            </Routes>
         </>
     );
 }
