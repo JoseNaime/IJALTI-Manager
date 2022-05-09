@@ -1,17 +1,20 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import LoginForm from "../components/Forms/LoginForm";
-
+import LoginImg from "../assets/images/login.jpg";
+import Logo from "../assets/images/logo.png";
 
 function Login(props) {
-
-    useEffect(() => {
-    })
     return (
-        <div id="login" className="flex h-full">
+        <div id="login" className="flex flex-row-reverse h-full">
+
+            <div className="right basis-2/3">
+                <img src={LoginImg} alt="Login"/>
+            </div>
+
             <div className="left basis-1/3 bg-light-gray">
                 <div className="flex flex-col h-full items-center text-center justify-between py-16 px-20">
                     <div>
-                        <h1 className="text-3xl font-bold text-center">Logo</h1>
+                        <img src={Logo} alt="Logo"/>
                     </div>
                     <div className="w-full">
                         <LoginForm/>
@@ -21,9 +24,6 @@ function Login(props) {
                         <button className="primary-squared">Registrate</button>
                     </div>
                 </div>
-            </div>
-            <div className="right basis-2/3">
-
             </div>
         </div>
     );

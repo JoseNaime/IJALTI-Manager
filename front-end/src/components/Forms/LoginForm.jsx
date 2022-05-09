@@ -1,10 +1,12 @@
 import React, {useContext, useState} from 'react';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import {GlobalContext} from "../GlobalProvider";
+import {useNavigate} from "react-router-dom";
 
 function LoginForm() {
     const {postRequest, login} = useContext(GlobalContext);
     const [submitError, setSubmitError] = useState(null);
+    const navigate = useNavigate();
 
     return (
         <Formik
@@ -30,8 +32,9 @@ function LoginForm() {
                 postRequest("/login", {email: values.email, password: values.password}).then(res => {
                     console.log(res)
                     if (res.status === 200) {
+                        alert("Login Successful")
                         login(res.data)
-
+                        navigate("/")
                     } else {
                         setSubmitError(res.data)
                     }

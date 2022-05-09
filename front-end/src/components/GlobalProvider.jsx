@@ -1,4 +1,4 @@
-import React, {createContext, useReducer} from 'react';
+import React, {createContext, useReducer, useEffect} from 'react';
 import {AppReducer} from './AppReducer';
 import axios from "axios";
 
@@ -10,8 +10,6 @@ export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({children}) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
-
-    // Actions for changing state
 
     function login(user) {
         dispatch({
