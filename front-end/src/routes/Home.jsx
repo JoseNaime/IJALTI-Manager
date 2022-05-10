@@ -8,6 +8,8 @@ function Home() {
 
     useEffect(() => {
         if (!user)  navigate('/login')
+
+        // eslint-disable-next-line
     },[user])
 
 
