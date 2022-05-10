@@ -12,7 +12,7 @@ function App() {
             console.log(userInLocalStorage)
             login(userInLocalStorage);
         }
-    }, [login]);
+    }, []);
     return (
         <>
             <Routes>
