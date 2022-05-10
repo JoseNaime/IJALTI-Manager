@@ -3,19 +3,19 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+require('dotenv').config();
 app.use(bodyParser.json());
 app.use(cors());
 
-
 //establecemos conexion con la base de datos postgreSQL (hosteado en heroku)
 const pgp = require('pg-promise')();
-const config ={
-    user: "lcsrlhqxqrvwef",
-    database: "db8lgl35pjnphr",
-    password: "b3cfd02aaf1507176a5e3da83c052dda4dc8c77fbba6cb2c1a0d58a3ab03c7ce",
-    port: 5432,
-    host: "ec2-3-209-124-113.compute-1.amazonaws.com",
-    ssl: { rejectUnauthorized: false }
+const config = {
+    user: process.env.DB_USER,
+    database: process.env.DB_ID_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.SERVER_PORT,
+    host: process.env.SERVER_HOST,
+    ssl: {rejectUnauthorized: false}
 }; 
 const db = pgp(config);
 db.connect();
@@ -86,7 +86,7 @@ app.get('/login', (req,res)=>{
     });
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.SERVER_PORT || 3001;
 app.listen(PORT, () => {
     console.log('Server is running on port: ' + PORT);
 });
