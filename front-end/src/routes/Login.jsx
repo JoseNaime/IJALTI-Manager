@@ -7,9 +7,7 @@ function Login(props) {
     return (
         <div id="login" className="flex flex-row-reverse h-full">
 
-            <div className="right basis-2/3">
-                <img src={LoginImg} alt="Login"/>
-            </div>
+            <img className="right basis-2/3 h-full object-cover" alt="Login" src={LoginImg} />
 
             <div className="left basis-1/3 bg-light-gray">
                 <div className="flex flex-col h-full items-center text-center justify-between py-16 px-20">

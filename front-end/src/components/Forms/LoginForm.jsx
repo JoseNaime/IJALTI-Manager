@@ -14,7 +14,7 @@ function LoginForm() {
             validate={values => {
                 const errors = {};
                 if (!values.email) {
-                    errors.email = 'Required';
+                    errors.email = 'Password Required';
                 } else if (
                     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
                 ) {
@@ -22,7 +22,7 @@ function LoginForm() {
                 }
 
                 if (!values.password) {
-                    errors.password = 'Required';
+                    errors.password = 'Password Required';
                 }
                 return errors;
             }}
@@ -51,17 +51,18 @@ function LoginForm() {
                         <div className="flex flex-col form-field">
                             <ErrorMessage name="email" className="error" component="div" />
                             <Field type="email" name="email" />
-                            <label>Email:</label>
+                            <label>*Email:</label>
                         </div>
                         <div className="flex flex-col form-field">
                             <ErrorMessage name="password" className="error" component="div" />
                             <Field type="password" name="password" />
-                            <label>Password:</label>
+                            <label>*Password:</label>
                         </div>
                         <button className="primary-squared" type="submit" disabled={isSubmitting}>
                             Submit
                         </button>
-                        {submitError && <div className="error">{submitError}</div>}
+                        {submitError &&
+                            <div className="error">{submitError.charAt(0).toUpperCase() + submitError.slice(1)}</div>}
                     </Form>
                 </>
             )}
