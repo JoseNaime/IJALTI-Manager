@@ -3,6 +3,7 @@ import {Route, Routes} from 'react-router-dom';
 import Login from "./routes/Login";
 import {GlobalContext} from "./components/GlobalProvider";
 import Home from "./routes/Home";
+import Register from "./routes/Register";
 
 function App() {
     const {login} = useContext(GlobalContext);
@@ -19,6 +20,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/login" element={<Login/>} />
+                <Route path="/register" element={<Register/>} />
             </Routes>
         </>
     );
