@@ -1,6 +1,7 @@
 import React from 'react';
 import RegisterType from "../components/RegisterType";
 import Logo from "../components/Logo";
+import RegisterEmployee from "../components/Forms/RegisterEmployee";
 
 const style = {
     container: {
@@ -27,7 +28,7 @@ function Register() {
             case null:
                 return <RegisterType setRegisterType={setRegisterType}/>
             case 'employee':
-                return <div>Employee</div>
+                return <RegisterEmployee />
             case 'company':
                 return <div>Company</div>
             default:
