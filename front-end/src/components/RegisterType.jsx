@@ -9,11 +9,11 @@ const style = {
 
 function RegisterType({setRegisterType}) {
     return (
-        <div className="flex flex-col w-50 text-center justify-between mt-56">
+        <div className="flex flex-col w-50 text-center justify-between mt-32">
             <h1 className="text-4xl ">Cuéntanos sobre de ti</h1>
                 <hr className="my-8 opacity-5"/>
             <div >
-                <h2 className="text-xl font-bold mb-10 opacity-70">¿Qué buscas en nuestra plataforma?</h2>
+                <h2 className="text-xl font-bold mb-14 opacity-70">¿Qué buscas en nuestra plataforma?</h2>
                 <div className="flex flex-row justify-around">
                     <RegisterTypeBtn image={EmployeeIcon}
                                      onClick={() => setRegisterType("employee")}>
