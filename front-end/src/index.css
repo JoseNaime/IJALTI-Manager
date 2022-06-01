@@ -95,3 +95,12 @@ button[type="submit"]{
 button[disabled] {
 	opacity : 0.5;
 }
+
+.register-type-btn{
+	transition: all 0.5s;
+}
+
+.register-type-btn:hover {
+	background-color : #6298CB !important;
+	color: white;
+}
