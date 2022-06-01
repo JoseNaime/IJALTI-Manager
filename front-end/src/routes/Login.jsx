@@ -1,7 +1,8 @@
 import React from 'react';
 import LoginForm from "../components/Forms/LoginForm";
 import LoginImg from "../assets/images/login.jpg";
-import Logo from "../assets/images/logo.png";
+import Logo from "../components/Logo";
+
 
 function Login(props) {
     return (
@@ -11,9 +12,7 @@ function Login(props) {
 
             <div className="left basis-1/3 bg-light-gray">
                 <div className="flex flex-col h-full items-center text-center justify-between py-16 px-20">
-                    <div>
-                        <img src={Logo} alt="Logo"/>
-                    </div>
+                    <Logo />
                     <div className="w-full">
                         <LoginForm/>
                     </div>

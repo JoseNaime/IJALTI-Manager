@@ -1,5 +1,6 @@
 import React from 'react';
 import RegisterType from "../components/RegisterType";
+import Logo from "../components/Logo";
 
 const style = {
     container: {
@@ -38,7 +39,7 @@ function Register() {
         <div className="w-full h-full bg-primary">
             <div style={style.container} className={"container h-full bg-slate-50"}>
                 <div style={style.content} className={"h-full w-full text-center"}>
-                    <h1>LOGO</h1>
+                    <Logo />
                     <ActiveRegisterComponent />
                 </div>
             </div>
