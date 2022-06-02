@@ -245,15 +245,15 @@ app.get('/getRol', (req,res)=>{
     var gotuser=null;
     var gotempresa=null;
     var gotadmin=null;
-    db.any(`SELECT * FROM usuario WHERE correoCuenta='${req.body.email}' ;`, [true])
+    db.any(`SELECT * FROM usuario WHERE correoCuenta='${req.query.email}' ;`, [true])
     .then(data => {
         if(data[0]){
-            res.send({"rol":"usuario"});
+            res.send({rol:"usuario"});
             gotuser=true;
         }else{
             gotuser=false;
             if(gotuser==false && gotempresa==false && gotadmin==false){
-                res.send({"rol":null});
+                res.send({rol:null});
             }
         }
     })
@@ -265,12 +265,12 @@ app.get('/getRol', (req,res)=>{
     db.any(`SELECT * FROM empresa WHERE correoCuenta='${req.body.email}' ;`, [true])
     .then(data => {
         if(data[0]){
-            res.send({"rol":"empresa"});
+            res.send({rol:"empresa"});
             gotempresa=true;
         }else{
             gotempresa=false;
             if(gotuser==false && gotempresa==false && gotadmin==false){
-                res.send({"rol":null});
+                res.send({rol:null});
             }
         }
         
@@ -283,13 +283,13 @@ app.get('/getRol', (req,res)=>{
     db.any(`SELECT * FROM admin WHERE correo='${req.body.email}' ;`, [true])
     .then(data => {
         if(data[0] ){
-            res.send({"rol":"admin"});
+            res.send({rol:"admin"});
             gotadmin=true;
             
         }else{
             gotadmin=false;
             if(gotuser==false && gotempresa==false && gotadmin==false){
-                res.send({"rol":null});
+                res.send({rol:null});
                 return;
             }
         }
