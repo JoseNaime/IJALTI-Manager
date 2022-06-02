@@ -37,12 +37,17 @@ function LoginForm() {
                         getRequest("/getRol", {email: values.email}).then(res => {
                             console.log(res.data)
                             if (res.status === 200) {
-                                //login(res.data)
+                                const newUser = {
+                                    email:values.email,
+                                    role:res.data.rol
+                                };
+                                login(newUser);
                             } else {
                                 setSubmitError(res.data)
                             }
                         }).then(() => {
                             setSubmitting(false);
+
                         })
                         alert("Login Successful!");
                         navigate("/login");
