@@ -37,7 +37,6 @@ app.post('/crearTablaUsuario',(req,res)=>{
     //Primero quitamos la tabla para volverla a crear
     db.none("DROP TABLE IF EXISTS usuario;");
     db.none(`CREATE TABLE usuario (username VARCHAR(255) PRIMARY KEY,
-    rol VARCHAR(50) NOT NULL,
     nombre VARCHAR(255),
     apellido VARCHAR(255),
     sexo VARCHAR(55),
@@ -67,7 +66,6 @@ app.post('/crearTablaEmpresa',(req,res)=>{
     //Primero quitamos la tabla para volverla a crear
     db.none("DROP TABLE IF EXISTS empresa;");
     db.none(`CREATE TABLE empresa (empresaID SERIAL PRIMARY KEY,
-    rol VARCHAR(50) NOT NULL,
     nombreComercial VARCHAR(255) NOT NULL,
     nombreFiscal VARCHAR(255),
     estadoCuenta VARCHAR(50), 
@@ -218,10 +216,10 @@ app.put('/insertarInfoPrueba',(req,res)=>{
     db.none('DELETE FROM admin;');
     sleep(500);
     
-    db.none(`INSERT INTO usuario(username, rol, nombre, apellido, sexo, fechaNacimiento, nacionalidad, estadoCivil, papelesVigentes, rfc, correoCuenta, estado, ciudad)
-    VALUES ('testUser','usuario','Jose','Naime','M','2002-02-17','Mexicano','Soltero',true,'ni idea','testUser@gmail.com','Jalisco','Guadalajara');`);
-    db.none(`INSERT INTO usuario(username, rol, nombre, apellido, sexo, fechaNacimiento, nacionalidad, estadoCivil, papelesVigentes, rfc, correoCuenta, estado, ciudad)
-    VALUES ('severia','usuario','Santiago','Reyes','M','2001-07-21','Mexicano','Soltero',true,'idk','severia@google.com','Jalisco','Guadalajara');`);
+    db.none(`INSERT INTO usuario(username, nombre, apellido, sexo, fechaNacimiento, nacionalidad, estadoCivil, papelesVigentes, rfc, correoCuenta, estado, ciudad)
+    VALUES ('testUser','Jose','Naime','M','2002-02-17','Mexicano','Soltero',true,'ni idea','test@test.com','Jalisco','Guadalajara');`);
+    db.none(`INSERT INTO usuario(username, nombre, apellido, sexo, fechaNacimiento, nacionalidad, estadoCivil, papelesVigentes, rfc, correoCuenta, estado, ciudad)
+    VALUES ('severia','Santiago','Reyes','M','2001-07-21','Mexicano','Soltero',true,'idk','severia@google.com','Jalisco','Guadalajara');`);
 
 
     //Insertamos dos empresas de prueba
@@ -243,35 +241,14 @@ app.put('/insertarInfoPrueba',(req,res)=>{
 
 
 
-
-
-//hacer que este newuser sea una creacion de usuario universal (tato para usuarios normales como para empresas. Utilizamos el parametro de rol que se va a pasar en request)
-app.post('/newUser',(req,res)=>{
-    if(req.body.tipoUsuario=='usuario'){
-        //insertamos en la tabla la info que se pasa como body a este post
-        db.none(`INSERT INTO usuario(username, rol, nombre, apellido, sexo, fechaNacimiento, nacionalidad, estadoCivil, papelesVigentes, rfc, correoCuenta, telefonoCuenta, estado, ciudad) VALUES ('${req.body.username}', '${req.body.rol}', '${req.body.nombre}', '${req.body.apellido}', '${req.body.sexo}', '${req.body.fechaNacimiento}', '${req.body.nacionalidad}', '${req.body.estadoCivil}', ${req.body.papelesVigentes}, '${req.body.rfc}', '${req.body.correoCuenta}', '${req.body.telefonoCuenta}', '${req.body.estado}', '${req.body.ciudad}');`)    .then(data => {
-            //si encuentra los datos, los manda
-            res.send("success");
-        })
-        .catch(error => {
-            //si hay un error con el select, lo imprime y lo regresa
-            console.log('ERROR:', error);
-            res.send(error);
-        });
-    }
-
-});
-
-
-
 app.get('/getRol', (req,res)=>{
     var gotuser=null;
     var gotempresa=null;
     var gotadmin=null;
-    db.any(`SELECT rol FROM usuario WHERE correoCuenta='${req.body.email}' ;`, [true])
+    db.any(`SELECT * FROM usuario WHERE correoCuenta='${req.body.email}' ;`, [true])
     .then(data => {
         if(data[0]){
-            res.send(data[0]);
+            res.send({"rol":"usuario"});
             gotuser=true;
         }else{
             gotuser=false;
@@ -324,6 +301,38 @@ app.get('/getRol', (req,res)=>{
     });
 
 
+
+});
+
+app.put('/newAccount',(req,res)=>{
+    if(req.body.tipoCuenta=='usuario'){
+        //insertamos en la tabla la info que se pasa como body a este post
+        db.none(`INSERT INTO usuario(username, nombre, apellido, sexo, fechaNacimiento, nacionalidad, estadoCivil, papelesVigentes, rfc, correoCuenta, telefonoCuenta, estado, ciudad)
+         VALUES ('${req.body.data.username}', '${req.body.data.nombre}', '${req.body.data.apellido}', '${req.body.data.sexo}', '${req.body.data.fechaNacimiento}', '${req.body.data.nacionalidad}', '${req.body.data.estadoCivil}', ${req.body.data.papelesVigentes}, '${req.body.data.rfc}', '${req.body.data.correoCuenta}', '${req.body.data.telefonoCuenta}', '${req.body.data.estado}', '${req.body.data.ciudad}');`)    .then(data => {
+            //si encuentra los datos, los manda
+            res.send("success");
+        })
+        .catch(error => {
+            //si hay un error con el select, lo imprime y lo regresa
+            console.log('ERROR:', error);
+            res.send(error);
+        });
+    }
+    else if(req.body.tipoCuenta=='empresa'){
+        //insertamos en la tabla la info que se pasa como body a este post
+        db.none(`INSERT INTO empresa(nombreComercial, nombreFiscal, correoCuenta, telefonoContacto, estado, ciudad)
+         VALUES ('${req.body.data.nombreComercial}', '${req.body.data.nombreFiscal}','${req.body.data.correoCuenta}','${req.body.data.telefonoContacto}','${req.body.data.estado}','${req.body.data.ciudad}');`)    .then(data => {
+            //si encuentra los datos, los manda
+            res.send("success");
+        })
+        .catch(error => {
+            //si hay un error con el select, lo imprime y lo regresa
+            console.log('ERROR:', error);
+            res.send(error);
+        });
+    }else{
+        res.send("Informacion invalida");
+    }
 
 });
 
