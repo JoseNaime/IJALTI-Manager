@@ -12,7 +12,8 @@ function App() {
             console.log(userInLocalStorage)
             login(userInLocalStorage);
         }
-    },[]);
+        // eslint-disable-next-line
+    }, []);
     return (
         <>
             <Routes>
