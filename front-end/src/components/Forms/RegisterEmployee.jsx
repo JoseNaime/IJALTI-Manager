@@ -2,6 +2,8 @@ import React, {useContext, useState} from 'react';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import {GlobalContext} from "../GlobalProvider";
 import {useNavigate} from "react-router-dom";
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../Firebase/firebase-config';
 
 const RegisterEmployee = ({registerType}) => {
     const {putRequest} = useContext(GlobalContext);
@@ -34,21 +36,26 @@ const RegisterEmployee = ({registerType}) => {
             onSubmit={(values, {setSubmitting}) => {
                 console.log(values);
                 setSubmitting(false);
+                
+                createUserWithEmailAndPassword(auth, values.correoCuenta, values.password);
 
                 putRequest("/newAccount", {
-                    nombre: values.nombre,
-                    apellido: values.apellido,
-                    sexo: values.sexo,
-                    fechaNacimiento: values.fechaNacimiento,
-                    nacionalidad: values.nacionalidad,
-                    estadoCivil: values.estadoCivil,
-                    rfc: values.rfc,
-                    papelesVigentes: values.papelesVigentes,
-                    correoCuenta: values.correoCuenta,
-                    username: values.username,
-                    telefonoCuenta: values.telefonoCuenta,
-                    estado: values.estado,
-                    ciudad: values.ciudad
+                    data: {
+                        nombre: values.nombre,
+                        apellido: values.apellido,
+                        sexo: values.sexo,
+                        fechaNacimiento: values.fechaNacimiento,
+                        nacionalidad: values.nacionalidad,
+                        estadoCivil: values.estadoCivil,
+                        rfc: values.rfc,
+                        papelesVigentes: values.papelesVigentes,
+                        correoCuenta: values.correoCuenta,
+                        username: values.username,
+                        telefonoCuenta: values.telefonoCuenta,
+                        estado: values.estado,
+                        ciudad: values.ciudad,
+                    },
+                    tipoCuenta: registerType
                 }).then(res => {
                     console.log(res)
                     if (res.status === 200) {
