@@ -2,9 +2,11 @@ import React, {useContext, useState} from 'react';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import {GlobalContext} from "../GlobalProvider";
 import {useNavigate} from "react-router-dom";
+import {signInWithEmailAndPassword} from "firebase/auth"; 
+import { auth } from '../Firebase/firebase-config';
 
 function LoginForm() {
-    const {postRequest, login} = useContext(GlobalContext);
+    const {getRequest, login} = useContext(GlobalContext);
     const [submitError, setSubmitError] = useState(null);
     const navigate = useNavigate();
 
@@ -27,20 +29,34 @@ function LoginForm() {
                 return errors;
             }}
             onSubmit={(values, {setSubmitting}) => {
-                console.log(values)
+                
+                signInWithEmailAndPassword(auth, values.email, values.password)
+                    .then((userCredential) => {
+                        getRequest("/getRol", {email: values.email}).then(res => {
+                            if (res.status === 200) {
+                                const newUser = {
+                                    email:values.email,
+                                    role:res.data.rol
+                                };
+                                login(newUser);
+                            } else {
+                                setSubmitError(res.data)
+                            }
+                        }).then(() => {
+                            setSubmitting(false);
 
-                postRequest("/login", {email: values.email, password: values.password}).then(res => {
-                    console.log(res)
-                    if (res.status === 200) {
-                        alert("Login Successful")
-                        login(res.data)
-                        navigate("/")
-                    } else {
-                        setSubmitError(res.data)
-                    }
-                }).then(() => {
-                    setSubmitting(false);
-                })
+                        })
+                        alert("Login Successful!");
+                        navigate("/");
+                    })
+                    .catch ((error) => {
+                        console.log(error.message);
+                        setSubmitError(error);
+                        alert(error.message);
+                    })
+
+                
+                
 
             }}
         >
