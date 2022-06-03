@@ -58,8 +58,8 @@ const RegisterEmployee = ({registerType}) => {
                     tipoCuenta: registerType
                 }).then(res => {
                     console.log(res)
-                    if (res.status === 200) {
-                        alert("Login Successful")
+                    if (res.status === 201) {
+                        alert("Register Successful")
                         navigate("/login")
                     } else {
                         setSubmitError(res.data)
@@ -67,7 +67,6 @@ const RegisterEmployee = ({registerType}) => {
                 }).then(() => {
                     setSubmitting(false);
                 })
-
             }}
         >
         {({isSubmitting}) => (
@@ -197,7 +196,7 @@ const RegisterEmployee = ({registerType}) => {
                     </div>
                 </div>
 
-                <button className="primary-squared" type="submit" disabled={isSubmitting}>Submit</button>
+                <button className="primary-squared" type="submit" disabled={isSubmitting}>Registrate</button>
             </Form>
         )}
         </Formik>
