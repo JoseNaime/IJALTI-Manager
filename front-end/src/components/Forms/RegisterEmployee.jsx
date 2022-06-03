@@ -4,7 +4,7 @@ import {GlobalContext} from "../GlobalProvider";
 import {useNavigate} from "react-router-dom";
 
 const RegisterEmployee = ({registerType}) => {
-    const {postRequest} = useContext(GlobalContext);
+    const {putRequest} = useContext(GlobalContext);
     const [submitError, setSubmitError] = useState(null);
     const navigate = useNavigate();
 
@@ -35,18 +35,31 @@ const RegisterEmployee = ({registerType}) => {
                 console.log(values);
                 setSubmitting(false);
 
-                // postRequest("/newAccount", {email: values.email, password: values.password}).then(res => {
-                //     console.log(res)
-                //     if (res.status === 200) {
-                //         alert("Login Successful")
-                //         login(res.data)
-                //         navigate("/logint")
-                //     } else {
-                //         setSubmitError(res.data)
-                //     }
-                // }).then(() => {
-                //     setSubmitting(false);
-                // })
+                putRequest("/newAccount", {
+                    nombre: values.nombre,
+                    apellido: values.apellido,
+                    sexo: values.sexo,
+                    fechaNacimiento: values.fechaNacimiento,
+                    nacionalidad: values.nacionalidad,
+                    estadoCivil: values.estadoCivil,
+                    rfc: values.rfc,
+                    papelesVigentes: values.papelesVigentes,
+                    correoCuenta: values.correoCuenta,
+                    username: values.username,
+                    telefonoCuenta: values.telefonoCuenta,
+                    estado: values.estado,
+                    ciudad: values.ciudad
+                }).then(res => {
+                    console.log(res)
+                    if (res.status === 200) {
+                        alert("Login Successful")
+                        navigate("/login")
+                    } else {
+                        setSubmitError(res.data)
+                    }
+                }).then(() => {
+                    setSubmitting(false);
+                })
 
             }}
         >
