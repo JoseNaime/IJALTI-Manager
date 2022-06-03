@@ -31,7 +31,8 @@ export const GlobalProvider = ({children}) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            data: data
+            params: data
+            
         }
         return axios(requestUrl, requestOptions);
     }

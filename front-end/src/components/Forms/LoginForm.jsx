@@ -50,13 +50,12 @@ function LoginForm() {
 
                         })
                         alert("Login Successful!");
-                        navigate("/login");
+                        navigate("/");
                     })
                     .catch ((error) => {
                         console.log(error.message);
                         setSubmitError(error);
                         alert(error.message);
-                        navigate("/");
                     })
 
                 

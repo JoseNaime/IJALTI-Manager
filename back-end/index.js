@@ -246,7 +246,7 @@ app.get('/getRol', (req,res)=>{
     var gotuser=null;
     var gotempresa=null;
     var gotadmin=null;
-    db.any(`SELECT * FROM usuario WHERE correoCuenta='${req.body.email}' ;`, [true])
+    db.any(`SELECT * FROM usuario WHERE correoCuenta='${req.query.email}' ;`, [true])
     .then(data => {
         if(data[0]){
             res.send({status:200, rol:"usuario"});
