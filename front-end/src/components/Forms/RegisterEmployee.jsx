@@ -1,17 +1,53 @@
-import React from 'react'
+import React, {useContext, useState} from 'react';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
+import {GlobalContext} from "../GlobalProvider";
+import {useNavigate} from "react-router-dom";
 
-const RegisterEmployee = () => {
-  return (
+const RegisterEmployee = ({registerType}) => {
+    const {postRequest} = useContext(GlobalContext);
+    const [submitError, setSubmitError] = useState(null);
+    const navigate = useNavigate();
+
+    return (
     <div className='ml-8'>
         <Formik
-            initialValues={{nombre: '',apellido:'',sex:'',birth:'',nationality:'',maritalstatus:'',rfc:'',visapassport:'',email:'',password:'',passwordconfirm:'',username:'',phonenumber:'',estado:'',ciudad:''}}
+            initialValues={{
+                nombre: '',
+                apellido:'',
+                sexo:'',
+                fechaNacimiento:'',
+                nacionalidad:'',
+                estadoCivil:'',
+                rfc:'',
+                papelesVigentes:'',
+                correoCuenta:'',
+                password:'',
+                passwordconfirm:'',
+                username:'',
+                telefonoCuenta:'',
+                estado:'',
+                ciudad:''
+            }}
             validate={values => {
                 
             }}
             onSubmit={(values, {setSubmitting}) => {
                 console.log(values);
                 setSubmitting(false);
+
+                // postRequest("/newAccount", {email: values.email, password: values.password}).then(res => {
+                //     console.log(res)
+                //     if (res.status === 200) {
+                //         alert("Login Successful")
+                //         login(res.data)
+                //         navigate("/logint")
+                //     } else {
+                //         setSubmitError(res.data)
+                //     }
+                // }).then(() => {
+                //     setSubmitting(false);
+                // })
+
             }}
         >
         {({isSubmitting}) => (
@@ -31,8 +67,8 @@ const RegisterEmployee = () => {
                     </div>
                     <div className='flex flex-row gap-x-10'>
                         <div className="flex flex-col form-field flex-1">
-                            <ErrorMessage name="sex" className="error" component="div"/>
-                            <Field as="select" name="sex">
+                            <ErrorMessage name="sexo" className="error" component="div"/>
+                            <Field as="select" name="sexo">
                                 <option value="">Selecciona tu sexo</option>
                                 <option value="masculino">Masculino</option>
                                 <option value="femenino">Femenino</option>
@@ -41,20 +77,20 @@ const RegisterEmployee = () => {
                             <label htmlFor="">*Sexo</label>
                         </div>
                         <div className="flex flex-col form-field flex-1">
-                            <ErrorMessage name="birth" className="error" component="div"/>
-                            <Field type="date" name="birth"/>
+                            <ErrorMessage name="fechaNacimiento" className="error" component="div"/>
+                            <Field type="date" name="fechaNacimiento"/>
                             <label htmlFor="">*Fecha de nacimiento</label>
                         </div>
                     </div>
                     <div className='flex flex-row gap-x-10'>
                         <div className="flex flex-col form-field flex-1">
-                            <ErrorMessage name="nationality" className="error" component="div"/>
-                            <Field type="text" name="nationality"/>
+                            <ErrorMessage name="nacionalidad" className="error" component="div"/>
+                            <Field type="text" name="nacionalidad"/>
                             <label htmlFor="">*Nacionalidad</label>
                         </div>
                         <div className="flex flex-col form-field flex-1">
-                            <ErrorMessage name="maritalstatus" className="error" component="div"/>
-                            <Field as="select" name="maritalstatus">
+                            <ErrorMessage name="estadoCivil" className="error" component="div"/>
+                            <Field as="select" name="estadoCivil">
                                 <option value="">Selecciona tu estado civil</option>
                                 <option value="soltero">Soltero</option>
                                 <option value="casado">Casado</option>
@@ -70,8 +106,8 @@ const RegisterEmployee = () => {
                             <label htmlFor="">*RFC</label>
                         </div>
                         <div className="flex flex-col form-field flex-1">
-                            <ErrorMessage name="visapassport" className="error" component="div"/>
-                            <Field as="select" name="visapassport">
+                            <ErrorMessage name="papelesVigentes" className="error" component="div"/>
+                            <Field as="select" name="papelesVigentes">
                                 <option value="">Selecciona una opción</option>
                                 <option value="visa">Visa</option>
                                 <option value="pasaporte">Pasaporte</option>
@@ -86,8 +122,8 @@ const RegisterEmployee = () => {
                 <div className='flex flex-col gap-y-5'>
                     <div className='flex flex-row gap-x-10'>
                         <div className="flex flex-col form-field flex-1">
-                            <ErrorMessage name="email" className="error" component="div"/>
-                            <Field type="email" name="email"/>
+                            <ErrorMessage name="correoCuenta" className="error" component="div"/>
+                            <Field type="email" name="correoCuenta"/>
                             <label htmlFor="">*Email</label>
                         </div>
                     </div>
@@ -110,8 +146,8 @@ const RegisterEmployee = () => {
                             <label htmlFor="">*Username</label>
                         </div>
                         <div className="flex flex-col form-field flex-1">
-                            <ErrorMessage name="phonenumber" className="error" component="div"/>
-                            <Field type="number" name="phonenumber"/>
+                            <ErrorMessage name="telefonoCuenta" className="error" component="div"/>
+                            <Field type="number" name="telefonoCuenta"/>
                             <label htmlFor="">*Número de teléfono</label>
                         </div>
                     </div>

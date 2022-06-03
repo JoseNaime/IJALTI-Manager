@@ -16,12 +16,12 @@ function RegisterType({setRegisterType}) {
                 <h2 className="text-xl font-bold mb-14 opacity-70">¿Qué buscas en nuestra plataforma?</h2>
                 <div className="flex flex-row justify-around">
                     <RegisterTypeBtn image={EmployeeIcon}
-                                     onClick={() => setRegisterType("employee")}>
+                                     onClick={() => setRegisterType("usuario")}>
                         Busco nuevas <br/>
                         oportunidades laborales
                     </RegisterTypeBtn>
                     <RegisterTypeBtn image={CompanyIcon}
-                                     onClick={() => setRegisterType("company")}>
+                                     onClick={() => setRegisterType("empresa")}>
                         Busco empleados <br/>
                         para mi empresa
                     </RegisterTypeBtn>

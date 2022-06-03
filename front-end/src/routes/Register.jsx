@@ -27,9 +27,9 @@ function Register() {
         switch (registerType) {
             case null:
                 return <RegisterType setRegisterType={setRegisterType}/>
-            case 'employee':
-                return <RegisterEmployee />
-            case 'company':
+            case 'usuario':
+                return <RegisterEmployee registerType={registerType}/>
+            case 'empresa':
                 return <div>Company</div>
             default:
                 return <div>Loading...</div>
