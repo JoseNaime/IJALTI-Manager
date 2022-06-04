@@ -338,6 +338,40 @@ app.put('/newAccount',(req,res)=>{
 
 });
 
+app.delete('/account', (req,res)=>{
+    if(req.body.rol=='usuario'){
+        db.none(`DELETE FROM usuario WHERE correoCuenta='${req.body.email}';`)    .then(data => {
+           //si encuentra los datos, los manda
+           res.send({status: 201});
+       })
+       .catch(error => {
+           //si hay un error con el select, lo imprime y lo regresa
+           console.log('ERROR:', error);
+           res.send({status: 404});
+       });
+    }else if(req.body.rol=='empresa'){
+        db.none(`DELETE FROM empresa WHERE correoCuenta='${req.body.email}';`)    .then(data => {
+            //si encuentra los datos, los manda
+            res.send({status: 201});
+        })
+        .catch(error => {
+            //si hay un error con el select, lo imprime y lo regresa
+            console.log('ERROR:', error);
+            res.send({status: 404});
+        });
+    }else if(req.body.rol=='admin'){
+        db.none(`DELETE FROM admin WHERE correo='${req.body.email}';`)    .then(data => {
+            //si encuentra los datos, los manda
+            res.send({status: 201});
+        })
+        .catch(error => {
+            //si hay un error con el select, lo imprime y lo regresa
+            console.log('ERROR:', error);
+            res.send({status: 404});
+        });
+    }
+});
+
 
 app.get('/usuarios', (req,res)=>{
     db.any('SELECT * FROM usuario;', [true])
