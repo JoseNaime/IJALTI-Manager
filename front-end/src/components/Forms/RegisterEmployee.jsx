@@ -135,6 +135,7 @@ const RegisterEmployee = ({registerType}) => {
                         </div>
                     </div>
                 </div>
+                
 
                 <div className='flex flex-col gap-y-5'>
                     <div className='flex flex-row gap-x-10'>
