@@ -30,12 +30,9 @@ function LoginForm() {
             }}
             onSubmit={(values, {setSubmitting}) => {
                 
-                console.log(values)
                 signInWithEmailAndPassword(auth, values.email, values.password)
                     .then((userCredential) => {
-                        
                         getRequest("/getRol", {email: values.email}).then(res => {
-                            console.log(res.data)
                             if (res.status === 200) {
                                 const newUser = {
                                     email:values.email,
