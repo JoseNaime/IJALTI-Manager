@@ -34,10 +34,7 @@ const RegisterEmployee = ({registerType}) => {
                 
             }}
             onSubmit={(values, {setSubmitting}) => {
-                console.log(values);
-                setSubmitting(false);
-                
-                createUserWithEmailAndPassword(auth, values.correoCuenta, values.password);
+                console.log(values);            
 
                 putRequest("/newAccount", {
                     data: {
@@ -59,6 +56,7 @@ const RegisterEmployee = ({registerType}) => {
                 }).then(res => {
                     console.log(res)
                     if (res.status === 201) {
+                        createUserWithEmailAndPassword(auth, values.correoCuenta, values.password);
                         alert("Register Successful")
                         navigate("/login")
                     } else {
@@ -175,10 +173,10 @@ const RegisterEmployee = ({registerType}) => {
                             <ErrorMessage name="estado" className="error" component="div"/>
                             <Field as="select" name="estado">
                                 <option value="">Selecciona una opción</option>
-                                <option value="visa">Michoacán</option>
-                                <option value="pasaporte">Jalisco</option>
-                                <option value="ambos">Aguascalientes</option>
-                                <option value="ninguno">Nayarit</option>
+                                <option value="michoacan">Michoacán</option>
+                                <option value="jalisco">Jalisco</option>
+                                <option value="aguascalientes">Aguascalientes</option>
+                                <option value="nayarit">Nayarit</option>
                             </Field>
                             <label htmlFor="">*Estado</label>
                         </div>
@@ -186,10 +184,10 @@ const RegisterEmployee = ({registerType}) => {
                             <ErrorMessage name="ciudad" className="error" component="div"/>
                             <Field as="select" name="ciudad">
                                 <option value="">Selecciona una opción</option>
-                                <option value="visa">Zamora</option>
-                                <option value="pasaporte">Sayulita</option>
-                                <option value="ambos">Guadalajara</option>
-                                <option value="ninguno">Tlajomulco</option>
+                                <option value="zamora">Zamora</option>
+                                <option value="sayulita">Sayulita</option>
+                                <option value="guadalajara">Guadalajara</option>
+                                <option value="tlajomulco">Tlajomulco</option>
                             </Field>
                             <label htmlFor="">*Ciudad</label>
                         </div>
