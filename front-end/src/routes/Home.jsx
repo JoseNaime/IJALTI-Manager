@@ -7,7 +7,7 @@ import CompanyIconTest from '../assets/images/icons/company_icon_test.png';
 
 function Home() {
     //const user = JSON.parse(localStorage.getItem('user'));
-    const {logout, user, getUser} = useContext(GlobalContext);
+    const {user, getUser} = useContext(GlobalContext);
     const navigate = useNavigate();
 
     useEffect(() => {

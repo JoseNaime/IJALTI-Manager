@@ -1,5 +1,4 @@
 import React from 'react';
-import {position} from "tailwindcss/lib/util/dataTypes";
 
 function Card({icon, title, description, optional}) {
 
