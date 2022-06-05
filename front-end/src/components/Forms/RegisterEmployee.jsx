@@ -7,7 +7,7 @@ import {auth} from '../Firebase/firebase-config';
 
 const RegisterEmployee = ({registerType}) => {
     const {putRequest} = useContext(GlobalContext);
-    const [submitError, setSubmitError] = useState(null);
+    const [setSubmitError] = useState(null);
     const navigate = useNavigate();
 
     return (

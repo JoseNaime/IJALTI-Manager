@@ -2,8 +2,11 @@ import React from 'react';
 import LoginForm from "../components/Forms/LoginForm";
 import LoginImg from "../assets/images/login.jpg";
 import Logo from "../components/Logo";
+import {useNavigate} from "react-router-dom";
 
 function Login(props) {
+    const navigate = useNavigate();
+
     return (
         <div id="login" className="flex flex-row-reverse h-full">
 
@@ -17,7 +20,7 @@ function Login(props) {
                     </div>
                     <div>
                         <p className="text-xl">Nuevo por aqui?</p>
-                        <button className="primary-squared">Registrate</button>
+                        <button onClick={() => navigate("/register")} className="primary-squared">Registrate</button>
                     </div>
                 </div>
             </div>
