@@ -7,7 +7,7 @@ import {auth} from '../Firebase/firebase-config';
 
 const RegisterCompany = ({registerType}) => {
     const {putRequest} = useContext(GlobalContext);
-    const [submitError, setSubmitError] = useState(null);
+    const [ setSubmitError] = useState(null);
     const navigate = useNavigate();
 
     return (
@@ -15,7 +15,7 @@ const RegisterCompany = ({registerType}) => {
         <Formik
             initialValues={{nombreComercial: '', nombreFiscal: '', correoCuenta: '', password: '', passwordConfirm: '', telefonoContacto: '', estado: '', ciudad: ''}}
             validate={values => {
-                const errors = {};
+                //const errors = {};
 
                 // if (!values.nombreComercial)
                 //     errors.nombreComercial = 'Name Required';
