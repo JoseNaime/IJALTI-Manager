@@ -11,6 +11,18 @@ export const GlobalContext = createContext(initialState);
 export const GlobalProvider = ({children}) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
+    function getUser() {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            console.log(storedUser);
+            dispatch({
+                type: 'SET_USER',
+                payload: JSON.parse(storedUser)
+            })
+        }
+        return state.user;
+    }
+
     function login(user) {
         dispatch({
             type: 'LOGIN',
@@ -62,7 +74,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     return (
-        <GlobalContext.Provider value={{user: state.user, login, logout, getRequest, postRequest, putRequest}}>
+        <GlobalContext.Provider value={{user: state.user, getUser, login, logout, getRequest, postRequest, putRequest}}>
             {children}
         </GlobalContext.Provider>
     )

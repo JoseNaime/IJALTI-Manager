@@ -16,6 +16,7 @@ input:focus, textarea:focus, select:focus {
 
 :root {
 	--main-container-bg : #F4F4F4;
+	
 	--primary           : #4064AC;
 }
 

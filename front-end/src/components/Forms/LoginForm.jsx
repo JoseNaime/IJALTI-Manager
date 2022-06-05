@@ -54,10 +54,6 @@ function LoginForm() {
                         setSubmitError(error);
                         alert(error.message);
                     })
-
-                
-                
-
             }}
         >
             {({isSubmitting}) => (
@@ -78,7 +74,7 @@ function LoginForm() {
                             Submit
                         </button>
                         {submitError &&
-                            <div className="error">{submitError.charAt(0).toUpperCase() + submitError.slice(1)}</div>}
+                            <div className="error">{JSON.stringify(submitError)}</div>}
                     </Form>
                 </>
             )}

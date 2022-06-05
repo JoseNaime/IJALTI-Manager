@@ -1,7 +1,12 @@
 export const AppReducer = (state, action) => {
   switch (action.type) {
-      case 'LOGIN':
+      case 'SET_USER':
+        return {
+            ...state,
+            user: action.user
+        }
 
+      case 'LOGIN':
           localStorage.setItem('user', JSON.stringify(action.payload));
         return {
           ...state,
