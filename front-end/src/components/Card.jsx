@@ -1,10 +1,23 @@
 import React from 'react';
 
-function Card({icon, title, description, optional}) {
+function Card({isActive = true, icon, title, description, optional}) {
+    const getStatusColor = () => {
+        switch (optional.status) {
+            case "active":
+                return "#27CA40";
+            case "pending":
+                return "#FFC130";
+            case "closed":
+                return "#FF6058";
+            default:
+                return "#e1e1e1";
+        }
+    }
 
-    const style={
+    const style = {
         container: {
             position: 'relative',
+            width: "96%",
             display: 'flex',
             flexDirection: 'row',
             height: '85px',
@@ -19,6 +32,19 @@ function Card({icon, title, description, optional}) {
             flexDirection: 'row',
             alignItems: 'center',
         },
+        description:{
+            textOverflow: "ellipsis",
+            wordWrap: "break-word",
+            width: "80%",
+            overflow: "hidden",
+            display: "block"
+        },
+        info: {
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+
+        },
         optionals: {
             position: 'absolute',
             width: '100%',
@@ -26,31 +52,47 @@ function Card({icon, title, description, optional}) {
         },
         topRight: {
             position: 'absolute',
-            top: '0',
+            top: '8px',
             right: '0',
+            alignItems: 'center',
         },
         bottomRight: {
             position: 'absolute',
-            bottom: '0',
+            bottom: '5px',
             right: '0',
+        },
+        status: {
+            backgroundColor: getStatusColor(),
+            height: '10px',
+            width: '10px',
+            borderRadius: '50%',
+
         }
     }
 
     return (
-        <div style={style.container}>
+        <div style={style.container} className={!isActive ? "opacity-60" : ""}>
             <div style={style.mainContent}>
-                <img style={style.icon} src={icon} alt={title+"_icon"}/>
-                <div className="text-left">
-                    <h3>{title}</h3>
-                    <p className="w-72">{description}</p>
+                <img style={style.icon} className={"mx-4"} src={icon} alt={title + "_icon"} />
+                <div style={style.info} className="text-left py-2 justify-around">
+                    <h3 className="font-bold max-h-fit">{title}</h3>
+                    <p style={style.description} className="w-80 opacity-50 leading-5 align-center">{description}</p>
                 </div>
             </div>
-            <div style={style.optionals}>
-                <div style={style.topRight}>
-                    TopRight
+            <div>
+                <div style={style.topRight} className="flex flex-row">
+                    <div className="font-bold text-white text-center opacity-30 px-2 text-xs">
+                        <p>{optional.counter.title}: {optional.counter.count}</p>
+                    </div>
+
+                    {optional.status &&
+                        <div style={style.status}> </div>
+                    }
                 </div>
                 <div style={style.bottomRight}>
-                    BottomRight
+                    <div>
+                        <p className="font-medium opacity-50 text-sm">{optional.date}</p>
+                    </div>
                 </div>
             </div>
         </div>

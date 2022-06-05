@@ -19,13 +19,15 @@ function Home() {
             backgroundImage: `url(${PatronFondo})`,
         },
         container: {
+            margin: 'auto',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            backgroundColor: '#FFF',
+            backgroundColor: '#FFFFFF',
             boxShadow: '0 0 50px 0 rgba(0,0,0,0.2)',
             padding: "100px 20px",
             position: 'relative',
+            width: '1000px',
         },
         content: {
             margin: "0 auto",
@@ -46,16 +48,35 @@ function Home() {
 
     return (
         <div style={style.background} className="w-full h-full bg-gray">
-            <div style={style.container} className={"container h-full bg-slate-50"}>
+            <div style={style.container} className={"h-full bg-slate-50"}>
                 <div style={style.content} className={"h-full w-full text-center"}>
-                    <div className="basis-1/2">
-                        <Card icon={CompanyIconTest}
+                    <div className="basis-1/2 flex flex-col gap-y-2">
+                        <Card isActive={true}
+                              icon={CompanyIconTest}
                               title={"Titulo de Empleo"}
                               description={"Lorem ipsum dolor sit amet, consectetur \n" +
                                   "adipiscing elit."}
                               optional={{
                                   date: "20/01/2021",
-                                  state: "active"
+                                  status: "active",
+                                  counter: {
+                                      title: "Solicitudes",
+                                      count: "10"
+                                  }
+                              }}
+                        />
+                        <Card isActive={true}
+                              icon={CompanyIconTest}
+                              title={"Titulo de Empleo"}
+                              description={"Lorem ipsum dolor sit amet, consectetur \n" +
+                                  "adipiscing elit."}
+                              optional={{
+                                  date: "20/01/2021",
+                                  status: "active",
+                                  counter: {
+                                      title: "Solicitudes",
+                                      count: "10"
+                                  }
                               }}
                         />
                     </div>
