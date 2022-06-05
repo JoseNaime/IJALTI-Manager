@@ -4,6 +4,7 @@ import {GlobalContext} from "../components/GlobalProvider";
 import PatronFondo from '../assets/images/patron_fondo.png';
 import Card from "../components/Card";
 import CompanyIconTest from '../assets/images/icons/company_icon_test.png';
+import CardsContainer from "../components/CardsContainer";
 
 function Home() {
     //const user = JSON.parse(localStorage.getItem('user'));
@@ -50,36 +51,7 @@ function Home() {
         <div style={style.background} className="w-full h-full bg-gray">
             <div style={style.container} className={"h-full bg-slate-50"}>
                 <div style={style.content} className={"h-full w-full text-center"}>
-                    <div className="basis-1/2 flex flex-col gap-y-2">
-                        <Card isActive={true}
-                              icon={CompanyIconTest}
-                              title={"Titulo de Empleo"}
-                              description={"Lorem ipsum dolor sit amet, consectetur \n" +
-                                  "adipiscing elit."}
-                              optional={{
-                                  date: "20/01/2021",
-                                  status: "active",
-                                  counter: {
-                                      title: "Solicitudes",
-                                      count: "10"
-                                  }
-                              }}
-                        />
-                        <Card isActive={true}
-                              icon={CompanyIconTest}
-                              title={"Titulo de Empleo"}
-                              description={"Lorem ipsum dolor sit amet, consectetur \n" +
-                                  "adipiscing elit."}
-                              optional={{
-                                  date: "20/01/2021",
-                                  status: "active",
-                                  counter: {
-                                      title: "Solicitudes",
-                                      count: "10"
-                                  }
-                              }}
-                        />
-                    </div>
+                    <CardsContainer />
                     <hr style={style.splitLine} />
                     <div className="basis-1/2">2</div>
                 </div>
