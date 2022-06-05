@@ -240,6 +240,45 @@ app.put('/insertarInfoPrueba',(req,res)=>{
 
 });
 
+app.put('/insertarInfo',(req,res)=>{
+
+    /*
+        db.none(`INSERT INTO habilidades(nombre,color)
+        VALUES ('JavaScript', '#FFF8BE');`);
+        db.none(`INSERT INTO habilidades(nombre,color)
+        VALUES ('React', '#61DBFB');`);
+        db.none(`INSERT INTO habilidades(nombre,color)
+        VALUES ('Python', '#FFD43B');`);
+    
+    
+        //Insertamos empleo a la tabla
+        db.none(`INSERT INTO empleo(titulo, descripcion, empresaID)
+        VALUES('Front-end developer', 'Este es una descripcion de ejemplo para el rol', 3);`);
+        db.none(`INSERT INTO empleo(titulo, descripcion, empresaID)
+        VALUES('Ingeniero de Datos Senior', 'La responsabilidad sera desarrollar data pipelines y analizar datos', 4);`);
+        
+        
+        //Habilidades de empleo
+        db.none(`INSERT INTO habilidadesDeEmpleo(habilidadID, empleoID)
+        VALUES(1,2);`);
+        db.none(`INSERT INTO habilidadesDeEmpleo(habilidadID, empleoID,tiempoExperiencia)
+        VALUES(3,2,5);`);
+        db.none(`INSERT INTO habilidadesDeEmpleo(habilidadID, empleoID,tiempoExperiencia)
+        VALUES(2,1,4);`);
+    
+        //Aplicaciones
+        db.none(`INSERT INTO aplicacion(aplicacionFecha, status,empleoID, username)
+        VALUES('06-05-2022','Revision',2,'pigihunter' );`);
+        db.none(`INSERT INTO aplicacion(aplicacionFecha, status,empleoID, username)
+        VALUES('06-05-2022','Aceptado',1,'pigihunter' );`);
+        db.none(`INSERT INTO aplicacion(aplicacionFecha, status,empleoID, username)
+        VALUES('06-05-2022','Aceptado',2,'JoseNaime' );`);
+    */
+    
+    
+        res.send("Inserted all info");
+    
+    });
 
 
 app.get('/getRol', (req,res)=>{
@@ -372,6 +411,46 @@ app.delete('/account', (req,res)=>{
     }
 });
 
+
+app.get('/aplicacionesUsuario', (req,res)=>{
+    
+
+    //Queremos aplicaciones.
+    //status,aplicacionFecha(aplicacion), titulo, descripcion (Empleo), nombreComercial, ciudad, estado (empresa) , habilidades
+    //console.log(response);
+    db.any(`SELECT aplicacion.username, aplicacion.aplicacionFecha,aplicacion.status,
+    empleo.empleoID, empleo.titulo,empleo.descripcion,
+    empresa.nombreComercial,empresa.ciudad,empresa.estado
+     FROM aplicacion JOIN empleo ON aplicacion.empleoid=empleo.empleoid JOIN empresa ON empleo.empresaID=empresa.empresaID
+     WHERE aplicacion.username='${req.body.username}';`, [true])
+    .then(data => {
+        //si encuentra los datos, los manda
+        var finalData=data;
+        var habilidadesArr=[];
+        for(i in finalData){
+            var completed=false;
+            db.any(`SELECT * FROM habilidadesDeEmpleo WHERE empleoID=${finalData[i].empleoid}`,[i])
+            .then(data2=>{
+                habilidadesArr.push(data2);
+                if(habilidadesArr.length===finalData.length){
+                    //console.log(habilidadesArr);
+                    for(j in finalData){
+                        finalData[j].habilidades=habilidadesArr[j];
+                    }
+                    res.send(finalData);
+                }
+            });
+            
+        }
+        
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send(error);
+    });
+
+});
 
 app.get('/usuarios', (req,res)=>{
     db.any('SELECT * FROM usuario;', [true])
