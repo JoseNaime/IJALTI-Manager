@@ -2,9 +2,11 @@ import React, {useContext, useState} from 'react';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import {GlobalContext} from "../GlobalProvider";
 import {useNavigate} from "react-router-dom";
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../Firebase/firebase-config';
 
 const RegisterEmployee = ({registerType}) => {
-    const {postRequest} = useContext(GlobalContext);
+    const {putRequest} = useContext(GlobalContext);
     const [submitError, setSubmitError] = useState(null);
     const navigate = useNavigate();
 
@@ -32,22 +34,37 @@ const RegisterEmployee = ({registerType}) => {
                 
             }}
             onSubmit={(values, {setSubmitting}) => {
-                console.log(values);
-                setSubmitting(false);
+                console.log(values);            
 
-                // postRequest("/newAccount", {email: values.email, password: values.password}).then(res => {
-                //     console.log(res)
-                //     if (res.status === 200) {
-                //         alert("Login Successful")
-                //         login(res.data)
-                //         navigate("/logint")
-                //     } else {
-                //         setSubmitError(res.data)
-                //     }
-                // }).then(() => {
-                //     setSubmitting(false);
-                // })
-
+                putRequest("/newAccount", {
+                    data: {
+                        nombre: values.nombre,
+                        apellido: values.apellido,
+                        sexo: values.sexo,
+                        fechaNacimiento: values.fechaNacimiento,
+                        nacionalidad: values.nacionalidad,
+                        estadoCivil: values.estadoCivil,
+                        rfc: values.rfc,
+                        papelesVigentes: values.papelesVigentes,
+                        correoCuenta: values.correoCuenta,
+                        username: values.username,
+                        telefonoCuenta: values.telefonoCuenta,
+                        estado: values.estado,
+                        ciudad: values.ciudad,
+                    },
+                    tipoCuenta: registerType
+                }).then(res => {
+                    console.log(res)
+                    if (res.status === 201) {
+                        createUserWithEmailAndPassword(auth, values.correoCuenta, values.password);
+                        alert("Register Successful")
+                        navigate("/login")
+                    } else {
+                        setSubmitError(res.data)
+                    }
+                }).then(() => {
+                    setSubmitting(false);
+                })
             }}
         >
         {({isSubmitting}) => (
@@ -118,6 +135,7 @@ const RegisterEmployee = ({registerType}) => {
                         </div>
                     </div>
                 </div>
+                
 
                 <div className='flex flex-col gap-y-5'>
                     <div className='flex flex-row gap-x-10'>
@@ -156,10 +174,10 @@ const RegisterEmployee = ({registerType}) => {
                             <ErrorMessage name="estado" className="error" component="div"/>
                             <Field as="select" name="estado">
                                 <option value="">Selecciona una opción</option>
-                                <option value="visa">Michoacán</option>
-                                <option value="pasaporte">Jalisco</option>
-                                <option value="ambos">Aguascalientes</option>
-                                <option value="ninguno">Nayarit</option>
+                                <option value="michoacan">Michoacán</option>
+                                <option value="jalisco">Jalisco</option>
+                                <option value="aguascalientes">Aguascalientes</option>
+                                <option value="nayarit">Nayarit</option>
                             </Field>
                             <label htmlFor="">*Estado</label>
                         </div>
@@ -167,17 +185,17 @@ const RegisterEmployee = ({registerType}) => {
                             <ErrorMessage name="ciudad" className="error" component="div"/>
                             <Field as="select" name="ciudad">
                                 <option value="">Selecciona una opción</option>
-                                <option value="visa">Zamora</option>
-                                <option value="pasaporte">Sayulita</option>
-                                <option value="ambos">Guadalajara</option>
-                                <option value="ninguno">Tlajomulco</option>
+                                <option value="zamora">Zamora</option>
+                                <option value="sayulita">Sayulita</option>
+                                <option value="guadalajara">Guadalajara</option>
+                                <option value="tlajomulco">Tlajomulco</option>
                             </Field>
                             <label htmlFor="">*Ciudad</label>
                         </div>
                     </div>
                 </div>
 
-                <button className="primary-squared" type="submit" disabled={isSubmitting}>Submit</button>
+                <button className="primary-squared" type="submit" disabled={isSubmitting}>Registrate</button>
             </Form>
         )}
         </Formik>

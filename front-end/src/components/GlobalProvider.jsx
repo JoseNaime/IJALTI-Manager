@@ -49,8 +49,20 @@ export const GlobalProvider = ({children}) => {
         return axios(requestUrl, requestOptions).then(res => res.data);
     }
 
+    function putRequest(url, body) {
+        const requestUrl = process.env.REACT_APP_API_URL + url;
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: body
+        }
+        return axios(requestUrl, requestOptions).then(res => res.data);
+    }
+
     return (
-        <GlobalContext.Provider value={{user: state.user, login, logout, getRequest, postRequest}}>
+        <GlobalContext.Provider value={{user: state.user, login, logout, getRequest, postRequest, putRequest}}>
             {children}
         </GlobalContext.Provider>
     )
