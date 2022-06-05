@@ -411,7 +411,6 @@ app.delete('/account', (req,res)=>{
     }
 });
 
-
 app.get('/aplicacionesUsuario', (req,res)=>{
     
 
@@ -421,8 +420,8 @@ app.get('/aplicacionesUsuario', (req,res)=>{
     db.any(`SELECT aplicacion.username, aplicacion.aplicacionFecha,aplicacion.status,
     empleo.empleoID, empleo.titulo,empleo.descripcion,
     empresa.nombreComercial,empresa.ciudad,empresa.estado
-     FROM aplicacion JOIN empleo ON aplicacion.empleoid=empleo.empleoid JOIN empresa ON empleo.empresaID=empresa.empresaID
-     WHERE aplicacion.username='${req.body.username}';`, [true])
+     FROM aplicacion JOIN empleo ON aplicacion.empleoid=empleo.empleoid JOIN empresa ON empleo.empresaID=empresa.empresaID JOIN usuario ON aplicacion.username=usuario.username
+     WHERE usuario.correoCuenta='${req.body.email}';`, [true])
     .then(data => {
         //si encuentra los datos, los manda
         var finalData=data;
