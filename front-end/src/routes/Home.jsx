@@ -2,6 +2,8 @@ import React, {useContext, useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import {GlobalContext} from "../components/GlobalProvider";
 import PatronFondo from '../assets/images/patron_fondo.png';
+import Card from "../components/Card";
+import CompanyIconTest from '../assets/images/icons/company_icon_test.png';
 
 function Home() {
     //const user = JSON.parse(localStorage.getItem('user'));
@@ -20,7 +22,7 @@ function Home() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            backgroundColor: '#F6F6F6',
+            backgroundColor: '#FFF',
             boxShadow: '0 0 50px 0 rgba(0,0,0,0.2)',
             padding: "100px 20px",
             position: 'relative',
@@ -46,8 +48,18 @@ function Home() {
         <div style={style.background} className="w-full h-full bg-gray">
             <div style={style.container} className={"container h-full bg-slate-50"}>
                 <div style={style.content} className={"h-full w-full text-center"}>
-                    <div className="basis-1/2">1</div>
-                    <hr style={style.splitLine}/>
+                    <div className="basis-1/2">
+                        <Card icon={CompanyIconTest}
+                              title={"Titulo de Empleo"}
+                              description={"Lorem ipsum dolor sit amet, consectetur \n" +
+                                  "adipiscing elit."}
+                              optional={{
+                                  date: "20/01/2021",
+                                  state: "active"
+                              }}
+                        />
+                    </div>
+                    <hr style={style.splitLine} />
                     <div className="basis-1/2">2</div>
                 </div>
             </div>
