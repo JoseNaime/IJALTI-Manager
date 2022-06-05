@@ -3,7 +3,6 @@ import LoginForm from "../components/Forms/LoginForm";
 import LoginImg from "../assets/images/login.jpg";
 import Logo from "../components/Logo";
 
-
 function Login(props) {
     return (
         <div id="login" className="flex flex-row-reverse h-full">
