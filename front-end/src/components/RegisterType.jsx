@@ -3,9 +3,6 @@ import RegisterTypeBtn from "./RegisterTypeBtn";
 import EmployeeIcon from "../assets/images/employee_icon.png";
 import CompanyIcon from "../assets/images/company_icon.png";
 
-const style = {
-    container: {}
-}
 
 function RegisterType({setRegisterType}) {
     return (
