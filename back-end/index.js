@@ -451,6 +451,253 @@ app.get('/aplicacionesUsuario', (req,res)=>{
 
 });
 
+//Busqueda de empleos
+app.get('/buscarEmpleos', (req,res)=>{
+    //Filtros  (Empresa, Titulo, Habilidades, Fecha?)
+    /*
+    {
+        Empresa: ["Oracle", "IBM", "Microsoft"],
+        Titulo: "Titulo",
+        Habilidades: ["React", "Python"]
+    
+    }
+    
+    {
+        {empleo}
+    }
+    
+    */
+        var empresasText="( ";
+        for(i in req.body.empresas){
+            var empresasText=empresasText.concat("'");
+            var empresasText=empresasText.concat(req.body.empresas[i].toLowerCase());
+            var empresasText=empresasText.concat("'");
+            var empresasText=empresasText.concat(",");
+            
+        }
+        var empresasText=empresasText.slice(0,-1);
+        var empresasText=empresasText.concat(")");
+    
+        var habilidadesText="( ";
+        for(i in req.body.habilidades){
+            var habilidadesText=habilidadesText.concat("'");
+            var habilidadesText=habilidadesText.concat(req.body.habilidades[i].toLowerCase());
+            var habilidadesText=habilidadesText.concat("'");
+            var habilidadesText=habilidadesText.concat(",");
+            
+        }
+    
+        var habilidadesText=habilidadesText.slice(0,-1);
+        var habilidadesText=habilidadesText.concat(")");
+    
+    
+    //empleoid, titulo, descrpcion, empresaid, nombrecomercial, status, ciudad, estado, habilidades
+        if(habilidadesText==="()" && empresasText==="()"){
+            db.any(`SELECT empleo.empleoID, empleo.titulo, empleo.descripcion,empleo.postDate,
+            empresa.empresaID, empresa.nombreComercial, empresa.estadoCuenta, empresa.ciudad, empresa.estado FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
+            JOIN habilidadesDeEmpleo ON empleo.empleoID=habilidadesDeEmpleo.empleoID JOIN habilidades ON habilidadesDeEmpleo.habilidadID= habilidades.habilidadID
+            WHERE LOWER(empleo.titulo) LIKE '%${req.body.titulo.toLowerCase()}%';`, [true])
+            .then(data => {
+                //si encuentra los datos, los manda
+                var finalData=data;
+                var habilidadesArr=[];
+                var sentData=false;
+                if(finalData.lengt===0){
+                    res.send(finalData);
+                    sentData=true;
+                }
+                for(i in finalData){
+                    var completed=false;
+                    db.any(`SELECT * FROM habilidadesDeEmpleo JOIN habilidades ON habilidadesDeEmpleo.habilidadID=habilidades.habilidadID
+                    WHERE empleoID=${finalData[i].empleoid}`,[i])
+                    .then(data2=>{
+                        habilidadesArr.push(data2);
+                        if(habilidadesArr.length===finalData.length){
+                            //console.log(habilidadesArr);
+                            for(j in finalData){
+                                finalData[j].habilidades=habilidadesArr[j];
+                            }
+                            var dataToSend=[];
+                            var idDeEmpleos=[];
+                            for(i in finalData){
+                                if(!idDeEmpleos.includes(finalData[i].empleoid)){
+                                    dataToSend.push(finalData[i]);
+                                    idDeEmpleos.push(finalData[i].empleoid);
+                    
+                                }
+                            }
+                            if(!sentData){
+                                res.send(dataToSend);
+                            }
+                            
+    
+                        }
+                    });
+                    
+                }
+    
+                
+            })
+            .catch(error => {
+                //si hay un error con el select, lo imprime y lo regresa
+                console.log('ERROR:', error);
+                res.send(error);
+            });
+        }else if (habilidadesText==="()"){
+            db.any(`SELECT empleo.empleoID, empleo.titulo, empleo.descripcion,empleo.postDate,
+            empresa.empresaID, empresa.nombreComercial, empresa.estadoCuenta, empresa.ciudad, empresa.estado FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
+            JOIN habilidadesDeEmpleo ON empleo.empleoID=habilidadesDeEmpleo.empleoID JOIN habilidades ON habilidadesDeEmpleo.habilidadID= habilidades.habilidadID
+            WHERE LOWER(empresa.nombreComercial) IN ${empresasText}
+            AND LOWER(empleo.titulo) LIKE '%${req.body.titulo.toLowerCase()}%';`, [true])
+            .then(data => {
+                //si encuentra los datos, los manda
+                var finalData=data;
+                var habilidadesArr=[];
+                var sentData=false;
+                if(finalData.length===0){
+                    res.send(finalData)
+                    sentData=true;
+                }
+    
+                for(i in finalData){
+                    var completed=false;
+                    db.any(`SELECT * FROM habilidadesDeEmpleo JOIN habilidades ON habilidadesDeEmpleo.habilidadID=habilidades.habilidadID
+                    WHERE empleoID=${finalData[i].empleoid}`,[i])
+                    .then(data2=>{
+                        habilidadesArr.push(data2);
+                        if(habilidadesArr.length===finalData.length){
+                            //console.log(habilidadesArr);
+                            for(j in finalData){
+                                finalData[j].habilidades=habilidadesArr[j];
+                            }
+                            var dataToSend=[];
+                            var idDeEmpleos=[];
+                            for(i in finalData){
+                                if(!idDeEmpleos.includes(finalData[i].empleoid)){
+                                    dataToSend.push(finalData[i]);
+                                    idDeEmpleos.push(finalData[i].empleoid);
+                    
+                                }
+                            }
+                            if(!sentData){
+                                res.send(dataToSend);
+                            }
+                            
+    
+                        }
+                    });
+                    
+                }
+                
+            })
+            .catch(error => {
+                //si hay un error con el select, lo imprime y lo regresa
+                console.log('ERROR:', error);
+                res.send(error);
+            });
+        }else if(empresasText==="()"){
+            db.any(`SELECT empleo.empleoID, empleo.titulo, empleo.descripcion,empleo.postDate,
+            empresa.empresaID, empresa.nombreComercial, empresa.estadoCuenta, empresa.ciudad, empresa.estado FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
+            JOIN habilidadesDeEmpleo ON empleo.empleoID=habilidadesDeEmpleo.empleoID JOIN habilidades ON habilidadesDeEmpleo.habilidadID= habilidades.habilidadID
+            WHERE LOWER(habilidades.nombre) IN ${habilidadesText}
+            AND LOWER(empleo.titulo) LIKE '%${req.body.titulo.toLowerCase()}%';`, [true])
+            .then(data => {
+                //si encuentra los datos, los manda
+                var finalData=data;
+                var habilidadesArr=[];
+                var sentData=false;
+                if(finalData.length===0){
+                    res.send(finalData)
+                    sentData=true;
+                }
+                for(i in finalData){
+                    var completed=false;
+                    db.any(`SELECT * FROM habilidadesDeEmpleo JOIN habilidades ON habilidadesDeEmpleo.habilidadID=habilidades.habilidadID
+                    WHERE empleoID=${finalData[i].empleoid}`,[i])
+                    .then(data2=>{
+                        habilidadesArr.push(data2);
+                        if(habilidadesArr.length===finalData.length){
+                            //console.log(habilidadesArr);
+                            for(j in finalData){
+                                finalData[j].habilidades=habilidadesArr[j];
+                            }
+                            var dataToSend=[];
+                            var idDeEmpleos=[];
+                            for(i in finalData){
+                                if(!idDeEmpleos.includes(finalData[i].empleoid)){
+                                    dataToSend.push(finalData[i]);
+                                    idDeEmpleos.push(finalData[i].empleoid);
+                    
+                                }
+                            }
+                            if(!sentData){
+                                res.send(dataToSend);
+                            }
+    
+                        }
+                    });
+                    
+                }    
+            })
+            .catch(error => {
+                //si hay un error con el select, lo imprime y lo regresa
+                console.log('ERROR:', error);
+                res.send(error);
+            });
+        }else{
+            db.any(`SELECT empleo.empleoID, empleo.titulo, empleo.descripcion,empleo.postDate,
+            empresa.empresaID, empresa.nombreComercial, empresa.estadoCuenta, empresa.ciudad, empresa.estado FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
+            JOIN habilidadesDeEmpleo ON empleo.empleoID=habilidadesDeEmpleo.empleoID JOIN habilidades ON habilidadesDeEmpleo.habilidadID= habilidades.habilidadID
+            WHERE LOWER(habilidades.nombre) IN ${habilidadesText}
+            AND LOWER(empresa.nombreComercial) IN ${empresasText}
+            AND LOWER(empleo.titulo) LIKE '%${req.body.titulo.toLowerCase()}%';`, [true])
+            .then(data => {
+                //si encuentra los datos, los manda
+                var finalData=data;
+                var habilidadesArr=[];
+                var sentData=false;
+                if(finalData.length===0){
+                    res.send(finalData)
+                    sentData=true;
+                }
+                for(i in finalData){
+                    var completed=false;
+                    db.any(`SELECT * FROM habilidadesDeEmpleo JOIN habilidades ON habilidadesDeEmpleo.habilidadID=habilidades.habilidadID
+                    WHERE empleoID=${finalData[i].empleoid}`,[i])
+                    .then(data2=>{
+                        habilidadesArr.push(data2);
+                        if(habilidadesArr.length===finalData.length){
+                            //console.log(habilidadesArr);
+                            for(j in finalData){
+                                finalData[j].habilidades=habilidadesArr[j];
+                            }
+                            var dataToSend=[];
+                            var idDeEmpleos=[];
+                            for(i in finalData){
+                                if(!idDeEmpleos.includes(finalData[i].empleoid)){
+                                    dataToSend.push(finalData[i]);
+                                    idDeEmpleos.push(finalData[i].empleoid);
+                    
+                                }
+                            }
+                            if(!sentData){
+                                res.send(dataToSend);
+                            }
+                        }
+                    });
+                    
+                }
+                
+            })
+            .catch(error => {
+                //si hay un error con el select, lo imprime y lo regresa
+                console.log('ERROR:', error);
+                res.send(error);
+            });
+        }
+    
+    });
+
 app.get('/usuarios', (req,res)=>{
     db.any('SELECT * FROM usuario;', [true])
     .then(data => {
