@@ -11,6 +11,9 @@ module.exports = {
             'primary': '#4064AC',
             'light-gray': '#f6f6f6',
             'gray': '#E5E5E5',
+            'status-active': '#27CA40',
+            'status-pending': '#FFC130',
+            'status-closed': '#FF6058'
         },
 
         container: {

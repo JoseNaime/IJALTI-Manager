@@ -5,6 +5,7 @@ import PatronFondo from '../assets/images/patron_fondo.png';
 import Card from "../components/Card";
 import CompanyIconTest from '../assets/images/icons/company_icon_test.png';
 import CardsContainer from "../components/CardsContainer";
+import CardDetails from '../components/CardDetails';
 
 function Home() {
     //const user = JSON.parse(localStorage.getItem('user'));
@@ -53,7 +54,7 @@ function Home() {
                 <div style={style.content} className={"h-full w-full text-center"}>
                     <CardsContainer />
                     <hr style={style.splitLine} />
-                    <div className="basis-1/2">2</div>
+                    <CardDetails />
                 </div>
             </div>
         </div>
