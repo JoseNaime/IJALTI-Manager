@@ -10,6 +10,7 @@ module.exports = {
         colors: {
             'primary': '#4064AC',
             'light-gray': '#f6f6f6',
+            'gray': '#E5E5E5',
         },
 
         container: {

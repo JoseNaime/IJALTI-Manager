@@ -3,7 +3,6 @@ import RegisterTypeBtn from "./RegisterTypeBtn";
 import EmployeeIcon from "../assets/images/employee_icon.png";
 import CompanyIcon from "../assets/images/company_icon.png";
 
-
 function RegisterType({setRegisterType}) {
     return (
         <div className="flex flex-col w-50 text-center justify-between mt-32">
