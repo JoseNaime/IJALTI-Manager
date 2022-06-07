@@ -39,7 +39,7 @@ const CardDetails = ({icon,title,description,status,date,socialMedia}) => {
                     <div className='flex flex-row justify-between'>
                         <h1 style={style.h1}>Título de la Oferta</h1>
                         <div className='mt-auto mb-auto'>
-                            <Status status={"active"} fullForm={true}/>
+                            <Status status={"active"} fullForm={false}/>
                         </div>
                     </div>
 
