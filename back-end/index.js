@@ -697,6 +697,237 @@ app.get('/buscarEmpleos', (req,res)=>{
         }
     
     });
+    
+    
+app.put('/crearEmpleo',(req,res)=>{
+    //empresaID el ID de la empresa, habilidades ([]) es un arreglo de IDs de las habilidades
+    //Titulo es un string, descripcion es un string
+
+    //insertamos en la tabla la info que se pasa como body a este post
+    db.none(`INSERT INTO empleo(titulo, descripcion, empresaID, postDate)
+    VALUES ('${req.body.titulo}', '${req.body.descripcion}',${req.body.empresaID},current_timestamp);`)    .then(data => {
+        db.one(`SELECT MAX(empleoid) AS maxid FROM empleo;`, [true])
+        .then(data => {
+            //si encuentra los datos, los manda
+            
+            var currEmpleoId=data.maxid;
+            sentData=false;
+            if (req.body.habilidades.length===0){
+                sentData=true;
+                res.send({status: 201});
+            }
+            for(i in req.body.habilidades){
+                db.none(`INSERT INTO habilidadesDeEmpleo(habilidadID, empleoID)
+                VALUES(${req.body.habilidades[i]},${currEmpleoId});`);
+            }
+            if(!sentData){
+                res.send({status: 201});
+                sentData=true;
+            }
+        })
+        .catch(error => {
+            //si hay un error con el select, lo imprime y lo regresa
+            console.log('ERROR:', error);
+            res.send({status: 404});
+        });
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send({status: 404});
+    });
+});
+
+app.delete('/borrarEmpleo',(req,res)=>{
+    db.none(`DELETE FROM habilidadesDeEmpleo WHERE empleoID=${req.body.empleoID};`)    .then(data => {
+        //si encuentra los datos, los manda
+        db.none(`DELETE FROM empleo WHERE empleoID=${req.body.empleoID};`)    .then(data => {
+            //si encuentra los datos, los manda
+            res.send({status: 201});
+        })
+        .catch(error => {
+            //si hay un error con el select, lo imprime y lo regresa
+            console.log('ERROR:', error);
+            res.send({status: 404});
+        });
+        
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send({status: 404});
+    });
+});
+
+app.put('/updateEmpleo',(req,res)=>{
+    /*
+    Parametros:
+    - empleoID
+    - empresaID (el ID de la empresa que esta creando el empleo)
+    - habilidades (un arreglo de los IDs de las habilidades relacionadas con el empleo)
+    - titulo (un string que representa el titulo del empleo)
+    - descripcion (un string que representa la descripcion del empleo)
+
+    Output:
+    - status 201 si todo bien, status 404 si no todo bien
+
+    */
+
+    //insertamos en la tabla la info que se pasa como body a este post
+    db.none(`UPDATE empleo
+    SET titulo='${req.body.titulo}',  descripcion='${req.body.descripcion}', postDate= current_timestamp
+    WHERE empleoID=${req.body.empleoID};`)    .then(data => {
+        db.none(`DELETE FROM habilidadesDeEmpleo WHERE empleoID=${req.body.empleoID};`, [true])
+        .then(data => {
+            sentData=false;
+            if (req.body.habilidades.length===0){
+                sentData=true;
+                res.send({status: 201});
+            }
+            for(i in req.body.habilidades){
+                db.none(`INSERT INTO habilidadesDeEmpleo(habilidadID, empleoID)
+                VALUES(${req.body.habilidades[i]},${req.body.empleoID});`);
+            }
+            if(!sentData){
+                res.send({status: 201});
+                sentData=true;
+            }
+
+            
+
+        })
+        .catch(error => {
+            //si hay un error con el select, lo imprime y lo regresa
+            console.log('ERROR:', error);
+            res.send({status: 404});
+        });
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send({status: 404});
+    });
+});
+
+
+app.put('/updateUsuario',(req,res)=>{
+    /*
+vamos a tener que agarrar username al inicio desde correo
+
+    Parametros:
+    email
+    nombre
+    apellido
+    rolActual
+    correoContacto
+    telefonoContacto
+    linkedinContacto
+    githubContacto
+    biografia
+
+    habilidades (lista de objetos json){
+        habilidadID
+        tiempoExperiencia
+    }
+
+    experiencias (lista de objetos json){
+        titulo,
+        empresa
+        fechaInicio
+        fechaFin (puede ser null)
+    }
+
+    educaciones (lista de objetos json){
+        tipoEducacion
+        titulo
+        escuela
+        fechaInicio
+        fechaFin
+
+    }
+
+    */
+
+    db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.body.email}';`, [true])
+    .then(data => {
+        //si encuentra los datos, los manda
+        const username= data.username;
+        
+        
+        db.none(`UPDATE usuario
+        SET nombre='${req.body.nombre}', apellido='${req.body.apellido}', rolActual='${req.body.rolActual}',
+        correoContacto='${req.body.correoContacto}',telefonoContacto='${req.body.telefonoContacto}',linkedinContacto='${req.body.linkedinContacto}',githubContacto='${req.body.githubContacto}',
+        biografia='${req.body.biografia}' WHERE username='${username}';`);
+
+        db.none(`DELETE FROM habilidadesDeUsuario WHERE username='${username}';`,[true]).then(data=>{
+            for(i in req.body.habilidades){
+                db.none(`INSERT INTO habilidadesDeUsuario(habilidadID, username, tiempoExperiencia)
+                VALUES(${req.body.habilidades[i].habilidadID}, '${username}', ${req.body.habilidades[i].tiempoExperiencia});`);
+            }
+        });
+        res.send({status:200});
+        
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        res.send({status:404});
+    });
+});
+
+
+app.get('/habilidadesDeUsuario', (req,res)=>{
+    db.any('SELECT * FROM habilidadesDeUsuario;', [true])
+    .then(data => {
+        //si encuentra los datos, los manda
+        res.send(data);
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send(error);
+    });
+});
+
+app.get('/habilidades', (req,res)=>{
+    db.any('SELECT * FROM habilidades;', [true])
+    .then(data => {
+        //si encuentra los datos, los manda
+        res.send(data);
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send(error);
+    });
+});
+
+app.get('/habilidadesDeEmpleo', (req,res)=>{
+    db.any('SELECT * FROM habilidadesDeEmpleo;', [true])
+    .then(data => {
+        //si encuentra los datos, los manda
+        res.send(data);
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send(error);
+    });
+});
+
+app.get('/empleos', (req,res)=>{
+    db.any('SELECT * FROM empleo;', [true])
+    .then(data => {
+        //si encuentra los datos, los manda
+        res.send(data);
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send(error);
+    });
+});
+
+
 
 app.get('/usuarios', (req,res)=>{
     db.any('SELECT * FROM usuario;', [true])
