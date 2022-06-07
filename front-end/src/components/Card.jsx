@@ -81,7 +81,7 @@ function Card({isActive = true, icon, title, description, optional}) {
             </div>
             <div>
                 <div style={style.topRight} className="flex flex-row">
-                    <div className="font-bold text-white text-center opacity-30 px-2 text-xs">
+                    <div className="font-medium text-white text-center opacity-30 px-2 text-xs">
                         <p>{optional.counter.title}: {optional.counter.count}</p>
                     </div>
 
