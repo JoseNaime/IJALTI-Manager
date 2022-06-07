@@ -40,7 +40,7 @@ function LoginForm() {
                                 };
                                 login(newUser);
                             } else {
-                                setSubmitError(res.data)
+                                setSubmitError(res.data);
                             }
                         }).then(() => {
                             setSubmitting(false);
@@ -51,9 +51,11 @@ function LoginForm() {
                     })
                     .catch ((error) => {
                         console.log(error.message);
-                        setSubmitError(error);
+                        setSubmitError("Contraseña o correo inválido");
                         alert(error.message);
+                        setSubmitting(false);
                     })
+                
             }}
         >
             {({isSubmitting}) => (
