@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SkillsContainer = () => {
+const SkillsContainer = ({skills}) => {
 
     const style = {
         h2: {
@@ -9,15 +9,17 @@ const SkillsContainer = () => {
         }
     }
 
+    const skillCards = skills.map((skill,i) => {
+        return (<div>
+                    <p>{skill}</p>
+                </div>)
+    })
+
   return (
     <>
         <h2 style={style.h2} className='text-left'>Habilidades</h2>
-        <div className='flex flex-row'>
-            <p>JavaScript</p>
-            <p>JavaScript</p>
-            <p>JavaScript</p>
-            <p>JavaScript</p>
-            <p>JavaScript</p>
+        <div className='flex flex-row gap-2'>
+            {skillCards}
         </div>
     </>
   )
