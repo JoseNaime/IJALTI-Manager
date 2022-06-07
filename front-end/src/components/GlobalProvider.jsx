@@ -14,13 +14,13 @@ export const GlobalProvider = ({children}) => {
     function getUser() {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            console.log(storedUser);
+            console.log("GlobalContext: " + storedUser);
             dispatch({
                 type: 'SET_USER',
                 payload: JSON.parse(storedUser)
             })
         }
-        return state.user;
+        return storedUser;
     }
 
     function login(user) {

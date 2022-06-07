@@ -2,19 +2,20 @@ import React, {useContext, useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import {GlobalContext} from "../components/GlobalProvider";
 import PatronFondo from '../assets/images/patron_fondo.png';
-import Card from "../components/Card";
-import CompanyIconTest from '../assets/images/icons/company_icon_test.png';
 import CardsContainer from "../components/CardsContainer";
 import CardDetails from '../components/CardDetails';
 
 function Home() {
     //const user = JSON.parse(localStorage.getItem('user'));
-    const {user, getUser} = useContext(GlobalContext);
+    const {getUser} = useContext(GlobalContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!getUser) navigate('/login')
-    }, [getUser, navigate, user])
+        //console.log(getUser());
+        if (getUser() === null) navigate('/login')
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const style = {
         background: {
