@@ -15,9 +15,7 @@ function Skill({icon, name, color}) {
             justifyContent: 'center',
             backgroundColor: color,
         }
-
     }
-
 
     return (
         <div style={style.container}>

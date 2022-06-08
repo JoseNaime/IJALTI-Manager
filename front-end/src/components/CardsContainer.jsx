@@ -3,8 +3,6 @@ import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import Card from "./Card";
 
 function CardsContainer(props) {
-
-
     return (
         <div className="basis-1/2 flex flex-col gap-y-2">
             <Card isActive={true}

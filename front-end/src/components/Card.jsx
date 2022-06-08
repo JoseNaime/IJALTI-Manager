@@ -1,19 +1,7 @@
 import React from 'react';
+import Status from "./Status";
 
 function Card({isActive = true, icon, title, description, optional}) {
-    const getStatusColor = () => {
-        switch (optional.status) {
-            case "active":
-                return "#27CA40";
-            case "pending":
-                return "#FFC130";
-            case "closed":
-                return "#FF6058";
-            default:
-                return "#e1e1e1";
-        }
-    }
-
     const style = {
         container: {
             position: 'relative',
@@ -61,13 +49,6 @@ function Card({isActive = true, icon, title, description, optional}) {
             bottom: '5px',
             right: '0',
         },
-        status: {
-            backgroundColor: getStatusColor(),
-            height: '10px',
-            width: '10px',
-            borderRadius: '50%',
-
-        }
     }
 
     return (
@@ -86,7 +67,7 @@ function Card({isActive = true, icon, title, description, optional}) {
                     </div>
 
                     {optional.status &&
-                        <div style={style.status}> </div>
+                        <Status status={optional.status} fullForm={false} />
                     }
                 </div>
                 <div style={style.bottomRight}>
