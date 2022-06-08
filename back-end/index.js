@@ -757,6 +757,7 @@ app.delete('/borrarEmpleo',(req,res)=>{
         console.log('ERROR:', error);
         res.send({status: 404});
     });
+
 });
 
 app.put('/updateEmpleo',(req,res)=>{
@@ -846,25 +847,61 @@ vamos a tener que agarrar username al inicio desde correo
 
     }
 
+    Output:
+    Status 201 o 404
+
     */
 
     db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.body.email}';`, [true])
     .then(data => {
-        //si encuentra los datos, los manda
         const username= data.username;
-        
-        
+        //Update de la informacion del usuario
         db.none(`UPDATE usuario
         SET nombre='${req.body.nombre}', apellido='${req.body.apellido}', rolActual='${req.body.rolActual}',
-        correoContacto='${req.body.correoContacto}',telefonoContacto='${req.body.telefonoContacto}',linkedinContacto='${req.body.linkedinContacto}',githubContacto='${req.body.githubContacto}',
+        correoContacto='${req.body.correocontacto}',telefonoContacto='${req.body.telefonocontacto}',linkedinContacto='${req.body.linkedincontacto}',githubContacto='${req.body.githubcontacto}',
         biografia='${req.body.biografia}' WHERE username='${username}';`);
 
+        //update de las habilidades relacionadas al usuario
         db.none(`DELETE FROM habilidadesDeUsuario WHERE username='${username}';`,[true]).then(data=>{
             for(i in req.body.habilidades){
                 db.none(`INSERT INTO habilidadesDeUsuario(habilidadID, username, tiempoExperiencia)
-                VALUES(${req.body.habilidades[i].habilidadID}, '${username}', ${req.body.habilidades[i].tiempoExperiencia});`);
+                VALUES(${req.body.habilidades[i].habilidadid}, '${username}', ${req.body.habilidades[i].tiempoexperiencia});`);
             }
         });
+    
+       //update de las experiencias relacionadas al usuario
+        db.none(`DELETE FROM experiencia WHERE username='${username}';`,[true]).then(data=>{
+            for(j in req.body.experiencias){
+                if(req.body.experiencias[j].fechaFin!=null){
+                    db.none(`INSERT INTO experiencia(username, titulo, empresa, fechaInicio, fechaFin)
+                    VALUES('${username}', '${req.body.experiencias[j].titulo}','${req.body.experiencias[j].empresa}',
+                    '${req.body.experiencias[j].fechainicio}','${req.body.experiencias[j].fechafin}');`);
+                }else{
+                    db.none(`INSERT INTO experiencia(username, titulo, empresa, fechaInicio)
+                    VALUES('${username}', '${req.body.experiencias[j].titulo}','${req.body.experiencias[j].empresa}',
+                    '${req.body.experiencias[j].fechainicio}');`);
+                }
+                }
+        });
+
+        //update de las educaciones relacionadas al usuario
+        db.none(`DELETE FROM educacion WHERE username='${username}';`,[true]).then(data=>{
+            for(k in req.body.educaciones){
+                if(req.body.educaciones[k].fechaFin!=null){
+                    db.none(`INSERT INTO educacion(username, tipoEducacion, titulo, escuela, fechaInicio, fechaFin)
+                    VALUES('${username}', '${req.body.educaciones[k].tipoeducacion}','${req.body.educaciones[k].titulo}',
+                    '${req.body.educaciones[k].escuela}','${req.body.educaciones[k].fechainicio}', '${req.body.educaciones[k].fechafin}');`); 
+                }else{
+                    db.none(`INSERT INTO educacion(username, tipoEducacion, titulo, escuela, fechaInicio)
+                    VALUES('${username}', '${req.body.educaciones[k].tipoeducacion}','${req.body.educaciones[k].titulo}',
+                    '${req.body.educaciones[k].escuela}','${req.body.educaciones[k].fechainicio}');`); 
+                }
+                }
+        });
+
+        
+
+
         res.send({status:200});
         
     })
@@ -986,6 +1023,110 @@ if(req.body.habilidades.length>=1){
 
 
 });
+
+
+
+app.put('/nuevaHabilidad',(req,res)=>{
+    /*
+    Parametros
+    - nombre (string de la habilidad a insertar)
+    - color (string del codigo hexadecimal que va a representar la habilidad)
+
+    Output
+    status 201 si todo bien, 404 si todo mal
+    */
+
+    db.none(`INSERT INTO habilidades(nombre,color)
+    VALUES ('${req.body.nombre}', '${req.body.color}');`).then(data=>{
+        res.send({status:201});
+    }).catch(error=>{
+        res.send({status:404});
+    });
+
+    
+});
+
+app.get('/userInfo',(req,res)=>{
+    /*
+    Parametros
+    - email (string del correo del usuario)
+
+    Output
+    - El objeto todo grandote del usuario (el mismo que se usa de input para /updateUsuario)
+
+    Ej:
+{
+    "email": "severia@google.com",
+    "nombre": "Santiago",
+    "apellido": "Reyes",
+    "correocontacto": "null",
+    "telefonocontacto": "null",
+    "linkedincontacto": "null",
+    "githubcontacto": "null",
+    "biografia": "null",
+    "habilidades": [
+        {
+            "habilidadid": 2,
+            "tiempoexperiencia": 3,
+            "nombre": "Python",
+            "color": "#FFD43B"
+        },
+        {
+            "habilidadid": 3,
+            "tiempoexperiencia": null,
+            "nombre": "JavaScript",
+            "color": "#FFF8BE"
+        }
+    ],
+    "experiencias": [
+        {
+            "titulo": "Data Science/Engineering Metee",
+            "empresa": "Meta",
+            "fechainicio": "2022-03-01T06:00:00.000Z",
+            "fechafin": null
+        }
+    ],
+    "educaciones": [
+        {
+            "tipoeducacion": "Carrera",
+            "titulo": "Ingenieria en Tecnologias Computacionales",
+            "escuela": "Tec de Monterrey",
+            "fechainicio": "2020-08-01T05:00:00.000Z",
+            "fechafin": null
+        }
+    ]
+}
+    */
+
+    db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.body.email}';`, [true])
+    .then(data => {
+        const username= data.username;
+        
+        db.one(`SELECT correoCuenta AS email, nombre, apellido, correoContacto, telefonoContacto, linkedinContacto, githubContacto, biografia FROM usuario WHERE username='${username}';`,[true])
+        .then(dataUsuario=>{
+            var finalData=dataUsuario;
+            db.any(`SELECT habilidades.habilidadID, tiempoExperiencia, nombre, color FROM habilidadesDeUsuario JOIN habilidades ON habilidadesDeUsuario.habilidadID=habilidades.habilidadID
+            WHERE username='${username}'`,[true])
+            .then(dataHabilidades=>{
+                finalData.habilidades=dataHabilidades;
+                db.any(`SELECT titulo, empresa, fechaInicio, fechaFin FROM experiencia
+                WHERE username='${username}';`,[true])
+                .then(dataExperiencia=>{
+                    finalData.experiencias=dataExperiencia;
+                    db.any(`SELECT tipoEducacion, titulo, escuela, fechaInicio, fechaFin FROM educacion
+                    WHERE username='${username}'`,[true])
+                    .then(dataEducacion=>{
+                        finalData.educaciones=dataEducacion;
+                        res.send(finalData);
+                        
+                    }); 
+                }); 
+            }); 
+        });
+    });
+});
+
+
 
 app.get('/habilidadesDeUsuario', (req,res)=>{
     db.any('SELECT * FROM habilidadesDeUsuario;', [true])
