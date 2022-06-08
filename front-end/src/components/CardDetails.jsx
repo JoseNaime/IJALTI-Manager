@@ -10,18 +10,11 @@ const CardDetails = ({id,icon,title,location,description,optional}) => {
             fontWeight: "bold",
             fontSize: "24px"
         },
-
-        h2: {
-            fontWeight: "bold",
-            fontSize: "16px"
-        },
-
         details: {
             fontWeight: "400",
             fontSize: "0.8rem",
             opacity: "0.5"
         },
-
         icon: {
           width: '100px',  
         }
@@ -29,7 +22,7 @@ const CardDetails = ({id,icon,title,location,description,optional}) => {
   
     return (
     <div className='flex flex-col basis-1/2'>
-        <div className='w-full h-full px-5'>
+        <div className='w-full h-full pl-5'>
             <div className='mt-3 flex flex-row gap-x-5'>
                 <div>
                     <img style={style.icon} className={""} src={CompanyIconTest} alt={title + "_icon"} />
@@ -53,19 +46,20 @@ const CardDetails = ({id,icon,title,location,description,optional}) => {
                         </div>
                     </div>
 
-                    
+
                 </div>
             </div>
 
-            <hr className='mb-8 opacity-25'/>
+            <hr className='mb-8 opacity-25' />
 
-            <SkillsContainer 
-                skills={['JavaScript', 'Python', 'C++', 'R', 'Ensamblador']}
-            />
-
-            <div className='mt-5 flex flex-col gap-4 text-left'>
-                <h2 style={style.h2}>Descripción</h2>
-                <p>{description}</p>
+            <div className="flex flex-col gap-5">
+                <SkillsContainer
+                    skills={['JavaScript', 'Python', 'C++', 'R', 'Ensamblador', "Golang"]}
+                />
+                <div className='mt-5 flex flex-col gap-4 text-left'>
+                    <h2 className="text-xl">Descripción</h2>
+                    <p>{description}</p>
+                </div>
             </div>
         </div>
     </div>
