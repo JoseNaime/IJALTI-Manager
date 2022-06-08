@@ -63,12 +63,16 @@ const Status = ({status, fullForm=false}) => {
   
     return (
       <div>
-          <div style={style.status} className='p-1 rounded-full flex flex-row justify-center'>
-            <p style={style.statusText}>
-                {fullForm ? getStatusText() : ''}
-            </p>
+          {fullForm ?
+            <div style={style.status} className='p-1 pl-2 rounded-full flex flex-row justify-center'>
+                <p style={style.statusText}>
+                    {fullForm ? getStatusText() : ''}
+                </p>
+                <div style={style.statusCircle} className='m-auto ml-2'></div>
+            </div>
+            :
             <div style={style.statusCircle} className='m-auto ml-2'></div>
-          </div>
+            }
       </div>
   )
 }

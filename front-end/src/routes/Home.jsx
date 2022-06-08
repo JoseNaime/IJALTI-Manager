@@ -4,6 +4,7 @@ import {GlobalContext} from "../components/GlobalProvider";
 import PatronFondo from '../assets/images/patron_fondo.png';
 import CardsContainer from "../components/CardsContainer";
 import CardDetails from '../components/CardDetails';
+import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 
 function Home() {
     //const user = JSON.parse(localStorage.getItem('user'));
@@ -55,7 +56,17 @@ function Home() {
                 <div style={style.content} className={"h-full w-full text-center"}>
                     <CardsContainer />
                     <hr style={style.splitLine} />
-                    <CardDetails />
+                    <CardDetails 
+                        id={'12'}
+                        icon={CompanyIconTest}
+                        title={'Titulo de Oferta'}
+                        location={'Guadalajara, Jalisco'}
+                        description={'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel minus voluptates velit nihil, reprehenderit mollitia quidem quibusdam sint recusandae vitae aliquam adipisci dicta numquam est quis ullam temporibus quam. Suscipit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni reiciendis commodi unde officiis voluptates cumque veniam exercitationem inventore, velit cupiditate, saepe accusantium perspiciatis! Nesciunt aspernatur architecto excepturi quo ab provident?'}
+                        optional = {{
+                            status: 'active',
+                            date: '20/01/2021',
+                        }}
+                    />
                 </div>
             </div>
         </div>
