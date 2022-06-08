@@ -56,7 +56,7 @@ const CardDetails = ({id,icon,title,location,description,optional}) => {
                 <SkillsContainer
                     skills={['JavaScript', 'Python', 'C++', 'R', 'Ensamblador', "Golang"]}
                 />
-                <div className='mt-5 flex flex-col gap-4 text-left'>
+                <div className='mt-3 flex flex-col gap-4 text-left'>
                     <h2 className="text-xl">Descripción</h2>
                     <p>{description}</p>
                 </div>

@@ -26,7 +26,7 @@ const SkillsContainer = ({skills}) => {
 
   return (
     <div>
-        <h2 className='text-left mb-5 text-xl'>Habilidades</h2>
+        <h2 className='text-left mb-3 text-xl'>Habilidades</h2>
         <div style={style.skillsGrid} className='w-full'>
             {skillCards}
         </div>
