@@ -895,95 +895,92 @@ estado (string que representa el estado)
 Output
 lista de objetos json con la informacion de usuario y las habilidades del mismo (lista de jsons con la info de las habildades)
 */
-
-    var habilidadesText="(";
-    for(i in req.body.habilidades){
-        if(req.body.habilidades[i].tiempoExperiencia!=null){
-            var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${req.body.habilidades[i].nombre.toLowerCase()}' AND habilidadesDeUsuario.tiempoexperiencia>=${req.body.habilidades[i].tiempoexperiencia})`);
-
-        }
-        else{
-            var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${req.body.habilidades[i].nombre.toLowerCase()}')`);
-        }
-        var habilidadesText=habilidadesText.concat(" OR");
-        
-    }
-
-
-    var habilidadesText=habilidadesText.slice(0,-2);
-    var habilidadesText=habilidadesText.concat(")");
-
-   console.log(habilidadesText);
-
-    if(req.body.habilidades.length>=1){
-        db.any(`SELECT usuario.username, usuario.nombre, usuario.apellido, usuario.rolActual, usuario.biografia, usuario.linkedinContacto, usuario.githubContacto, usuario.correoContacto, usuario.ciudad, usuario.estado
-        FROM habilidadesDeUsuario JOIN usuario ON habilidadesDeUsuario.username=usuario.username JOIN habilidades ON habilidadesDeUsuario.habilidadID=habilidades.habilidadID
-        WHERE ${habilidadesText}
-        AND CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${req.body.name.toLowerCase()}%'
-        AND LOWER(usuario.ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
-        AND LOWER(usuario.estado) LIKE '%${req.body.estado.toLowerCase()}%';`,[true]).then(data=>{
-            var finalData=data;
-            var habilidadesArr=[];
-            var sentData=false;
-            console.log(data);
-            if(finalData.length===0){
-                sentData=true;
-                res.send(finalData);
-            }
-            for(i in finalData){
-                var completed=false;
-                db.any(`SELECT * FROM habilidadesDeUsuario JOIN habilidades ON habilidadesDeUsuario.habilidadID=habilidades.habilidadID
-                WHERE username='${finalData[i].username}'`,[i])
-                .then(data2=>{
-                    habilidadesArr.push(data2);
-                    if(habilidadesArr.length===finalData.length){
-                        //console.log(habilidadesArr);
-                        for(j in finalData){
-                            finalData[j].habilidades=habilidadesArr[j];
-                        }
-                        if(!sentData){
-                            res.send(finalData);
-                        }
-                    }
-                });
-                
-            }
-        });
-    }else{
-        db.any(`SELECT usuario.username, usuario.nombre, usuario.apellido, usuario.rolActual, usuario.biografia, usuario.linkedinContacto, usuario.githubContacto, usuario.correoContacto, usuario.ciudad, usuario.estado
-        FROM usuario
-        WHERE CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${req.body.name.toLowerCase()}%'
-        AND LOWER(usuario.ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
-        AND LOWER(usuario.estado) LIKE '%${req.body.estado.toLowerCase()}%';`,[true]).then(data=>{
-            var finalData=data;
-            var habilidadesArr=[];
-            var sentData=false;
-            console.log(data);
-            if(finalData.length===0){
-                sentData=true;
-                res.send(finalData);
-            }
-            for(i in finalData){
-                var completed=false;
-                db.any(`SELECT * FROM habilidadesDeUsuario JOIN habilidades ON habilidadesDeUsuario.habilidadID=habilidades.habilidadID
-                WHERE username='${finalData[i].username}'`,[i])
-                .then(data2=>{
-                    habilidadesArr.push(data2);
-                    if(habilidadesArr.length===finalData.length){
-                        //console.log(habilidadesArr);
-                        for(j in finalData){
-                            finalData[j].habilidades=habilidadesArr[j];
-                        }
-                        if(!sentData){
-                            res.send(finalData);
-                        }
-                    }
-                });
-                
-            }
-        });
+var habilidadesText="(";
+for(i in req.body.habilidades){
+    if(req.body.habilidades[i].tiempoexperiencia!=null && req.body.habilidades[i].tiempoexperiencia!=0){
+        var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${req.body.habilidades[i].nombre.toLowerCase()}' AND habilidadesDeUsuario.tiempoexperiencia>=${req.body.habilidades[i].tiempoexperiencia})`);
 
     }
+    else{
+        var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${req.body.habilidades[i].nombre.toLowerCase()}')`);
+    }
+    var habilidadesText=habilidadesText.concat(" OR");
+    
+}
+
+
+var habilidadesText=habilidadesText.slice(0,-2);
+var habilidadesText=habilidadesText.concat(")");
+
+
+if(req.body.habilidades.length>=1){
+    db.any(`SELECT usuario.username, usuario.nombre, usuario.apellido, usuario.rolActual, usuario.biografia, usuario.linkedinContacto, usuario.githubContacto, usuario.correoContacto, usuario.ciudad, usuario.estado
+    FROM habilidadesDeUsuario JOIN usuario ON habilidadesDeUsuario.username=usuario.username JOIN habilidades ON habilidadesDeUsuario.habilidadID=habilidades.habilidadID
+    WHERE ${habilidadesText}
+    AND CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${req.body.name.toLowerCase()}%'
+    AND LOWER(usuario.ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
+    AND LOWER(usuario.estado) LIKE '%${req.body.estado.toLowerCase()}%';`,[true]).then(data=>{
+        var finalData=data;
+        var habilidadesArr=[];
+        var sentData=false;
+        if(finalData.length===0){
+            sentData=true;
+            res.send(finalData);
+        }
+        for(i in finalData){
+            var completed=false;
+            db.any(`SELECT * FROM habilidadesDeUsuario JOIN habilidades ON habilidadesDeUsuario.habilidadID=habilidades.habilidadID
+            WHERE username='${finalData[i].username}'`,[i])
+            .then(data2=>{
+                habilidadesArr.push(data2);
+                if(habilidadesArr.length===finalData.length){
+                    //console.log(habilidadesArr);
+                    for(j in finalData){
+                        finalData[j].habilidades=habilidadesArr[j];
+                    }
+                    if(!sentData){
+                        res.send(finalData);
+                    }
+                }
+            });
+            
+        }
+    });
+}else{
+    db.any(`SELECT usuario.username, usuario.nombre, usuario.apellido, usuario.rolActual, usuario.biografia, usuario.linkedinContacto, usuario.githubContacto, usuario.correoContacto, usuario.ciudad, usuario.estado
+    FROM usuario
+    WHERE CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${req.body.name.toLowerCase()}%'
+    AND LOWER(usuario.ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
+    AND LOWER(usuario.estado) LIKE '%${req.body.estado.toLowerCase()}%';`,[true]).then(data=>{
+        var finalData=data;
+        var habilidadesArr=[];
+        var sentData=false;
+        console.log(data);
+        if(finalData.length===0){
+            sentData=true;
+            res.send(finalData);
+        }
+        for(i in finalData){
+            var completed=false;
+            db.any(`SELECT * FROM habilidadesDeUsuario JOIN habilidades ON habilidadesDeUsuario.habilidadID=habilidades.habilidadID
+            WHERE username='${finalData[i].username}'`,[i])
+            .then(data2=>{
+                habilidadesArr.push(data2);
+                if(habilidadesArr.length===finalData.length){
+                    //console.log(habilidadesArr);
+                    for(j in finalData){
+                        finalData[j].habilidades=habilidadesArr[j];
+                    }
+                    if(!sentData){
+                        res.send(finalData);
+                    }
+                }
+            });
+            
+        }
+    });
+
+}
 
 
 
