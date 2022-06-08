@@ -811,6 +811,40 @@ app.put('/updateEmpleo',(req,res)=>{
 });
 
 
+app.put('/updateEmpresa',(req,res)=>{
+    /*
+    Parametros:
+    - empresaID
+    - nombreComercial
+    - nombreFiscal
+    - correoContacto
+    - telefonoContacto
+    - paginaWeb
+    - ciudad
+    - estado
+    - domicilio
+    - documentoAprobacion
+
+    Output:
+    - status 201 si todo bien, status 404 si no todo bien
+    */
+
+    //insertamos en la tabla la info que se pasa como body a este post
+    db.none(`UPDATE empresa
+    SET nombreComercial='${req.body.nombreComercial}',  nombreFiscal='${req.body.nombreFiscal}', correoContacto = '${req.body.correoContacto}',
+    telefonoContacto = '${req.body.telefonoContacto}', paginaWeb = '${req.body.paginaWeb}', ciudad = '${req.body.ciudad}', estado = '${req.body.estado}',
+    domicilio = '${req.body.domicilio}', documentoAprobacion = '${req.body.documentoAprobacion}'
+    WHERE empresaID=${req.body.empresaID};`)    .then(data => {
+        res.send({status: 201});
+    })
+    .catch(error => {
+        //si hay un error con el select, lo imprime y lo regresa
+        console.log('ERROR:', error);
+        res.send({status: 404});
+    });
+});
+
+
 app.put('/updateUsuario',(req,res)=>{
     /*
 vamos a tener que agarrar username al inicio desde correo
