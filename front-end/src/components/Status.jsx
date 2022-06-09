@@ -48,8 +48,8 @@ const Status = ({status, fullForm=false}) => {
 
         statusCircle: {
             backgroundColor: getStatusColor(),
-            height: '10px',
-            width: '10px',
+            height: '12px',
+            width: '12px',
             borderRadius: '50%',
             opacity: 1
         },

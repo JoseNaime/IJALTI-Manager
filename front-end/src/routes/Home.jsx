@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {GlobalContext} from "../components/GlobalProvider";
 import PatronFondo from '../assets/images/patron_fondo.png';
@@ -7,6 +7,8 @@ import CardDetails from '../components/CardDetails';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 
 function Home() {
+    const [currentCard, setCurrentCard] = useState(null);
+
     //const user = JSON.parse(localStorage.getItem('user'));
     const {getUser} = useContext(GlobalContext);
     const navigate = useNavigate();
@@ -44,6 +46,7 @@ function Home() {
             borderLeft: "1px solid #A6A6A6",
             width: "1px",
             position: "absolute",
+            opacity: "0.35",
             left: "50%",
             top: "50%",
             transform: "translate(-50%, -50%)",
@@ -56,7 +59,7 @@ function Home() {
                 <div style={style.content} className={"h-full w-full text-center"}>
                     <CardsContainer />
                     <hr style={style.splitLine} />
-                    <CardDetails 
+                    <CardDetails
                         id={'12'}
                         icon={CompanyIconTest}
                         title={'Titulo de Oferta'}
