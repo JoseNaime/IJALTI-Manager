@@ -1,4 +1,6 @@
 import React, {useState} from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
 function Menu() {
 
@@ -59,19 +61,32 @@ function Menu() {
             width: '60px',
             height: '60px',
             background: '#FFFFFF'
+        },
+        iconContainer: {
+            width: '100%',
+            height: '100%',
+            position: 'relative'
+        },
+        arrow: {
+            position: 'absolute',
+            top: '36%',
+            left: '67%',
+            transform: 'Translate(-50% -50%)'
         }
     }
     return (
         <>
-        <div style={toggle ? style.containerhidden : style.container} class="rounded-[12px]">
-            <div style={style.content} class="flex flex-col gap-y-3">
+        <div style={toggle ? style.containerhidden : style.container} className="rounded-[12px]">
+            <div style={style.content} className="flex flex-col gap-y-3">
                 <p><a href="/aplicaciones">Mis aplicaciones</a></p>
-                <p style={style.current} class="font-bold"><a href="/ofertas">Ofertas</a></p>
+                <p style={style.current} className="font-bold"><a href="/ofertas">Ofertas</a></p>
                 <p><a href="/perfil">Mi perfil</a></p>
             </div>
             <p style={style.logout}><a href="/cerrar">Cerrar Sesión</a></p>
             <hr style={style.hr}></hr>
-            <div style={style.click} class="rounded-[50%]" onClick={toggleMenu}></div>
+            <div style={style.click} className="rounded-[50%]" onClick={toggleMenu}>
+                <div style={style.iconContainer}><FontAwesomeIcon icon={faAngleRight} style={style.arrow} className={toggle ? "arrow" : "rotate-180"}/></div>
+            </div>
         </div>
         </>
     )
