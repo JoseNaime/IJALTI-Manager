@@ -76,6 +76,7 @@ app.post('/crearTablaEmpresa',(req,res)=>{
     ciudad VARCHAR(50),
     estado VARCHAR(50),
     domicilio VARCHAR(255),
+    descripcion VARCHAR(2555),
     documentoAprobacion VARCHAR(255)); `);
     res.send("Succesfully created empresa table");
 });
@@ -1160,7 +1161,134 @@ app.get('/userInfo',(req,res)=>{
     });
 });
 
+app.get('/empresaInfo',(req,res)=>{
+    /*
+    Parametros:
+    email (string del correo de la cuenta de empresa)
 
+    Output:
+    empresaid (int, id de la empresa)
+    nombreComercial (string)
+    estadocuenta (string del valor del estado de cuenta. Ej: Aprobada, en revision, etc)
+    domicilio (string)
+    ciudad (string)
+    estado (string)
+    descripcion (string)
+    correocontacto (string)
+    telefonocontacto (string)
+    empleos (lista de objetos json que representan los empleos que la empresa ha publicado){
+        empleoid (int, id del empleo)
+        titulo (string)
+        descripcion (string)
+        postdate (date, string)
+        solicitudes (string del numero de solicitudes/aplicaciones a este empleo)
+    }
+    */
+    db.one(`SELECT empresaID, nombreComercial, estadoCuenta,paginaWeb,domicilio,ciudad,estado,descripcion, correoContacto, telefonoContacto FROM empresa WHERE correoCuenta='${req.body.email}';`, [true])
+    .then(data => {
+        const empresaid= data.empresaid;
+        var finalData=data;
+        db.any(`SELECT empleo.empleoID, empleo.titulo, empleo.descripcion, empleo.postDate, COUNT(*) AS solicitudes FROM empleo
+        JOIN aplicacion ON empleo.empleoID=aplicacion.empleoID WHERE empleo.empresaID=${empresaid} GROUP BY empleo.empleoID`,[true])
+        .then(dataEmpleos=>{
+            finalData.empleos=dataEmpleos;
+            res.send(finalData);
+        }); 
+    });
+});
+
+app.get('/empleosEmpresa',(req,res)=>{
+    /*
+    Parametros:
+    email (string del correo de la cuenta de empresa)
+
+    Output:
+    lista de objetos JSON, cada uno representando un empleo{
+        empleoID (int, id del empleo)
+        titulo (string, titulo del empleo)
+        descripcion (string, descripcion del empleo)
+        postDate (date, string, dia en el que el empleo se publico)
+        ciudad (string, ciudad de la empresa que publico el empleo)
+        estado (string, estado de la empresa que publico el empleo)
+        nombrecomercial (string, nombrecomercial de la empresa que publico el empleo)
+        numsolicitues (string, cantidad de personas que han aplicado a el empleo)
+        solicitudes (lista de objetos JSON que representan las solicitudes de usuarios para este empleo){
+            status (string, estado de la aplicacion. Ej: Activa, Cerrada)
+            aplicacionfecha (date, string, dia en el que la aplicacion para el empleo fue enviada por el usuario)
+            nombre (string, nombre del aplicante)
+            apellido (string, apellido del aplicante)
+            rolactual (string, rolactual del aplicante)
+            correocontacto (string, correo de contacto del aplicante)
+            telefonocontacto (string, telefono de contacto del aplicante)
+            username (string, username/identificador unico del aplicante)
+            email (string, el correo con el que se creo la cuenta del aplicante)
+            }
+
+        habilidades (lista de objetos JSON que representan las habilidades del empleo){
+            habilidadid (int, id de la habilidad)
+            tiempoexperiencia (int, tiempo de experiencia que se requeire/prefiere para el empleo)
+            nombre (string, nombre de la habilidad. Ej: "React")
+            color (string, codigo hexadecimal que representa el color de la habilidad)
+            nombrelogo (string, aun no se usa pero en teoria es para acceder al logo de la habilidad)
+        }
+    }
+
+    */
+    db.one(`SELECT empresaID FROM empresa WHERE correoCuenta='${req.body.email}';`, [true])
+    .then(data => {
+        const empresaid= data.empresaid;
+        db.any(`SELECT empleo.empleoID, empleo.titulo, empleo.descripcion, empleo.postDate, empresa.ciudad, empresa.estado, empresa.nombreComercial FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
+        WHERE empleo.empresaID=${empresaid};`,[true])
+        .then(dataEmpleos=>{
+            var finalData=dataEmpleos;
+            var aplicaciones=[];
+            var habilidades=[];
+            for(i in finalData){
+                db.any(`SELECT aplicacion.status, aplicacion.aplicacionFecha, usuario.nombre, usuario.apellido, usuario.rolActual, usuario.correoContacto, usuario.telefonoContacto, usuario.username, usuario.correoCuenta AS email FROM aplicacion
+                JOIN empleo ON empleo.empleoID=aplicacion.empleoID JOIN usuario ON aplicacion.username=usuario.username WHERE empleo.empleoID=${finalData[i].empleoid};`,[true])
+                .then(dataAplicacion=>{
+                    aplicaciones.push(dataAplicacion);
+                    if(aplicaciones.length===finalData.length && habilidades.length==finalData.length){
+                        for(j in aplicaciones){
+                            finalData[j].numsolicitudes=aplicaciones[j].length;
+                            finalData[j].solicitudes=aplicaciones[j];
+                        }
+                        for(k in habilidades){
+                            finalData[k].habilidades=habilidades[k];
+                        }
+                        finalData.numsolicitudes=aplicaciones.length;
+                        res.send(finalData);
+
+                    }
+                    
+                });
+                db.any(`SELECT habilidadesDeEmpleo.habilidadID, habilidadesDeEmpleo.tiempoExperiencia, habilidades.nombre, habilidades.color, habilidades.nombreLogo
+                FROM habilidadesDeEmpleo JOIN habilidades ON habilidadesDeEmpleo.habilidadID=habilidades.habilidadID JOIN empleo ON habilidadesDeEmpleo.empleoID=empleo.empleoID
+                WHERE empleo.empleoID=${finalData[i].empleoid}`,[true])
+                .then(dataHabilidades=>{
+                    habilidades.push(dataHabilidades);
+                    if(aplicaciones.length===finalData.length && habilidades.length==finalData.length){
+                        for(j in aplicaciones){
+                            finalData[j].numSolicitudes=aplicaciones[j].length;
+                            finalData[j].solicitudes=aplicaciones[j];
+                        }
+                        for(k in habilidades){
+                            finalData[k].habilidades=habilidades[k];
+                        }
+                        res.send(finalData);
+                    }
+                    
+                }); 
+            }
+            
+        }); 
+    });
+});
+
+//------------------------------
+
+
+//-------------------------------
 
 app.get('/habilidadesDeUsuario', (req,res)=>{
     db.any('SELECT * FROM habilidadesDeUsuario;', [true])
@@ -1213,8 +1341,6 @@ app.get('/empleos', (req,res)=>{
         res.send(error);
     });
 });
-
-
 
 app.get('/usuarios', (req,res)=>{
     db.any('SELECT * FROM usuario;', [true])
