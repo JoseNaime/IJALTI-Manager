@@ -41,7 +41,7 @@ const CardDetails = ({id,icon,title,location,description,optional}) => {
                             <h1 style={style.h1}>{title}</h1>
                             {optional.status &&
                                 <div className='mt-auto mb-auto'>
-                                    <Status status={"active"} fullForm={true}/>
+                                    <Status status={optional.status} fullForm={true}/>
                                 </div>
                             }
                         </div>
