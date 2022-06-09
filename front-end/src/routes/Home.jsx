@@ -32,7 +32,7 @@ function Home() {
             justifyContent: 'center',
             backgroundColor: '#FFFFFF',
             boxShadow: '0 0 50px 0 rgba(0,0,0,0.2)',
-            padding: "100px 20px",
+            padding: "0px 0px",
             position: 'relative',
             width: '1000px',
         },
@@ -42,7 +42,7 @@ function Home() {
             flexDirection: 'row',
         },
         splitLine: {
-            height: "95vh",
+            height: "100vh",
             border: "none",
             borderLeft: "1px solid #A6A6A6",
             width: "1px",
@@ -59,7 +59,7 @@ function Home() {
             <div style={style.container} className={"h-full bg-slate-50"}>
                 <div style={style.content} className={"h-full w-full text-center"}>
                     <CardsContainer />
-                    <hr style={style.splitLine} />
+                    <hr style={style.splitLine}/>
                     <CardDetails
                         id={'12'}
                         icon={CompanyIconTest}
@@ -69,6 +69,9 @@ function Home() {
                         optional = {{
                             status: 'active',
                             date: '20/01/2021',
+                            buttonText: 'Ver Solicitudes',
+                            buttonFunction: 'si',
+                            counter: 20
                         }}
                     />
                 </div>
