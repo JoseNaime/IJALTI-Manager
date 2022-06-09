@@ -4,6 +4,7 @@ import {GlobalContext} from "../components/GlobalProvider";
 import PatronFondo from '../assets/images/patron_fondo.png';
 import CardsContainer from "../components/CardsContainer";
 import CardDetails from '../components/CardDetails';
+import Menu from '../components/Menu';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 
 function Home() {
@@ -72,6 +73,7 @@ function Home() {
                     />
                 </div>
             </div>
+            <Menu/>
         </div>
     );
 }
