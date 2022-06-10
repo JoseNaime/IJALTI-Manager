@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Status from "./Status";
 
-function Card({isActive = true, icon, title, description, optional, handleClick}) {
+function Card({_id,isActive = true, icon, title, description, optional, handleClick, selectedCard}) {
     const style = {
         container: {
             position: 'relative',
@@ -51,8 +51,16 @@ function Card({isActive = true, icon, title, description, optional, handleClick}
         },
     }
 
+    // const selectCard = () => {
+    //     if(selectedCard.data === id){
+    //         setSelected(true)
+    //     } else {
+    //         setSelected(false)
+    //     }
+    // }
+
     return (
-        <div style={style.container} className={!isActive ? "opacity-60" : ""} onClick={handleClick}>
+        <div style={style.container} className={!isActive ? "opacity-60" : ""} onClick={(e,_id) => handleClick(e,_id)}>
             <div style={style.mainContent}>
                 <img style={style.icon} className={"mx-4"} src={icon} alt={title + "_icon"} />
                 <div style={style.info} className="text-left py-2 justify-around">
