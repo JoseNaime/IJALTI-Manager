@@ -12,7 +12,7 @@ function Menu() {
     const sampleLocation = useLocation();
 
     const style = {
-        containerhidden: {
+        containerHidden: {
             backgroundColor: '#FFFFFF',
             boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
             padding: "10rem 10px",
@@ -82,7 +82,7 @@ function Menu() {
     }
     return (
         <>
-        <div style={toggle ? style.containerhidden : style.container} className="rounded-[12px]">
+        <div style={toggle ? style.containerHidden : style.container} className="rounded-[12px]">
             <div style={style.content} className="flex flex-col gap-y-3">
                 <p style={sampleLocation.pathname === "/aplicaciones" ? style.current : style.black}><a href="/aplicaciones">Mis aplicaciones</a></p>
                 <p style={sampleLocation.pathname === "/" ? style.current : style.black}><a href="/ofertas">Ofertas</a></p>

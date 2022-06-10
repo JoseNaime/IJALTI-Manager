@@ -599,10 +599,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border {
   border-width: 1px;
 }
-.bg-primary {
-  --tw-bg-opacity: 1;
-  background-color: rgb(64 100 172 / var(--tw-bg-opacity));
-}
 .bg-gray {
   --tw-bg-opacity: 1;
   background-color: rgb(229 229 229 / var(--tw-bg-opacity));
@@ -610,6 +606,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-light-gray {
   --tw-bg-opacity: 1;
   background-color: rgb(246 246 246 / var(--tw-bg-opacity));
+}
+.bg-primary {
+  --tw-bg-opacity: 1;
+  background-color: rgb(64 100 172 / var(--tw-bg-opacity));
 }
 .object-cover {
   object-fit: cover;

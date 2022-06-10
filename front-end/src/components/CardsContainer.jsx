@@ -1,22 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import Card from "./Card";
 
-function CardsContainer({setCurrentCard}) {
-
-    const [selectedCard, setSelectedCard] = useState(null);
-    
-    const handleClick = (e,data) => {
-        setCurrentCard(data)
-        setSelectedCard(data)
-        console.log(data)
-        console.log(e)
-    }
-
+function CardsContainer({handleCardClick}) {
     return (
         <div className="basis-1/2 flex flex-col gap-y-2">
             <Card isActive={true}
-                  _id={'1'}
+                  id={1}
                   icon={CompanyIconTest}
                   title={"Titulo de Empleo"}
                   description={"Lorem ipsum dolor sit amet, consectetur \n" +
@@ -29,11 +19,10 @@ function CardsContainer({setCurrentCard}) {
                           count: "10"
                       }
                   }}
-                  handleClick = {handleClick}
-                  selectedCard = {selectedCard}
+                  handleCardClick={handleCardClick}
             />
             <Card isActive={true}
-                  _id={'2'}
+                  id={2}
                   icon={CompanyIconTest}
                   title={"Titulo de Empleo"}
                   description={"Lorem ipsum dolor sit amet, consectetur \n" +
@@ -46,8 +35,7 @@ function CardsContainer({setCurrentCard}) {
                           count: "10"
                       }
                   }}
-                  handleClick = {handleClick}
-                  selectedCard = {selectedCard}
+                  handleCardClick={handleCardClick}
             />
         </div>
     );

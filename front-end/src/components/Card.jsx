@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import Status from "./Status";
 
-function Card({_id,isActive = true, icon, title, description, optional, handleClick, selectedCard}) {
+function Card({isActive = true, id, icon, title, description, optional, handleCardClick}) {
     const style = {
         container: {
             position: 'relative',
-            width: "96%",
+            width: "100%",
             display: 'flex',
             flexDirection: 'row',
             height: '85px',
@@ -41,26 +41,18 @@ function Card({_id,isActive = true, icon, title, description, optional, handleCl
         topRight: {
             position: 'absolute',
             top: '8px',
-            right: '0',
+            right: '15px',
             alignItems: 'center',
         },
         bottomRight: {
             position: 'absolute',
             bottom: '5px',
-            right: '0',
+            right: '15px',
         },
     }
 
-    // const selectCard = () => {
-    //     if(selectedCard.data === id){
-    //         setSelected(true)
-    //     } else {
-    //         setSelected(false)
-    //     }
-    // }
-
     return (
-        <div style={style.container} className={!isActive ? "opacity-60" : ""} onClick={(e,_id) => handleClick(e,_id)}>
+        <div style={style.container} className={!isActive ? "opacity-60" : ""} onClick={(e) => handleCardClick(id)}>
             <div style={style.mainContent}>
                 <img style={style.icon} className={"mx-4"} src={icon} alt={title + "_icon"} />
                 <div style={style.info} className="text-left py-2 justify-around">

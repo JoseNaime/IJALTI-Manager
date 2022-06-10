@@ -9,11 +9,14 @@ import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import ProfileIcon from '../components/ProfileIcon';
 
 function Home() {
-    const [currentCard, setCurrentCard] = useState(null);
-
-    //const user = JSON.parse(localStorage.getItem('user'));
+    const [currentCardId, setCurrentCardId] = useState(null);
     const {getUser} = useContext(GlobalContext);
     const navigate = useNavigate();
+
+    const handleCardClick = (id) => {
+        console.log(id);
+        setCurrentCardId(id)
+    }
 
     useEffect(() => {
         //console.log(getUser());
@@ -59,11 +62,9 @@ function Home() {
         <div style={style.background} className="w-full h-full bg-gray">
             <div style={style.container} className={"h-full bg-slate-50"}>
                 <div style={style.content} className={"h-full w-full text-center"}>
-                    <CardsContainer
-                        setCurrentCard = {setCurrentCard}/>
+                    <CardsContainer handleCardClick={handleCardClick}/>
                     <hr style={style.splitLine}/>
                     <CardDetails
-                        id={'12'}
                         icon={CompanyIconTest}
                         title={'Titulo de Oferta'}
                         location={'Guadalajara, Jalisco'}
@@ -75,7 +76,6 @@ function Home() {
                             buttonFunction: 'si',
                             counter: 200
                         }}
-                        currentCard={currentCard}
                     />
                 </div>
             </div>
