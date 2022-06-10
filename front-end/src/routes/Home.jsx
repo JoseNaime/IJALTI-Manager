@@ -58,7 +58,8 @@ function Home() {
         <div style={style.background} className="w-full h-full bg-gray">
             <div style={style.container} className={"h-full bg-slate-50"}>
                 <div style={style.content} className={"h-full w-full text-center"}>
-                    <CardsContainer />
+                    <CardsContainer
+                        setCurrentCard = {setCurrentCard}/>
                     <hr style={style.splitLine}/>
                     <CardDetails
                         id={'12'}
@@ -71,8 +72,9 @@ function Home() {
                             date: '20/01/2021',
                             buttonText: 'Ver Solicitudes',
                             buttonFunction: 'si',
-                            counter: 20
+                            counter: 200
                         }}
+                        currentCard={currentCard}
                     />
                 </div>
             </div>

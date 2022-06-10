@@ -1,7 +1,7 @@
 import React from 'react';
 import Status from "./Status";
 
-function Card({isActive = true, icon, title, description, optional}) {
+function Card({isActive = true, icon, title, description, optional, handleClick}) {
     const style = {
         container: {
             position: 'relative',
@@ -52,7 +52,7 @@ function Card({isActive = true, icon, title, description, optional}) {
     }
 
     return (
-        <div style={style.container} className={!isActive ? "opacity-60" : ""}>
+        <div style={style.container} className={!isActive ? "opacity-60" : ""} onClick={handleClick}>
             <div style={style.mainContent}>
                 <img style={style.icon} className={"mx-4"} src={icon} alt={title + "_icon"} />
                 <div style={style.info} className="text-left py-2 justify-around">

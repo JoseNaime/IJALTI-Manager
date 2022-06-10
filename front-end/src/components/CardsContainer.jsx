@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import Card from "./Card";
 
-function CardsContainer(props) {
+function CardsContainer(setCurrentCard) {
+
+    const [selectedCard, setSelectedCard] = useState(null);
+    
+    const handleClick = (data) => {
+        setCurrentCard(data)
+    }
+
     return (
         <div className="basis-1/2 flex flex-col gap-y-2">
             <Card isActive={true}
@@ -18,6 +25,8 @@ function CardsContainer(props) {
                           count: "10"
                       }
                   }}
+                  handleClick = {handleClick}
+                  selectedCard = {selectedCard}
             />
             <Card isActive={true}
                   icon={CompanyIconTest}
@@ -32,6 +41,8 @@ function CardsContainer(props) {
                           count: "10"
                       }
                   }}
+                  handleClick = {handleClick}
+                  selectedCard = {selectedCard}
             />
         </div>
     );

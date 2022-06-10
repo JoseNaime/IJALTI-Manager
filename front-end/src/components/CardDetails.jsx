@@ -3,7 +3,7 @@ import SkillsContainer from './SkillsContainer'
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png"
 import Status from './Status'
 
-const CardDetails = ({id,icon,title,location,description,optional}) => {
+const CardDetails = ({id,icon,title,location,description,optional, currentCard}) => {
   
     const style = {
         h1: {
