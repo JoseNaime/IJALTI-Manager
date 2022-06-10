@@ -6,6 +6,7 @@ import CardsContainer from "../components/CardsContainer";
 import CardDetails from '../components/CardDetails';
 import Menu from '../components/Menu';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
+import ProfileIcon from '../components/ProfileIcon';
 
 function Home() {
     const [currentCard, setCurrentCard] = useState(null);
@@ -77,6 +78,7 @@ function Home() {
                 </div>
             </div>
             <Menu/>
+            <ProfileIcon/>
         </div>
     );
 }
