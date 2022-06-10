@@ -462,7 +462,6 @@ app.get('/aplicacionesUsuario', (req,res)=>{
 
 //Busqueda de empleos
 app.get('/buscarEmpleos', (req,res)=>{
-    console.log(req.query);
 
     //Filtros  (Empresa, Titulo, Habilidades, Fecha?)
     /*
@@ -480,41 +479,68 @@ app.get('/buscarEmpleos', (req,res)=>{
 */
 
     var empresasText="( ";
-    for(i in req.query.empresas){
-        var empresasText=empresasText.concat("'");
-        var empresasText=empresasText.concat(req.query.empresas[i].toLowerCase());
-        var empresasText=empresasText.concat("'");
-        var empresasText=empresasText.concat(",");
-        
-    }
-    var empresasText=empresasText.slice(0,-1);
-    var empresasText=empresasText.concat(")");
-
     var habilidadesText="( ";
-    for(i in req.query.habilidades){
-        var habilidadesText=habilidadesText.concat("'");
-        var habilidadesText=habilidadesText.concat(req.query.habilidades[i].toLowerCase());
-        var habilidadesText=habilidadesText.concat("'");
-        var habilidadesText=habilidadesText.concat(",");
-        
-    }
+    var searchTitle="";
+    if(Object.keys(req.query).length!=0){
+        if(typeof req.query.empresas!='string'){
 
-    var habilidadesText=habilidadesText.slice(0,-1);
-    var habilidadesText=habilidadesText.concat(")");
+            for(i in req.query.empresas){
+                var empresasText=empresasText.concat("'");
+                var empresasText=empresasText.concat(req.query.empresas[i].toLowerCase());
+                var empresasText=empresasText.concat("'");
+                var empresasText=empresasText.concat(",");
+                
+            }
+            var empresasText=empresasText.slice(0,-1);
+            var empresasText=empresasText.concat(")");
+      }else{
+        var empresasText=empresasText.concat("'");
+        var empresasText=empresasText.concat(req.query.empresas.toLowerCase());
+        var empresasText=empresasText.concat("'");
+        var empresasText=empresasText.concat(")");
+
+      }
+      if(typeof req.query.habilidades!='string'){
+            var habilidadesText="( ";
+            for(i in req.query.habilidades){
+                var habilidadesText=habilidadesText.concat("'");
+                var habilidadesText=habilidadesText.concat(req.query.habilidades[i].toLowerCase());
+                var habilidadesText=habilidadesText.concat("'");
+                var habilidadesText=habilidadesText.concat(",");
+                
+            }
+
+            var habilidadesText=habilidadesText.slice(0,-1);
+            var habilidadesText=habilidadesText.concat(")");
+      }else{
+        var habilidadesText=habilidadesText.concat("'");
+        var habilidadesText=habilidadesText.concat(req.query.habilidades.toLowerCase());
+        var habilidadesText=habilidadesText.concat("'");
+        var habilidadesText=habilidadesText.concat(")");
+      }
+
+        searchTitle=req.query.titulo.toLowerCase()
+
+    }
+    else{
+        habilidadesText="()";
+        empresasText="()";
+    }
 
 
 //empleoid, titulo, descrpcion, empresaid, nombrecomercial, status, ciudad, estado, habilidades
     if(habilidadesText==="()" && empresasText==="()"){
-        db.any(`SELECT empleo.empleoID, empleo.titulo, empleo.descripcion,empleo.postDate,
+        
+        db.any(`SELECT DISTINCT empleo.empleoID, empleo.titulo, empleo.descripcion,empleo.postDate,
         empresa.empresaID, empresa.nombreComercial, empresa.estadoCuenta, empresa.ciudad, empresa.estado FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
         JOIN habilidadesDeEmpleo ON empleo.empleoID=habilidadesDeEmpleo.empleoID JOIN habilidades ON habilidadesDeEmpleo.habilidadID= habilidades.habilidadID
-        WHERE LOWER(empleo.titulo) LIKE '%${req.query.titulo.toLowerCase()}%';`, [true])
+        WHERE LOWER(empleo.titulo) LIKE '%${searchTitle}%';`, [true])
         .then(data => {
             //si encuentra los datos, los manda
             var finalData=data;
             var habilidadesTotales=0;
             var sentData=false;
-            if(finalData.lengt===0){
+            if(finalData.length===0){
                 res.send(finalData);
                 sentData=true;
             }
@@ -534,7 +560,6 @@ app.get('/buscarEmpleos', (req,res)=>{
                         habilidadesTotales+=1;
                     }
                     if(habilidadesTotales===finalData.length){
-                        //console.log(habilidadesArr);
                         for(j in finalData){
                             if(!("habilidades"  in finalData[j])){
                                 finalData[j].habilidades=[];
@@ -568,7 +593,7 @@ app.get('/buscarEmpleos', (req,res)=>{
         empresa.empresaID, empresa.nombreComercial, empresa.estadoCuenta, empresa.ciudad, empresa.estado FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
         JOIN habilidadesDeEmpleo ON empleo.empleoID=habilidadesDeEmpleo.empleoID JOIN habilidades ON habilidadesDeEmpleo.habilidadID= habilidades.habilidadID
         WHERE LOWER(empresa.nombreComercial) IN ${empresasText}
-        AND LOWER(empleo.titulo) LIKE '%${req.query.titulo.toLowerCase()}%';`, [true])
+        AND LOWER(empleo.titulo) LIKE '%${searchTitle}%';`, [true])
         .then(data => {
             //si encuentra los datos, los manda
             var finalData=data;
@@ -585,7 +610,7 @@ app.get('/buscarEmpleos', (req,res)=>{
                 WHERE empleoID=${finalData[i].empleoid}`,[i])
                 .then(data2=>{
                     habilidadesArr.push(data2);
-                    if(habilidadesArr.length===finalData.length){
+                    if(habilidadesArr.length===finalData.length && !sentData){
                         //console.log(habilidadesArr);
                         for(j in finalData){
                             finalData[j].habilidades=habilidadesArr[j];
@@ -599,9 +624,9 @@ app.get('/buscarEmpleos', (req,res)=>{
                 
                             }
                         }
-                        if(!sentData){
-                            res.send(dataToSend);
-                        }
+
+                        res.send(dataToSend);
+                        
                         
 
                     }
@@ -620,7 +645,7 @@ app.get('/buscarEmpleos', (req,res)=>{
         empresa.empresaID, empresa.nombreComercial, empresa.estadoCuenta, empresa.ciudad, empresa.estado FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
         JOIN habilidadesDeEmpleo ON empleo.empleoID=habilidadesDeEmpleo.empleoID JOIN habilidades ON habilidadesDeEmpleo.habilidadID= habilidades.habilidadID
         WHERE LOWER(habilidades.nombre) IN ${habilidadesText}
-        AND LOWER(empleo.titulo) LIKE '%${req.query.titulo.toLowerCase()}%';`, [true])
+        AND LOWER(empleo.titulo) LIKE '%${searchTitle}%';`, [true])
         .then(data => {
             //si encuentra los datos, los manda
             var finalData=data;
@@ -670,7 +695,7 @@ app.get('/buscarEmpleos', (req,res)=>{
         JOIN habilidadesDeEmpleo ON empleo.empleoID=habilidadesDeEmpleo.empleoID JOIN habilidades ON habilidadesDeEmpleo.habilidadID= habilidades.habilidadID
         WHERE LOWER(habilidades.nombre) IN ${habilidadesText}
         AND LOWER(empresa.nombreComercial) IN ${empresasText}
-        AND LOWER(empleo.titulo) LIKE '%${req.query.titulo.toLowerCase()}%';`, [true])
+        AND LOWER(empleo.titulo) LIKE '%${searchTitle}%';`, [true])
         .then(data => {
             //si encuentra los datos, los manda
             var finalData=data;
