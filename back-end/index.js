@@ -430,20 +430,32 @@ app.get('/aplicacionesUsuario', (req,res)=>{
     empleo.empleoID, empleo.titulo,empleo.descripcion,
     empresa.nombreComercial,empresa.ciudad,empresa.estado
      FROM aplicacion JOIN empleo ON aplicacion.empleoid=empleo.empleoid JOIN empresa ON empleo.empresaID=empresa.empresaID JOIN usuario ON aplicacion.username=usuario.username
-     WHERE usuario.correoCuenta='${req.body.email}';`, [true])
+     WHERE usuario.correoCuenta='${req.query.email}';`, [true])
     .then(data => {
         //si encuentra los datos, los manda
         var finalData=data;
-        var habilidadesArr=[];
+        var habilidadesTotales=0;
         for(i in finalData){
             var completed=false;
             db.any(`SELECT * FROM habilidadesDeEmpleo WHERE empleoID=${finalData[i].empleoid}`,[i])
             .then(data2=>{
-                habilidadesArr.push(data2);
-                if(habilidadesArr.length===finalData.length){
+                if(data2.length>=1){
+                    for(i in finalData){
+                        if(finalData[i].empleoid===data2[0].empleoid){
+                            finalData[i].habilidades=data2;
+                            habilidadesTotales+=1;
+                        }
+                    }
+                }else{
+                    habilidadesTotales+=1;
+                }
+
+                if(habilidadesTotales===finalData.length){
                     //console.log(habilidadesArr);
                     for(j in finalData){
-                        finalData[j].habilidades=habilidadesArr[j];
+                        if(!("habilidades" in finalData[j])){
+                            finalData[j].habilidades=[];
+                        }
                     }
                     res.send(finalData);
                 }
@@ -460,7 +472,7 @@ app.get('/aplicacionesUsuario', (req,res)=>{
 
 });
 
-//Busqueda de empleos
+
 app.get('/buscarEmpleos', (req,res)=>{
 
     //Filtros  (Empresa, Titulo, Habilidades, Fecha?)
@@ -1062,31 +1074,50 @@ Lista de JSONs con la info
         ]
     }
 */
+    var habilidades=[];
+    for(i in req.query.habilidades){
+        habilidades.push(JSON.parse(req.query.habilidades[i]));
+    }
+    var habilidadesText="( ";
+    var searchName="";
+    var searchCiudad="";
+    var searchEstado="";
 
-    var habilidadesText="(";
-    for(i in req.body.habilidades){
-        if(req.body.habilidades[i].tiempoexperiencia!=null && req.body.habilidades[i].tiempoexperiencia!=0){
-            var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${req.body.habilidades[i].nombre.toLowerCase()}' AND habilidadesDeUsuario.tiempoexperiencia>=${req.body.habilidades[i].tiempoexperiencia})`);
+    if(Object.keys(req.query).length!=0){
 
+        for(i in habilidades){
+            if(habilidades[i].tiempoexperiencia!=null && habilidades[i].tiempoexperiencia!=0){
+                var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${habilidades[i].nombre.toLowerCase()}' AND habilidadesDeUsuario.tiempoexperiencia>=${habilidades[i].tiempoexperiencia})`);
+    
+            }
+            else{
+                var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${habilidades[i].nombre.toLowerCase()}')`);
+            }
+            var habilidadesText=habilidadesText.concat(" OR");        
         }
-        else{
-            var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${req.body.habilidades[i].nombre.toLowerCase()}')`);
-        }
-        var habilidadesText=habilidadesText.concat(" OR");
+    
+        var habilidadesText=habilidadesText.slice(0,-2);
+        var habilidadesText=habilidadesText.concat(")");
         
+
+        searchName=req.query.name.toLowerCase();
+        searchCiudad=req.query.ciudad.toLowerCase();
+        searchEstado=req.query.estado.toLowerCase();
+
+
+
+        }
+    else{
+        habilidadesText="()";
     }
 
 
-    var habilidadesText=habilidadesText.slice(0,-2);
-    var habilidadesText=habilidadesText.concat(")");
-
-
-    if(req.body.habilidades.length>=1){
+    if(habilidades.length>=1){
         db.any(`SELECT usuario.username, usuario.nombre, usuario.apellido, usuario.rolActual, usuario.biografia, usuario.linkedinContacto, usuario.githubContacto, usuario.correoContacto, usuario.ciudad, usuario.estado
         FROM habilidadesDeUsuario JOIN usuario ON habilidadesDeUsuario.username=usuario.username JOIN habilidades ON habilidadesDeUsuario.habilidadID=habilidades.habilidadID
         WHERE ${habilidadesText}
-        AND CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${req.body.name.toLowerCase()}%'
-        AND LOWER(usuario.ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
+        AND CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${searchName}%'
+        AND LOWER(usuario.ciudad) LIKE '%${searchCiudad}%'
         AND LOWER(usuario.estado) LIKE '%${req.body.estado.toLowerCase()}%';`,[true]).then(data=>{
             var finalData=data;
             var habilidadesTotales=0;
@@ -1129,9 +1160,9 @@ Lista de JSONs con la info
     }else{
         db.any(`SELECT usuario.username, usuario.nombre, usuario.apellido, usuario.rolActual, usuario.biografia, usuario.linkedinContacto, usuario.githubContacto, usuario.correoContacto, usuario.ciudad, usuario.estado
         FROM usuario
-        WHERE CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${req.body.name.toLowerCase()}%'
-        AND LOWER(usuario.ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
-        AND LOWER(usuario.estado) LIKE '%${req.body.estado.toLowerCase()}%';`,[true]).then(data=>{
+        WHERE CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${searchName}%'
+        AND LOWER(usuario.ciudad) LIKE '%${searchCiudad}%'
+        AND LOWER(usuario.estado) LIKE '%${searchEstado}%';`,[true]).then(data=>{
             var finalData=data;
             var habilidadesTotales=0;
             var sentData=false;
