@@ -1282,7 +1282,7 @@ app.get('/userInfo',(req,res)=>{
 }
     */
 
-    db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.body.email}';`, [true])
+    db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.query.email}';`, [true])
     .then(data => {
         const username= data.username;
         
@@ -1334,10 +1334,19 @@ app.get('/buscarEmpresas',(req,res)=>{
 
 */ 
 
+    var searchNombre="";
+    var searchCiudad="";
+    var searchEstado="";
+
+    if(req.query.length!=0){
+        searchNombre=req.query.nombre.toLowerCase();
+        searchCiudad=req.query.ciudad.toLowerCase();
+        searchEstado=req.query.estado.toLowerCase();
+    }
     db.any(`SELECT * FROM empresa
-    WHERE (LOWER(nombreComercial) LIKE '${req.body.nombre}' OR LOWER(nombreFiscal) LIKE '%${req.body.nombre.toLowerCase()}%')
-    AND LOWER(ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
-    AND LOWER(estado) LIKE '%${req.body.estado.toLowerCase()}%';`).then(data=>{
+    WHERE (LOWER(nombreComercial) LIKE '${searchNombre}' OR LOWER(nombreFiscal) LIKE '%${searchNombre}%')
+    AND LOWER(ciudad) LIKE '%${searchCiudad}%'
+    AND LOWER(estado) LIKE '%${searchEstado}%';`).then(data=>{
         res.send(data);
     });
 });
@@ -1365,7 +1374,7 @@ app.get('/empresaInfo',(req,res)=>{
         solicitudes (string del numero de solicitudes/aplicaciones a este empleo)
     }
     */
-    db.one(`SELECT empresaID, nombreComercial, estadoCuenta,paginaWeb,domicilio,ciudad,estado,descripcion, correoContacto, telefonoContacto FROM empresa WHERE correoCuenta='${req.body.email}';`, [true])
+    db.one(`SELECT empresaID, nombreComercial, estadoCuenta,paginaWeb,domicilio,ciudad,estado,descripcion, correoContacto, telefonoContacto FROM empresa WHERE correoCuenta='${req.query.email}';`, [true])
     .then(data => {
         const empresaid= data.empresaid;
         var finalData=data;
@@ -1416,7 +1425,11 @@ app.get('/empleosEmpresa',(req,res)=>{
     }
 
     */
-    db.one(`SELECT empresaID FROM empresa WHERE correoCuenta='${req.body.email}';`, [true])
+   var searchEmail="";
+   if(req.query.length!=0){
+    searchEmail==req.query.email;
+   }
+    db.one(`SELECT empresaID FROM empresa WHERE correoCuenta='${searchEmail}';`, [true])
     .then(data => {
         const empresaid= data.empresaid;
         db.any(`SELECT empleo.empleoID, empleo.titulo, empleo.descripcion, empleo.postDate, empresa.ciudad, empresa.estado, empresa.nombreComercial FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
@@ -1543,7 +1556,7 @@ app.put('/aprobarEmpresa',(req,res)=>{
     status 201 si todo bien, 404 y err si no todo bien (err es el error)
     */
 
-    db.none(`UPDATE empresa SET estadoCuenta='Aprobada' WHERE empresaID=${req.body.empresaID};`).then(data=>{
+    db.none(`UPDATE empresa SET estadoCuenta='Aprobada' WHERE empresaID=${req.query.empresaID};`).then(data=>{
         res.send({status:201});
     }).catch(error=>{
         res.send({status:404,err:error});
@@ -1551,7 +1564,7 @@ app.put('/aprobarEmpresa',(req,res)=>{
 });
 
 app.get('/adminInfo', (req,res)=>{
-    db.one(`SELECT * FROM admin WHERE correo='${req.body.email}';`).then(data=>{
+    db.one(`SELECT * FROM admin WHERE correo='${req.query.email}';`).then(data=>{
         res.send(data);
     });
 });
