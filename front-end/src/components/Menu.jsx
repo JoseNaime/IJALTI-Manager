@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { useLocation } from "react-router-dom"
 
 function Menu() {
 
@@ -8,10 +9,12 @@ function Menu() {
 
     const toggleMenu = () => setToggle(!toggle);
 
+    const sampleLocation = useLocation();
+
     const style = {
         containerhidden: {
             backgroundColor: '#FFFFFF',
-            boxShadow: '0 0 30px 0 rgba(0,0,0,0.2)',
+            boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
             padding: "10rem 10px",
             position: 'absolute',
             width: '10.5rem',
@@ -22,7 +25,7 @@ function Menu() {
         },
         container: {
             backgroundColor: '#FFFFFF',
-            boxShadow: '0 0 30px 0 rgba(0,0,0,0.2)',
+            boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
             padding: "10rem 10px",
             position: 'absolute',
             width: '10.5rem',
@@ -35,10 +38,13 @@ function Menu() {
             position: 'relative',
             bottom: '8.3rem',
             left: '0.5rem',
-            fontWeight: 310
         },
         current: {
-            color: "#4064AC"
+            color: "#4064AC",
+            fontWeight: 700
+        },
+        black: {
+            fontWeight: 310
         },
         logout: {
             color: "#C35A5A",
@@ -78,9 +84,9 @@ function Menu() {
         <>
         <div style={toggle ? style.containerhidden : style.container} className="rounded-[12px]">
             <div style={style.content} className="flex flex-col gap-y-3">
-                <p><a href="/aplicaciones">Mis aplicaciones</a></p>
-                <p style={style.current} className="font-bold"><a href="/ofertas">Ofertas</a></p>
-                <p><a href="/perfil">Mi perfil</a></p>
+                <p style={sampleLocation.pathname === "/aplicaciones" ? style.current : style.black}><a href="/aplicaciones">Mis aplicaciones</a></p>
+                <p style={sampleLocation.pathname === "/" ? style.current : style.black}><a href="/ofertas">Ofertas</a></p>
+                <p style={sampleLocation.pathname === "/perfil" ? style.current : style.black}><a href="/perfil">Mi perfil</a></p>
             </div>
             <p style={style.logout}><a href="/cerrar">Cerrar Sesión</a></p>
             <hr style={style.hr}></hr>
