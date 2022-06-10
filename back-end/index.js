@@ -437,7 +437,7 @@ app.get('/aplicacionesUsuario', (req,res)=>{
         var habilidadesTotales=0;
         for(i in finalData){
             var completed=false;
-            db.any(`SELECT * FROM habilidadesDeEmpleo WHERE empleoID=${finalData[i].empleoid}`,[i])
+            db.any(`SELECT habilidadesDeEmpleo.empleoID, habilidades.habilidadID, habilidades.nombre, habilidades.color, habilidadesDeEmpleo.tiempoExperiencia FROM habilidadesDeEmpleo JOIN habilidades ON habilidadesDeEmpleo.habilidadID=habilidades.habilidadID WHERE empleoID=${finalData[i].empleoid}`,[i])
             .then(data2=>{
                 if(data2.length>=1){
                     for(i in finalData){
@@ -471,6 +471,7 @@ app.get('/aplicacionesUsuario', (req,res)=>{
     });
 
 });
+
 
 
 app.get('/buscarEmpleos', (req,res)=>{
