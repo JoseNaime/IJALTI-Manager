@@ -10,7 +10,6 @@ function App() {
     useEffect(() => {
         const userInLocalStorage = JSON.parse(localStorage.getItem('user'));
         if (userInLocalStorage) {
-            console.log(userInLocalStorage)
             login(userInLocalStorage);
         }
         // eslint-disable-next-line

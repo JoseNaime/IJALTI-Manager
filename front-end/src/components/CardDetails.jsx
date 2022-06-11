@@ -3,8 +3,8 @@ import SkillsContainer from './SkillsContainer'
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png"
 import Status from './Status'
 
-const CardDetails = ({id,icon,title,location,description,optional, currentCard}) => {
-  
+const CardDetails = ({cardInfo}) => {
+
     const style = {
         h1: {
             fontWeight: "bold",
@@ -44,24 +44,24 @@ const CardDetails = ({id,icon,title,location,description,optional, currentCard})
         <div className='w-auto h-full mx-5 relative'>
             <div className='mt-3 flex flex-row gap-x-5'>
                 <div>
-                    <img style={style.icon} className={""} src={CompanyIconTest} alt={title + "_icon"} />
+                    <img style={style.icon} className={""} src={CompanyIconTest} alt={cardInfo.titulo + "_icon"} />
                 </div>
 
                 <div className='flex flex-row justify-between w-full'>
                     <div className='flex flex-col justify-center text-left w-full'>
                         <div className='flex flex-row justify-between'>
-                            <h1 style={style.h1}>{title}</h1>
-                            {optional.status &&
+                            <h1 style={style.h1}>{cardInfo.titulo}</h1>
+                            {cardInfo.status &&
                                 <div className='mt-auto mb-auto'>
-                                    <Status status={optional.status} fullForm={true}/>
+                                    <Status status={cardInfo.status} fullForm={true} />
                                 </div>
                             }
                         </div>
 
                         <div style={style.details} className='flex flex-row gap-2'>
-                            <p>Compañía |</p>
-                            <p>{location} |</p>
-                            <p>{optional.date} </p>
+                            <p>{cardInfo.nombrecomercial} | </p>
+                            <p>{cardInfo.ciudad} | </p>
+                            <p>{new Date(cardInfo.postdate).toLocaleDateString()} </p>
                         </div>
                     </div>
 
@@ -73,22 +73,22 @@ const CardDetails = ({id,icon,title,location,description,optional, currentCard})
 
             <div className="flex flex-col gap-5">
                 <SkillsContainer
-                    skills={['JavaScript', 'Python', 'C++', 'R', 'Ensamblador', "Golang"]}
+                    skills={cardInfo.habilidades}
                 />
                 <div className='mt-3 flex flex-col gap-4 text-left'>
                     <h2 className="text-xl">Descripción</h2>
-                    <p>{description}</p>
+                    <p>{cardInfo.descripcion}</p>
                 </div>
             </div>
-            {optional.buttonText &&
+            {cardInfo.buttonText &&
                 <div style={style.bottomContainer}>
-                    {optional.counter &&
+                    {cardInfo.counter &&
                         <div className='mb-5 m-2' style={style.counterText}>
-                            <p>Solicitudes: {optional.counter}</p>
+                            <p>Solicitudes: {cardInfo.counter}</p>
                         </div>
                     }
                     <div className='mr-5 mb-4 p-2 pl-6 pr-6 rounded-full' style={style.botonFondo}>
-                        <p>{optional.buttonText}</p>
+                        <p>{cardInfo.buttonText}</p>
                     </div>
                 </div>
             }

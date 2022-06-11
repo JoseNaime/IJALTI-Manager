@@ -2,41 +2,29 @@ import React from 'react';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import Card from "./Card";
 
-function CardsContainer({handleCardClick}) {
+function CardsContainer({selectedCardInfoId, data, handleCardClick}) {
+    const cards = data.map((card, i) => {
+        return (<Card key={i}
+                      isSelected={selectedCardInfoId === card.empleoid}
+                      isActive={true}
+                      data={{
+                          id: card.empleoid,
+                          icon: CompanyIconTest,
+                          title: card.titulo,
+                          description: card.descripcion,
+                          optional: {
+                              date: new Date(card.postdate).toLocaleDateString(),
+                              status: card.status,
+                          }
+
+                      }}
+                      handleCardClick={(e) => handleCardClick(card)}
+        />)
+    });
+
     return (
-        <div className="basis-1/2 flex flex-col gap-y-2">
-            <Card isActive={true}
-                  id={1}
-                  icon={CompanyIconTest}
-                  title={"Titulo de Empleo"}
-                  description={"Lorem ipsum dolor sit amet, consectetur \n" +
-                      "adipiscing elit."}
-                  optional={{
-                      date: "20/01/2021",
-                      status: "active",
-                      counter: {
-                          title: "Solicitudes",
-                          count: "10"
-                      }
-                  }}
-                  handleCardClick={handleCardClick}
-            />
-            <Card isActive={true}
-                  id={2}
-                  icon={CompanyIconTest}
-                  title={"Titulo de Empleo"}
-                  description={"Lorem ipsum dolor sit amet, consectetur \n" +
-                      "adipiscing elit."}
-                  optional={{
-                      date: "20/01/2021",
-                      status: "active",
-                      counter: {
-                          title: "Solicitudes",
-                          count: "10"
-                      }
-                  }}
-                  handleCardClick={handleCardClick}
-            />
+        <div className="basis-1/2 flex flex-col">
+            {cards}
         </div>
     );
 }

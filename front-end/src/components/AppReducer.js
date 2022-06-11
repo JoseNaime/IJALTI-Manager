@@ -13,6 +13,7 @@ export const AppReducer = (state, action) => {
             user: action.payload,
         }
       case 'LOGOUT':
+          document.location.reload();
           localStorage.removeItem('user');
         return {
           ...state,

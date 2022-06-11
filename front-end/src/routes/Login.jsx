@@ -1,11 +1,20 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import LoginForm from "../components/Forms/LoginForm";
 import LoginImg from "../assets/images/login.jpg";
 import Logo from "../components/Logo";
 import {useNavigate} from "react-router-dom";
+import {GlobalContext} from "../components/GlobalProvider";
 
 function Login(props) {
     const navigate = useNavigate();
+    const {getUser} = useContext(GlobalContext);
+
+    useEffect(() => {
+        //console.log(getUser());
+        if (getUser() !== null) navigate('/')
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div id="login" className="flex flex-row-reverse h-full">

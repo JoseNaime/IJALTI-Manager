@@ -14,13 +14,12 @@ const SkillsContainer = ({skills}) => {
             gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
             gap: "10px 0",
         }
-
     }
 
     const skillCards = skills.map((skill,i) => {
         return (<Skill icon={CompanyIconTest}
-                       name={skill}
-                       color={"#FFF8BE"}
+                       name={skill.nombre}
+                       color={skill.color}
         />)
     })
 

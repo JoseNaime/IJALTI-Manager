@@ -7,8 +7,8 @@ function ProfileIcon() {
         img: {
             position: 'absolute',
             boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
-            top: '1.8%',
-            right: '1.3rem',
+            top: '15px',
+            right: '15px',
             width: '4.5rem',
             height: '4.5rem',
             background: '#FFFFFF',

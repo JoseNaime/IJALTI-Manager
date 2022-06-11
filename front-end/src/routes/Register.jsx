@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext, useEffect}  from 'react';
 import RegisterType from "../components/RegisterType";
 import Logo from "../components/Logo";
 import RegisterEmployee from "../components/Forms/RegisterEmployee";
 import RegisterCompany from "../components/Forms/RegisterCompany";
+import {GlobalContext} from "../components/GlobalProvider";
+import {useNavigate} from "react-router-dom";
 
 const style = {
     container: {
@@ -23,6 +25,15 @@ const style = {
 
 function Register() {
     const [registerType, setRegisterType] = React.useState(null);
+    const navigate = useNavigate();
+    const {getUser} = useContext(GlobalContext);
+
+    useEffect(() => {
+        //console.log(getUser());
+        if (getUser() !== null) navigate('/')
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const ActiveRegisterComponent = () => {
         switch (registerType) {
