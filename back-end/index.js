@@ -389,9 +389,20 @@ app.put('/newAccount',(req,res)=>{
 
 app.delete('/account', (req,res)=>{
     if(req.body.rol=='usuario'){
-        db.none(`DELETE FROM usuario WHERE correoCuenta='${req.body.email}';`)    .then(data => {
-           //si encuentra los datos, los manda
-           res.send({status: 200});
+
+        db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.body.email}';`)    .then(data => {
+            var username=data.username;
+            db.none(`DELETE FROM habilidadesDeUsuario WHERE username='${username}';`)    .then(data2 => {
+                db.none(`DELETE FROM educacion WHERE username='${username}';`)    .then(data3 => {
+                    db.none(`DELETE FROM experiencia WHERE username='${username}';`)    .then(data4 => {
+                        db.none(`DELETE FROM aplicacion WHERE username='${username}';`)    .then(data5 => {
+                            db.none(`DELETE FROM usuario WHERE username='${username}';`)    .then(data6 => {
+                                res.send({status:200});
+                            });
+                        });
+                    });
+                });
+            });
        })
        .catch(error => {
            //si hay un error con el select, lo imprime y lo regresa
@@ -399,15 +410,40 @@ app.delete('/account', (req,res)=>{
            res.send({status: 404});
        });
     }else if(req.body.rol=='empresa'){
-        db.none(`DELETE FROM empresa WHERE correoCuenta='${req.body.email}';`)    .then(data => {
-            //si encuentra los datos, los manda
-            res.send({status: 200});
-        })
-        .catch(error => {
-            //si hay un error con el select, lo imprime y lo regresa
-            console.log('ERROR:', error);
-            res.send({status: 404});
-        });
+        db.one(`SELECT empresaID FROM empresa WHERE correoCuenta='${req.body.email}';`)    .then(data => {
+            var empresaID=data.empresaid;
+            db.any(`SELECT empleo.empleoID FROM aplicacion JOIN empleo ON aplicacion.empleoID=empleo.empleoID
+            WHERE empleo.empresaID=${empresaID};`)    .then(data2 => {
+                var empleoIDText="( ";
+                var empleosIDs=[];
+                for(i in data2){
+                    if (!(empleosIDs.includes(data2[i].empleoid))){
+                        empleoIDText=empleoIDText.concat(data2[i].empleoid.toString())
+                        empleoIDText=empleoIDText.concat(',');
+                        empleosIDs.push(data2[i].empleoid);
+                    }
+                }
+                empleoIDText=empleoIDText.slice(0,-1);
+                empleoIDText=empleoIDText.concat(')');
+                console.log(empleoIDText);
+                
+                db.none(`DELETE FROM habilidadesDeEmpleo WHERE empleoID IN ${empleoIDText};`).then(data3=>{
+                    db.none(`DELETE FROM aplicacion WHERE empleoID IN ${empleoIDText};`).then(data4=>{
+                        db.none(`DELETE FROM empleo WHERE empleoID IN ${empleoIDText};`).then(data5=>{
+                            db.none(`DELETE FROM empresa WHERE empresaID=${empresaID};`).then(data6=>{
+                                res.send({status:200});
+                            });
+                        });
+                    });
+                });
+                
+            });
+       })
+       .catch(error => {
+           //si hay un error con el select, lo imprime y lo regresa
+           console.log('ERROR:', error);
+           res.send({status: 404});
+       });
     }else if(req.body.rol=='admin'){
         db.none(`DELETE FROM admin WHERE correo='${req.body.email}';`)    .then(data => {
             //si encuentra los datos, los manda
@@ -418,6 +454,8 @@ app.delete('/account', (req,res)=>{
             console.log('ERROR:', error);
             res.send({status: 404});
         });
+    }else{
+        res.send({status:400});
     }
 });
 
