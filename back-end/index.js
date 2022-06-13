@@ -1350,46 +1350,45 @@ app.get('/userInfo',(req,res)=>{
 });
 
 app.get('/buscarEmpresas',(req,res)=>{
-/*
-    Parametros
-    nombre (string representando el nombre de la/las empresas a buscar, puede estar vacio)
-    ciudad (string representado el nombre de la ciudad de interes)
-    estado (string representando el nombre del estado de interes)
-
-    Output
-    empresaid
-    nombrecomercial
-    nombrefiscal
-    estadocuenta
-    correocuenta
-    correcontacto
-    telefonocontacto
-    paginaweb
-    ciudad
-    estado
-    domicilio
-    domentoaprobacion
-
-
-*/ 
-
-    var searchNombre="";
-    var searchCiudad="";
-    var searchEstado="";
-
-    if(req.query.length!=0){
-        searchNombre=req.query.nombre.toLowerCase();
-        searchCiudad=req.query.ciudad.toLowerCase();
-        searchEstado=req.query.estado.toLowerCase();
-    }
-    db.any(`SELECT * FROM empresa
-    WHERE (LOWER(nombreComercial) LIKE '${searchNombre}' OR LOWER(nombreFiscal) LIKE '%${searchNombre}%')
-    AND LOWER(ciudad) LIKE '%${searchCiudad}%'
-    AND LOWER(estado) LIKE '%${searchEstado}%';`).then(data=>{
-        res.send(data);
+    /*
+        Parametros
+        nombre (string representando el nombre de la/las empresas a buscar, puede estar vacio)
+        ciudad (string representado el nombre de la ciudad de interes)
+        estado (string representando el nombre del estado de interes)
+    
+        Output
+        empresaid
+        nombrecomercial
+        nombrefiscal
+        estadocuenta
+        correocuenta
+        correcontacto
+        telefonocontacto
+        paginaweb
+        ciudad
+        estado
+        domicilio
+        domentoaprobacion
+    
+    
+    */ 
+    
+        var searchNombre="";
+        var searchCiudad="";
+        var searchEstado="";
+        if(Object.keys(req.query).length!=0){
+            searchNombre=req.query.nombre.toLowerCase();
+            searchCiudad=req.query.ciudad.toLowerCase();
+            searchEstado=req.query.estado.toLowerCase();
+        }
+        db.any(`SELECT * FROM empresa
+        WHERE (LOWER(nombreComercial) LIKE '${searchNombre}' OR LOWER(nombreFiscal) LIKE '%${searchNombre}%')
+        AND LOWER(ciudad) LIKE '%${searchCiudad}%'
+        AND LOWER(estado) LIKE '%${searchEstado}%';`).then(data=>{
+            res.send(data);
+        });
     });
-});
-
+    
 app.get('/empresaInfo',(req,res)=>{
     /*
     Parametros:
@@ -1427,7 +1426,7 @@ app.get('/empresaInfo',(req,res)=>{
 });
 
 
-app.get('/empleosEmpresa',(req,res)=>{
+app.get('/empleosEmpresa',(req,res)=>{ 
     /*
     Parametros:
     email (string del correo de la cuenta de empresa)
@@ -1464,10 +1463,14 @@ app.get('/empleosEmpresa',(req,res)=>{
     }
 
     */
-   var searchEmail="";
-   if(req.query.length!=0){
-    searchEmail==req.query.email;
-   }
+    var searchEmail="";
+    if(Object.keys(req.query).length!=0){
+    searchEmail=req.query.email;
+    }
+    else{
+    res.send([]);
+    return;
+    }
     db.one(`SELECT empresaID FROM empresa WHERE correoCuenta='${searchEmail}';`, [true])
     .then(data => {
         const empresaid= data.empresaid;
@@ -1551,7 +1554,7 @@ app.get('/empleosEmpresa',(req,res)=>{
 });
 
 
-app.put('/crearAplicacion', (req,res)=>{
+app.put('/crearAplicacion', (req,res)=>{ 
     /*
     Parametros:
     email (string, correo del usuario que esta aplicando)
@@ -1560,14 +1563,22 @@ app.put('/crearAplicacion', (req,res)=>{
     Output
     status 201 si todo bien, 404 y err si no todo bien (err es el error)
     */
-
     db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.body.email}';`, [true])
     .then(data => {
         const username= data.username;
-        db.none(`INSERT INTO aplicacion(aplicacionFecha,status,empleoID,username)
-        VALUES(current_timestamp,'active',${req.body.empleoid}, '${username}');`).then(newData=>{
-            res.send({status:201});
-        });
+        db.any(`SELECT * FROM aplicacion WHERE empleoID=${req.body.empleoid} AND username='${username}';`).then(unusedData=>{
+            if(unusedData.length==0){
+                db.none(`INSERT INTO aplicacion(aplicacionFecha,status,empleoID,username)
+                VALUES(current_timestamp,'active',${req.body.empleoid}, '${username}');`).then(newData=>{
+                    res.send({status:201});
+                });
+            }
+            else{
+                res.send({status:404, message:"Already applied for this job"});
+            }
+
+        })
+
     }).catch(error=>{
         res.send({status:404, err:error});
     });
@@ -1608,8 +1619,8 @@ app.get('/adminInfo', (req,res)=>{
     });
 });
 
-app.get('/aplicaciones', (req,res)=>{
-    db.any('SELECT * FROM aplicacion JOIN empresa ON aplicacion.empresaID=empresa.;', [true])
+app.get('/aplicaciones', (req,res)=>{ //------------------------------------------------------------------------UPDATE
+    db.any('SELECT * FROM aplicacion JOIN empleo ON aplicacion.empleoID=empleo.empleoID JOIN empresa ON empleo.empresaID=empresa.empresaID;', [true])
     .then(data => {
         //si encuentra los datos, los manda
         res.send(data);
