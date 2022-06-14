@@ -389,9 +389,20 @@ app.put('/newAccount',(req,res)=>{
 
 app.delete('/account', (req,res)=>{
     if(req.body.rol=='usuario'){
-        db.none(`DELETE FROM usuario WHERE correoCuenta='${req.body.email}';`)    .then(data => {
-           //si encuentra los datos, los manda
-           res.send({status: 200});
+
+        db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.body.email}';`)    .then(data => {
+            var username=data.username;
+            db.none(`DELETE FROM habilidadesDeUsuario WHERE username='${username}';`)    .then(data2 => {
+                db.none(`DELETE FROM educacion WHERE username='${username}';`)    .then(data3 => {
+                    db.none(`DELETE FROM experiencia WHERE username='${username}';`)    .then(data4 => {
+                        db.none(`DELETE FROM aplicacion WHERE username='${username}';`)    .then(data5 => {
+                            db.none(`DELETE FROM usuario WHERE username='${username}';`)    .then(data6 => {
+                                res.send({status:200});
+                            });
+                        });
+                    });
+                });
+            });
        })
        .catch(error => {
            //si hay un error con el select, lo imprime y lo regresa
@@ -399,15 +410,40 @@ app.delete('/account', (req,res)=>{
            res.send({status: 404});
        });
     }else if(req.body.rol=='empresa'){
-        db.none(`DELETE FROM empresa WHERE correoCuenta='${req.body.email}';`)    .then(data => {
-            //si encuentra los datos, los manda
-            res.send({status: 200});
-        })
-        .catch(error => {
-            //si hay un error con el select, lo imprime y lo regresa
-            console.log('ERROR:', error);
-            res.send({status: 404});
-        });
+        db.one(`SELECT empresaID FROM empresa WHERE correoCuenta='${req.body.email}';`)    .then(data => {
+            var empresaID=data.empresaid;
+            db.any(`SELECT empleo.empleoID FROM aplicacion JOIN empleo ON aplicacion.empleoID=empleo.empleoID
+            WHERE empleo.empresaID=${empresaID};`)    .then(data2 => {
+                var empleoIDText="( ";
+                var empleosIDs=[];
+                for(i in data2){
+                    if (!(empleosIDs.includes(data2[i].empleoid))){
+                        empleoIDText=empleoIDText.concat(data2[i].empleoid.toString())
+                        empleoIDText=empleoIDText.concat(',');
+                        empleosIDs.push(data2[i].empleoid);
+                    }
+                }
+                empleoIDText=empleoIDText.slice(0,-1);
+                empleoIDText=empleoIDText.concat(')');
+                console.log(empleoIDText);
+                
+                db.none(`DELETE FROM habilidadesDeEmpleo WHERE empleoID IN ${empleoIDText};`).then(data3=>{
+                    db.none(`DELETE FROM aplicacion WHERE empleoID IN ${empleoIDText};`).then(data4=>{
+                        db.none(`DELETE FROM empleo WHERE empleoID IN ${empleoIDText};`).then(data5=>{
+                            db.none(`DELETE FROM empresa WHERE empresaID=${empresaID};`).then(data6=>{
+                                res.send({status:200});
+                            });
+                        });
+                    });
+                });
+                
+            });
+       })
+       .catch(error => {
+           //si hay un error con el select, lo imprime y lo regresa
+           console.log('ERROR:', error);
+           res.send({status: 404});
+       });
     }else if(req.body.rol=='admin'){
         db.none(`DELETE FROM admin WHERE correo='${req.body.email}';`)    .then(data => {
             //si encuentra los datos, los manda
@@ -418,6 +454,8 @@ app.delete('/account', (req,res)=>{
             console.log('ERROR:', error);
             res.send({status: 404});
         });
+    }else{
+        res.send({status:400});
     }
 });
 
@@ -430,20 +468,32 @@ app.get('/aplicacionesUsuario', (req,res)=>{
     empleo.empleoID, empleo.titulo,empleo.descripcion,
     empresa.nombreComercial,empresa.ciudad,empresa.estado
      FROM aplicacion JOIN empleo ON aplicacion.empleoid=empleo.empleoid JOIN empresa ON empleo.empresaID=empresa.empresaID JOIN usuario ON aplicacion.username=usuario.username
-     WHERE usuario.correoCuenta='${req.body.email}';`, [true])
+     WHERE usuario.correoCuenta='${req.query.email}';`, [true])
     .then(data => {
         //si encuentra los datos, los manda
         var finalData=data;
-        var habilidadesArr=[];
+        var habilidadesTotales=0;
         for(i in finalData){
             var completed=false;
-            db.any(`SELECT * FROM habilidadesDeEmpleo WHERE empleoID=${finalData[i].empleoid}`,[i])
+            db.any(`SELECT habilidadesDeEmpleo.empleoID, habilidades.habilidadID, habilidades.nombre, habilidades.color, habilidadesDeEmpleo.tiempoExperiencia FROM habilidadesDeEmpleo JOIN habilidades ON habilidadesDeEmpleo.habilidadID=habilidades.habilidadID WHERE empleoID=${finalData[i].empleoid}`,[i])
             .then(data2=>{
-                habilidadesArr.push(data2);
-                if(habilidadesArr.length===finalData.length){
+                if(data2.length>=1){
+                    for(i in finalData){
+                        if(finalData[i].empleoid===data2[0].empleoid){
+                            finalData[i].habilidades=data2;
+                            habilidadesTotales+=1;
+                        }
+                    }
+                }else{
+                    habilidadesTotales+=1;
+                }
+
+                if(habilidadesTotales===finalData.length){
                     //console.log(habilidadesArr);
                     for(j in finalData){
-                        finalData[j].habilidades=habilidadesArr[j];
+                        if(!("habilidades" in finalData[j])){
+                            finalData[j].habilidades=[];
+                        }
                     }
                     res.send(finalData);
                 }
@@ -460,7 +510,8 @@ app.get('/aplicacionesUsuario', (req,res)=>{
 
 });
 
-//Busqueda de empleos
+
+
 app.get('/buscarEmpleos', (req,res)=>{
 
     //Filtros  (Empresa, Titulo, Habilidades, Fecha?)
@@ -1062,31 +1113,50 @@ Lista de JSONs con la info
         ]
     }
 */
+    var habilidades=[];
+    for(i in req.query.habilidades){
+        habilidades.push(JSON.parse(req.query.habilidades[i]));
+    }
+    var habilidadesText="( ";
+    var searchName="";
+    var searchCiudad="";
+    var searchEstado="";
 
-    var habilidadesText="(";
-    for(i in req.body.habilidades){
-        if(req.body.habilidades[i].tiempoexperiencia!=null && req.body.habilidades[i].tiempoexperiencia!=0){
-            var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${req.body.habilidades[i].nombre.toLowerCase()}' AND habilidadesDeUsuario.tiempoexperiencia>=${req.body.habilidades[i].tiempoexperiencia})`);
+    if(Object.keys(req.query).length!=0){
 
+        for(i in habilidades){
+            if(habilidades[i].tiempoexperiencia!=null && habilidades[i].tiempoexperiencia!=0){
+                var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${habilidades[i].nombre.toLowerCase()}' AND habilidadesDeUsuario.tiempoexperiencia>=${habilidades[i].tiempoexperiencia})`);
+    
+            }
+            else{
+                var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${habilidades[i].nombre.toLowerCase()}')`);
+            }
+            var habilidadesText=habilidadesText.concat(" OR");        
         }
-        else{
-            var habilidadesText=habilidadesText.concat(` (LOWER(habilidades.nombre)='${req.body.habilidades[i].nombre.toLowerCase()}')`);
-        }
-        var habilidadesText=habilidadesText.concat(" OR");
+    
+        var habilidadesText=habilidadesText.slice(0,-2);
+        var habilidadesText=habilidadesText.concat(")");
         
+
+        searchName=req.query.name.toLowerCase();
+        searchCiudad=req.query.ciudad.toLowerCase();
+        searchEstado=req.query.estado.toLowerCase();
+
+
+
+        }
+    else{
+        habilidadesText="()";
     }
 
 
-    var habilidadesText=habilidadesText.slice(0,-2);
-    var habilidadesText=habilidadesText.concat(")");
-
-
-    if(req.body.habilidades.length>=1){
+    if(habilidades.length>=1){
         db.any(`SELECT usuario.username, usuario.nombre, usuario.apellido, usuario.rolActual, usuario.biografia, usuario.linkedinContacto, usuario.githubContacto, usuario.correoContacto, usuario.ciudad, usuario.estado
         FROM habilidadesDeUsuario JOIN usuario ON habilidadesDeUsuario.username=usuario.username JOIN habilidades ON habilidadesDeUsuario.habilidadID=habilidades.habilidadID
         WHERE ${habilidadesText}
-        AND CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${req.body.name.toLowerCase()}%'
-        AND LOWER(usuario.ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
+        AND CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${searchName}%'
+        AND LOWER(usuario.ciudad) LIKE '%${searchCiudad}%'
         AND LOWER(usuario.estado) LIKE '%${req.body.estado.toLowerCase()}%';`,[true]).then(data=>{
             var finalData=data;
             var habilidadesTotales=0;
@@ -1129,9 +1199,9 @@ Lista de JSONs con la info
     }else{
         db.any(`SELECT usuario.username, usuario.nombre, usuario.apellido, usuario.rolActual, usuario.biografia, usuario.linkedinContacto, usuario.githubContacto, usuario.correoContacto, usuario.ciudad, usuario.estado
         FROM usuario
-        WHERE CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${req.body.name.toLowerCase()}%'
-        AND LOWER(usuario.ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
-        AND LOWER(usuario.estado) LIKE '%${req.body.estado.toLowerCase()}%';`,[true]).then(data=>{
+        WHERE CONCAT(LOWER(usuario.nombre), ' ', LOWER(usuario.apellido)) LIKE '%${searchName}%'
+        AND LOWER(usuario.ciudad) LIKE '%${searchCiudad}%'
+        AND LOWER(usuario.estado) LIKE '%${searchEstado}%';`,[true]).then(data=>{
             var finalData=data;
             var habilidadesTotales=0;
             var sentData=false;
@@ -1251,7 +1321,7 @@ app.get('/userInfo',(req,res)=>{
 }
     */
 
-    db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.body.email}';`, [true])
+    db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.query.email}';`, [true])
     .then(data => {
         const username= data.username;
         
@@ -1280,37 +1350,45 @@ app.get('/userInfo',(req,res)=>{
 });
 
 app.get('/buscarEmpresas',(req,res)=>{
-/*
-    Parametros
-    nombre (string representando el nombre de la/las empresas a buscar, puede estar vacio)
-    ciudad (string representado el nombre de la ciudad de interes)
-    estado (string representando el nombre del estado de interes)
-
-    Output
-    empresaid
-    nombrecomercial
-    nombrefiscal
-    estadocuenta
-    correocuenta
-    correcontacto
-    telefonocontacto
-    paginaweb
-    ciudad
-    estado
-    domicilio
-    domentoaprobacion
-
-
-*/ 
-
-    db.any(`SELECT * FROM empresa
-    WHERE (LOWER(nombreComercial) LIKE '${req.body.nombre}' OR LOWER(nombreFiscal) LIKE '%${req.body.nombre.toLowerCase()}%')
-    AND LOWER(ciudad) LIKE '%${req.body.ciudad.toLowerCase()}%'
-    AND LOWER(estado) LIKE '%${req.body.estado.toLowerCase()}%';`).then(data=>{
-        res.send(data);
+    /*
+        Parametros
+        nombre (string representando el nombre de la/las empresas a buscar, puede estar vacio)
+        ciudad (string representado el nombre de la ciudad de interes)
+        estado (string representando el nombre del estado de interes)
+    
+        Output
+        empresaid
+        nombrecomercial
+        nombrefiscal
+        estadocuenta
+        correocuenta
+        correcontacto
+        telefonocontacto
+        paginaweb
+        ciudad
+        estado
+        domicilio
+        domentoaprobacion
+    
+    
+    */ 
+    
+        var searchNombre="";
+        var searchCiudad="";
+        var searchEstado="";
+        if(Object.keys(req.query).length!=0){
+            searchNombre=req.query.nombre.toLowerCase();
+            searchCiudad=req.query.ciudad.toLowerCase();
+            searchEstado=req.query.estado.toLowerCase();
+        }
+        db.any(`SELECT * FROM empresa
+        WHERE (LOWER(nombreComercial) LIKE '${searchNombre}' OR LOWER(nombreFiscal) LIKE '%${searchNombre}%')
+        AND LOWER(ciudad) LIKE '%${searchCiudad}%'
+        AND LOWER(estado) LIKE '%${searchEstado}%';`).then(data=>{
+            res.send(data);
+        });
     });
-});
-
+    
 app.get('/empresaInfo',(req,res)=>{
     /*
     Parametros:
@@ -1334,7 +1412,7 @@ app.get('/empresaInfo',(req,res)=>{
         solicitudes (string del numero de solicitudes/aplicaciones a este empleo)
     }
     */
-    db.one(`SELECT empresaID, nombreComercial, estadoCuenta,paginaWeb,domicilio,ciudad,estado,descripcion, correoContacto, telefonoContacto FROM empresa WHERE correoCuenta='${req.body.email}';`, [true])
+    db.one(`SELECT empresaID, nombreComercial, estadoCuenta,paginaWeb,domicilio,ciudad,estado,descripcion, correoContacto, telefonoContacto FROM empresa WHERE correoCuenta='${req.query.email}';`, [true])
     .then(data => {
         const empresaid= data.empresaid;
         var finalData=data;
@@ -1348,7 +1426,7 @@ app.get('/empresaInfo',(req,res)=>{
 });
 
 
-app.get('/empleosEmpresa',(req,res)=>{
+app.get('/empleosEmpresa',(req,res)=>{ 
     /*
     Parametros:
     email (string del correo de la cuenta de empresa)
@@ -1385,7 +1463,15 @@ app.get('/empleosEmpresa',(req,res)=>{
     }
 
     */
-    db.one(`SELECT empresaID FROM empresa WHERE correoCuenta='${req.body.email}';`, [true])
+    var searchEmail="";
+    if(Object.keys(req.query).length!=0){
+    searchEmail=req.query.email;
+    }
+    else{
+    res.send([]);
+    return;
+    }
+    db.one(`SELECT empresaID FROM empresa WHERE correoCuenta='${searchEmail}';`, [true])
     .then(data => {
         const empresaid= data.empresaid;
         db.any(`SELECT empleo.empleoID, empleo.titulo, empleo.descripcion, empleo.postDate, empresa.ciudad, empresa.estado, empresa.nombreComercial FROM empleo JOIN empresa ON empleo.empresaID=empresa.empresaID
@@ -1468,7 +1554,7 @@ app.get('/empleosEmpresa',(req,res)=>{
 });
 
 
-app.put('/crearAplicacion', (req,res)=>{
+app.put('/crearAplicacion', (req,res)=>{ 
     /*
     Parametros:
     email (string, correo del usuario que esta aplicando)
@@ -1477,14 +1563,22 @@ app.put('/crearAplicacion', (req,res)=>{
     Output
     status 201 si todo bien, 404 y err si no todo bien (err es el error)
     */
-
     db.one(`SELECT username FROM usuario WHERE correoCuenta='${req.body.email}';`, [true])
     .then(data => {
         const username= data.username;
-        db.none(`INSERT INTO aplicacion(aplicacionFecha,status,empleoID,username)
-        VALUES(current_timestamp,'active',${req.body.empleoid}, '${username}');`).then(newData=>{
-            res.send({status:201});
-        });
+        db.any(`SELECT * FROM aplicacion WHERE empleoID=${req.body.empleoid} AND username='${username}';`).then(unusedData=>{
+            if(unusedData.length==0){
+                db.none(`INSERT INTO aplicacion(aplicacionFecha,status,empleoID,username)
+                VALUES(current_timestamp,'active',${req.body.empleoid}, '${username}');`).then(newData=>{
+                    res.send({status:201});
+                });
+            }
+            else{
+                res.send({status:404, message:"Already applied for this job"});
+            }
+
+        })
+
     }).catch(error=>{
         res.send({status:404, err:error});
     });
@@ -1512,7 +1606,7 @@ app.put('/aprobarEmpresa',(req,res)=>{
     status 201 si todo bien, 404 y err si no todo bien (err es el error)
     */
 
-    db.none(`UPDATE empresa SET estadoCuenta='Aprobada' WHERE empresaID=${req.body.empresaID};`).then(data=>{
+    db.none(`UPDATE empresa SET estadoCuenta='Aprobada' WHERE empresaID=${req.query.empresaID};`).then(data=>{
         res.send({status:201});
     }).catch(error=>{
         res.send({status:404,err:error});
@@ -1520,13 +1614,13 @@ app.put('/aprobarEmpresa',(req,res)=>{
 });
 
 app.get('/adminInfo', (req,res)=>{
-    db.one(`SELECT * FROM admin WHERE correo='${req.body.email}';`).then(data=>{
+    db.one(`SELECT * FROM admin WHERE correo='${req.query.email}';`).then(data=>{
         res.send(data);
     });
 });
 
-app.get('/aplicaciones', (req,res)=>{
-    db.any('SELECT * FROM aplicacion JOIN empresa ON aplicacion.empresaID=empresa.;', [true])
+app.get('/aplicaciones', (req,res)=>{ //------------------------------------------------------------------------UPDATE
+    db.any('SELECT * FROM aplicacion JOIN empleo ON aplicacion.empleoID=empleo.empleoID JOIN empresa ON empleo.empresaID=empresa.empresaID;', [true])
     .then(data => {
         //si encuentra los datos, los manda
         res.send(data);
