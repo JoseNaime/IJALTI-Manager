@@ -1,20 +1,21 @@
+import Cookies from 'js-cookie';
 export const AppReducer = (state, action) => {
   switch (action.type) {
       case 'SET_USER':
         return {
             ...state,
-            user: action.user
+            user: JSON.parse(action.payload)
         }
 
       case 'LOGIN':
-          localStorage.setItem('user', JSON.stringify(action.payload));
+          console.log(action.payload);
+          Cookies.set('user', JSON.stringify(action.payload));
         return {
           ...state,
             user: action.payload,
         }
       case 'LOGOUT':
-          document.location.reload();
-          localStorage.removeItem('user');
+          Cookies.remove('user');
         return {
           ...state,
             user: null,

@@ -42,13 +42,9 @@ function MainContainer({children}) {
     const [menuOptions, setMenuOptions] = useState([]);
 
     useEffect(() => {
-        console.log(user);
-        if (user){
             console.log("Menu Options: " + JSON.stringify(MENU_OPTIONS_BY_ROLE[user.role]))
             setMenuOptions(MENU_OPTIONS_BY_ROLE[user.role]);
-        }
-
-    }, [user]);
+        }, [user.role]);
 
     return (
         <div style={style.background} className="w-full h-full bg-gray">

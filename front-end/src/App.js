@@ -1,32 +1,49 @@
 import React, {useContext, useEffect} from 'react'
-import {Route, Routes} from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import Login from "./routes/Login";
 import {GlobalContext} from "./components/GlobalProvider";
-import Home from "./routes/Home";
-import Register from "./routes/Register";
 import MyApplicationsEmployee from "./routes/Employee/MyApplicationsEmployee";
 import GlobalOffersEmployee from "./routes/Employee/GlobalOffersEmployee";
+import Register from "./routes/Register";
 
 function App() {
-    const {login} = useContext(GlobalContext);
+    const {user} = useContext(GlobalContext);
+
     useEffect(() => {
-        const userInLocalStorage = JSON.parse(localStorage.getItem('user'));
-        if (userInLocalStorage) {
-            login(userInLocalStorage);
+        console.log(user);
+    }, [user])
+
+
+    function defaultRoute() {
+        if (user) {
+            switch (user.role) {
+                case 'usuario':
+                    return '/ofertas';
+
+                default:
+                    return '/login';
+            }
         }
-        // eslint-disable-next-line
-    }, []);
+        return '/login';
+    }
+
     return (
         <>
             <Routes>
-                <Route path="/" element={<Home/>}/>
+                {user ? (
+                    <>
+                        <Route path="/ofertas" element={<GlobalOffersEmployee />} />
+                        <Route path="/mis-aplicaciones" element={<MyApplicationsEmployee />} />
+                    </>
+                ) : (
+                    <>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                    </>
+                )}
 
-                {/* User routes */}
-                <Route path="/mis-aplicaciones" element={<MyApplicationsEmployee />}/>
-                <Route path="/ofertas" element={<GlobalOffersEmployee />}/>
+                <Route path="*" element={<Navigate to={defaultRoute()} redirect/>} />
 
-                <Route path="/login" element={<Login/>} />
-                <Route path="/register" element={<Register/>} />
             </Routes>
         </>
     );
