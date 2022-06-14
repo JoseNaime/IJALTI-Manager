@@ -1,5 +1,3 @@
-// React Custom Hook for fetching data from API
-
 import {useEffect, useState} from 'react';
 import axios from "axios";
 
@@ -27,7 +25,7 @@ function useFetch({url, method, body = null, params = null, headers=null}) {
                 setLoading(false)
             }
         })();
-    }, [url, method, body, headers]);
+    }, [url, method, body, headers, params]);
 
     return (
         {data, loading, error}
