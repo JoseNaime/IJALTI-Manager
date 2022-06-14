@@ -1,5 +1,9 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PatronFondo from "../assets/images/patron_fondo.png";
+import Menu from "./Menu";
+import ProfileIcon from "./ProfileIcon";
+import {MENU_OPTIONS_BY_ROLE} from "../json/MENU_OPTIONS_BY_ROLE";
+import {GlobalContext} from "./GlobalProvider";
 
 const style = {
     background: {
@@ -34,12 +38,26 @@ const style = {
 }
 
 function MainContainer({children}) {
+    const {user} = useContext(GlobalContext);
+    const [menuOptions, setMenuOptions] = useState([]);
+
+    useEffect(() => {
+        console.log(user);
+        if (user){
+            console.log("Menu Options: " + JSON.stringify(MENU_OPTIONS_BY_ROLE[user.role]))
+            setMenuOptions(MENU_OPTIONS_BY_ROLE[user.role]);
+        }
+
+    }, [user]);
+
     return (
         <div style={style.background} className="w-full h-full bg-gray">
             <div style={style.container} className={"w-full h-full bg-slate-50"}>
                 <div style={style.content} className={"h-full w-full text-center"}>
                     <hr style={style.splitLine} />
                     {children}
+                    <Menu menuOptions={menuOptions} />
+                    <ProfileIcon />
                 </div>
             </div>
         </div>

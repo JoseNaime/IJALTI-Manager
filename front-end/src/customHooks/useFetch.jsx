@@ -9,7 +9,7 @@ function useFetch({url, method, body = null, params = null, headers=null}) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        console.log("Fetching to " + process.env.REACT_APP_API_URL + url);
+        console.log("Fetching to " + process.env.REACT_APP_API_URL + url+" with params: "+JSON.stringify(params));
         (async () => {
             try {
                 setLoading(true)

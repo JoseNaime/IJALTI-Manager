@@ -2,6 +2,7 @@ import React, {useContext, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faAngleRight} from '@fortawesome/free-solid-svg-icons'
 import {GlobalContext} from "./GlobalProvider";
+import {useNavigate} from "react-router-dom";
 
 const style = {
     containerHidden: {
@@ -73,11 +74,17 @@ const style = {
     }
 }
 
-function Menu({menuOptions, onClick}) {
+function Menu({menuOptions}) {
     const [toggle, setToggle] = useState(false)
     const {logout} = useContext(GlobalContext)
+    const navigate = useNavigate();
 
     const toggleMenu = () => setToggle(!toggle);
+
+    const handleLinkClick = (route) => {
+        // redirect with React Router
+        navigate(route)
+    }
 
     return (
         <>
@@ -85,13 +92,13 @@ function Menu({menuOptions, onClick}) {
                 <div style={style.content} className="flex flex-col gap-y-3">
                     {menuOptions && menuOptions.map((option, index) => {
                         return (
-                            <p onClick={() => console.log(option.url)}>{option.name}</p>
+                            <p key={index} style={window.location.pathname === option.url ? style.current : style.black}
+                               onClick={() => handleLinkClick(option.url)}>
+                                {option.name}
+                            </p>
                         )
                     })}
 
-                    {/*<p style={sampleLocation.pathname === "/aplicaciones" ? style.current : style.black}><a href="/aplicaciones">Mis aplicaciones</a></p>
-                <p style={sampleLocation.pathname === "/" ? style.current : style.black}><a href="/ofertas">Ofertas</a></p>
-                <p style={sampleLocation.pathname === "/perfil" ? style.current : style.black}><a href="/perfil">Mi perfil</a></p>*/}
                 </div>
                 <p style={style.logout} onClick={() => logout()}>Cerrar Sesión</p>
                 <hr style={style.hr}></hr>

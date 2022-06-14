@@ -4,6 +4,8 @@ import Login from "./routes/Login";
 import {GlobalContext} from "./components/GlobalProvider";
 import Home from "./routes/Home";
 import Register from "./routes/Register";
+import MyApplicationsEmployee from "./routes/Employee/MyApplicationsEmployee";
+import GlobalOffersEmployee from "./routes/Employee/GlobalOffersEmployee";
 
 function App() {
     const {login} = useContext(GlobalContext);
@@ -18,6 +20,11 @@ function App() {
         <>
             <Routes>
                 <Route path="/" element={<Home/>}/>
+
+                {/* User routes */}
+                <Route path="/mis-aplicaciones" element={<MyApplicationsEmployee />}/>
+                <Route path="/ofertas" element={<GlobalOffersEmployee />}/>
+
                 <Route path="/login" element={<Login/>} />
                 <Route path="/register" element={<Register/>} />
             </Routes>
