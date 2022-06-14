@@ -1,6 +1,6 @@
 // React Custom Hook for fetching data from API
 
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import axios from "axios";
 
 function useFetch({url, method, body = null, params = null, headers=null}) {
