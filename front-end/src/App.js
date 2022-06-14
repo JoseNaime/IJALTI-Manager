@@ -2,9 +2,8 @@ import React, {useContext, useEffect} from 'react'
 import {Navigate, Route, Routes} from 'react-router-dom';
 import Login from "./routes/Login";
 import {GlobalContext} from "./components/GlobalProvider";
-import MyApplicationsEmployee from "./routes/Employee/MyApplicationsEmployee";
-import GlobalOffersEmployee from "./routes/Employee/GlobalOffersEmployee";
 import Register from "./routes/Register";
+import DynamicRoute from "./routes/DynamicRoute";
 
 function App() {
     const {user} = useContext(GlobalContext);
@@ -32,8 +31,15 @@ function App() {
             <Routes>
                 {user ? (
                     <>
-                        <Route path="/ofertas" element={<GlobalOffersEmployee />} />
-                        <Route path="/mis-aplicaciones" element={<MyApplicationsEmployee />} />
+                        <Route path="/ofertas" element={
+                            <DynamicRoute apiUrl={"/buscarEmpleos"} />
+                        } />
+
+                        <Route path="/mis-aplicaciones" element={
+                            <DynamicRoute apiUrl={"/aplicacionesUsuario"}
+                                          params={{"email": user && user.email}}
+                                          headers={{}} />
+                        } />
                     </>
                 ) : (
                     <>
