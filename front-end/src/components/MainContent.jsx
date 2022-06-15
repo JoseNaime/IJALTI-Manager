@@ -3,7 +3,7 @@ import useFetch from "../customHooks/useFetch";
 import CardsContainer from "./CardsContainer";
 import CardDetails from "./CardDetails";
 
-function MainContent({apiUrl, params}) {
+function MainContent({apiUrl, params, cardDetailFields}) {
     const {data, isLoading, error} = useFetch({url: apiUrl, method: "GET", params: params});
     const [cardsInfo, setCardsInfo] = useState([]);
     const [selectedCardInfo, setSelectedCardInfo] = useState(null);
@@ -26,9 +26,11 @@ function MainContent({apiUrl, params}) {
                 <>
                     <CardsContainer data={cardsInfo}
                                     selectedCardInfoId={selectedCardInfo.empleoid}
-                                    handleCardClick={handleCardClick} />
+                                    handleCardClick={handleCardClick}
+                                     />
                     <CardDetails
                         cardInfo={selectedCardInfo}
+                        fieldNames={cardDetailFields}
                     />
                 </>
             }

@@ -3,7 +3,7 @@ import SkillsContainer from './SkillsContainer'
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png"
 import Status from './Status'
 
-const CardDetails = ({cardInfo}) => {
+const CardDetails = ({cardInfo, fieldNames = {}}) => {
 
     const style = {
         h1: {
@@ -61,7 +61,12 @@ const CardDetails = ({cardInfo}) => {
                         <div style={style.details} className='flex flex-row gap-2'>
                             <p>{cardInfo.nombrecomercial} | </p>
                             <p>{cardInfo.ciudad} | </p>
-                            <p>{new Date(cardInfo.postdate).toLocaleDateString()} </p>
+                            {!!fieldNames.date ?
+                                <p>{new Date(cardInfo[fieldNames.date]).toLocaleDateString()} </p>
+                                :
+                                <p>{new Date(cardInfo.postdate).toLocaleDateString()} </p>
+                            }
+
                         </div>
                     </div>
 

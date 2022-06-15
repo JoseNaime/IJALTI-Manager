@@ -2,7 +2,7 @@ import React from 'react';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import Card from "./Card";
 
-function CardsContainer({selectedCardInfoId, data, handleCardClick}) {
+function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= {}}) {
     const cards = data.map((card, i) => {
         return (<Card key={i}
                       isSelected={selectedCardInfoId === card.empleoid}
@@ -13,7 +13,7 @@ function CardsContainer({selectedCardInfoId, data, handleCardClick}) {
                           title: card.titulo,
                           description: card.descripcion,
                           optional: {
-                              date: new Date(card.postdate).toLocaleDateString(),
+                              date: new Date(!!fieldNames.date ? card[fieldNames.date] : card.postdate).toLocaleDateString(),
                               status: card.status,
                           }
 

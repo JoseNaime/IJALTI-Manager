@@ -38,7 +38,7 @@ function App() {
                         <Route path="/mis-aplicaciones" element={
                             <DynamicRoute apiUrl={"/aplicacionesUsuario"}
                                           params={{"email": user && user.email}}
-                                          headers={{}} />
+                                          headers={{}} cardDetailFields={{date: "aplicacionfecha"}}/>
                         } />
                     </>
                 ) : (
