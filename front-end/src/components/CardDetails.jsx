@@ -81,7 +81,6 @@ const CardDetails = ({cardInfo, fieldNames = {}}) => {
                 <SkillsContainer
                     skills={cardInfo.habilidades}
                 />
-                <AddSkillContainer />
                 <div className='mt-3 flex flex-col gap-4 text-left'>
                     <h2 className="text-xl">Descripción</h2>
                     <p>{cardInfo.descripcion}</p>
