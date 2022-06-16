@@ -11,7 +11,7 @@ const style = {
 }
 
 function MainContent({apiUrl, params, fieldNames, noDataButton}) {
-    const {data, isLoading, error} = useFetch({url: apiUrl, method: "GET", params: params});
+    const {data, isLoading} = useFetch({url: apiUrl, method: "GET", params: params});
     const [auxCardsInfo, setAuxCardsInfo] = useState([]);
     const [selectedCardInfo, setSelectedCardInfo] = useState(null);
     const {cardsInfo, setCardsInfo} = useContext(GlobalContext);
