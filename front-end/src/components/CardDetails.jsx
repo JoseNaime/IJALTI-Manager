@@ -2,6 +2,7 @@ import React from 'react'
 import SkillsContainer from './SkillsContainer'
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png"
 import Status from './Status'
+import AddSkillContainer from "./AddSkillContainer";
 
 const CardDetails = ({cardInfo, fieldNames = {}}) => {
 
@@ -80,6 +81,7 @@ const CardDetails = ({cardInfo, fieldNames = {}}) => {
                 <SkillsContainer
                     skills={cardInfo.habilidades}
                 />
+                <AddSkillContainer />
                 <div className='mt-3 flex flex-col gap-4 text-left'>
                     <h2 className="text-xl">Descripción</h2>
                     <p>{cardInfo.descripcion}</p>
