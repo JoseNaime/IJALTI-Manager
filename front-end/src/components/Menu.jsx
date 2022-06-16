@@ -76,13 +76,14 @@ const style = {
 
 function Menu({menuOptions}) {
     const [toggle, setToggle] = useState(false)
-    const {logout} = useContext(GlobalContext)
+    const {logout, clearCardsInfo} = useContext(GlobalContext)
     const navigate = useNavigate();
 
     const toggleMenu = () => setToggle(!toggle);
 
     const handleLinkClick = (route) => {
         // redirect with React Router
+        clearCardsInfo();
         navigate(route)
     }
 

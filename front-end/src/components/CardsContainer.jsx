@@ -3,19 +3,25 @@ import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import Card from "./Card";
 
 function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= {}}) {
+
+
     const cards = data.map((card, i) => {
         return (<Card key={i}
-                      isSelected={selectedCardInfoId === card.empleoid}
+                      isSelected={selectedCardInfoId === card[fieldNames.id]}
                       isActive={true}
                       data={{
-                          id: card.empleoid,
+                          id: card[fieldNames.id],
                           icon: CompanyIconTest,
-                          title: card.titulo,
-                          description: card.descripcion,
-                          optional: {
-                              date: new Date(!!fieldNames.date ? card[fieldNames.date] : card.postdate).toLocaleDateString(),
-                              status: card.status,
+                          title: card[fieldNames.title],
+                          subTitle: card[fieldNames.subTitle],
+                          description: !fieldNames.subTitle && card[fieldNames.description],
+                          date: !!fieldNames.date ? new Date(card[fieldNames.date]).toLocaleDateString() : null,
+                          status: card.status,
+                          counter: !!fieldNames.counter && {
+                                title: card[fieldNames.counter.title],
+                                count: card[fieldNames.counter.count]
                           }
+
 
                       }}
                       handleCardClick={(e) => handleCardClick(card)}

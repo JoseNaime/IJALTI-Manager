@@ -4,7 +4,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const initialState = {
-    user: null
+    user: null,
+    cardsInfo: [],
 }
 
 export const GlobalContext = createContext(initialState);
@@ -22,6 +23,22 @@ export const GlobalProvider = ({children}) => {
             });
         }
     }, []);
+
+    function setCardsInfo(cardsInfo) {
+        console.log("GlobalProvider setCardsInfo: ");
+        console.log(cardsInfo);
+        dispatch({
+            type: 'SET_CARDS_INFO',
+            payload: cardsInfo
+        });
+    }
+
+    function clearCardsInfo() {
+        console.log("GlobalProvider clearCardsInfo");
+        dispatch({
+            type: 'CLEAR_CARDS_INFO'
+        });
+    }
 
     function getUser() {
         const storedUser = Cookies.get('user');
@@ -44,6 +61,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     function logout() {
+        clearCardsInfo();
         dispatch({
             type: 'LOGOUT',
         });
@@ -57,7 +75,7 @@ export const GlobalProvider = ({children}) => {
                 'Content-Type': 'application/json',
             },
             params: data
-            
+
         }
         return axios(requestUrl, requestOptions);
     }
@@ -87,7 +105,18 @@ export const GlobalProvider = ({children}) => {
     }
 
     return (
-        <GlobalContext.Provider value={{user: state.user, getUser, login, logout, getRequest, postRequest, putRequest}}>
+        <GlobalContext.Provider value={{
+            user: state.user,
+            cardsInfo: state.cardsInfo,
+            getUser,
+            login,
+            logout,
+            setCardsInfo,
+            clearCardsInfo,
+            getRequest,
+            postRequest,
+            putRequest
+        }}>
             {children}
         </GlobalContext.Provider>
     )

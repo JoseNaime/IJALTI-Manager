@@ -2,7 +2,6 @@ import React from 'react'
 import SkillsContainer from './SkillsContainer'
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png"
 import Status from './Status'
-import AddSkillContainer from "./AddSkillContainer";
 
 const CardDetails = ({cardInfo, fieldNames = {}}) => {
 
@@ -43,29 +42,31 @@ const CardDetails = ({cardInfo, fieldNames = {}}) => {
     return (
     <div className='flex flex-col basis-1/2'>
         <div className='w-auto h-full mx-5 relative'>
-            <div className='mt-3 flex flex-row gap-x-5'>
+            <div className='my-10  flex flex-row gap-x-5'>
                 <div>
-                    <img style={style.icon} className={""} src={CompanyIconTest} alt={cardInfo.titulo + "_icon"} />
+                    <img style={style.icon}
+                         className={""}
+                         src={CompanyIconTest}
+                         alt={cardInfo[fieldNames.title] + "_icon"} />
                 </div>
 
                 <div className='flex flex-row justify-between w-full'>
                     <div className='flex flex-col justify-center text-left w-full'>
                         <div className='flex flex-row justify-between'>
-                            <h1 style={style.h1}>{cardInfo.titulo}</h1>
-                            {cardInfo.status &&
+                            <h1 style={style.h1}>{cardInfo[fieldNames.title]}</h1>
+                            {cardInfo[fieldNames.status] &&
                                 <div className='mt-auto mb-auto'>
-                                    <Status status={cardInfo.status} fullForm={true} />
+                                    <Status status={cardInfo[fieldNames.status]} fullForm={true} />
                                 </div>
                             }
                         </div>
+                        <h2 className="font-medium opacity-40">{cardInfo[fieldNames.subTitle]}</h2>
 
                         <div style={style.details} className='flex flex-row gap-2'>
-                            <p>{cardInfo.nombrecomercial} | </p>
-                            <p>{cardInfo.ciudad} | </p>
-                            {!!fieldNames.date ?
+                            <p>{cardInfo[fieldNames.firstSpace]} | </p>
+                            <p>{cardInfo[fieldNames.secondSpace]} | </p>
+                            {!!fieldNames.date &&
                                 <p>{new Date(cardInfo[fieldNames.date]).toLocaleDateString()} </p>
-                                :
-                                <p>{new Date(cardInfo.postdate).toLocaleDateString()} </p>
                             }
 
                         </div>
@@ -75,26 +76,31 @@ const CardDetails = ({cardInfo, fieldNames = {}}) => {
                 </div>
             </div>
 
-            <hr className='mb-8 opacity-25' />
+            <hr className='mb-8 mt-5 opacity-25' />
 
             <div className="flex flex-col gap-5">
-                <SkillsContainer
-                    skills={cardInfo.habilidades}
-                />
-                <div className='mt-3 flex flex-col gap-4 text-left'>
-                    <h2 className="text-xl">Descripción</h2>
-                    <p>{cardInfo.descripcion}</p>
-                </div>
+                {cardInfo[fieldNames.skills].length > 0 &&
+                    <SkillsContainer
+                        skills={cardInfo[fieldNames.skills]}
+                    />
+                }
+                {cardInfo[fieldNames.description] &&
+                    <div className='mt-3 flex flex-col gap-4 text-left'>
+                        <h2 className="text-xl">Descripción</h2>
+                        <p>{cardInfo[fieldNames.description]}</p>
+                    </div>
+                }
             </div>
-            {cardInfo.buttonText &&
+            {/* TODO: Add dynamic button */}
+            {!!cardInfo[fieldNames.buttonText] &&
                 <div style={style.bottomContainer}>
-                    {cardInfo.counter &&
+                    {cardInfo[fieldNames.counter] &&
                         <div className='mb-5 m-2' style={style.counterText}>
-                            <p>Solicitudes: {cardInfo.counter}</p>
+                            <p>Solicitudes: {cardInfo[fieldNames.counter]}</p>
                         </div>
                     }
                     <div className='mr-5 mb-4 p-2 pl-6 pr-6 rounded-full' style={style.botonFondo}>
-                        <p>{cardInfo.buttonText}</p>
+                        <p>{cardInfo[fieldNames.buttonText]}</p>
                     </div>
                 </div>
             }

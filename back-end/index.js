@@ -510,8 +510,6 @@ app.get('/aplicacionesUsuario', (req,res)=>{
 
 });
 
-
-
 app.get('/buscarEmpleos', (req,res)=>{
 
     //Filtros  (Empresa, Titulo, Habilidades, Fecha?)

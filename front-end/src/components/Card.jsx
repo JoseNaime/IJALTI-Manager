@@ -73,25 +73,26 @@ function Card({isActive = true, isSelected = false, data, handleCardClick}) {
                 <img style={style.icon} className={"mx-4"} src={data.icon} alt={data.title + "_icon"} />
                 <div style={style.info} className="text-left py-2 justify-around">
                     <h3 className="font-bold max-h-fit">{data.title}</h3>
+                    <h4 className="font-medium opacity-40">{data.subTitle}</h4>
                     <p style={style.description}
                        className="w-80 opacity-50 leading-5 align-center">{data.description}</p>
                 </div>
             </div>
             <div>
                 <div style={style.topRight} className="flex flex-row">
-                    {data.optional.counter &&
+                    {data.counter &&
                         <div className="font-medium text-white text-center opacity-30 px-2 text-xs">
-                            <p>{data.optional.counter.title}: {data.optional.counter.count}</p>
+                            <p>{data.counter.title}: {data.counter.count}</p>
                         </div>
                     }
 
-                    {data.optional.status &&
-                        <Status status={data.optional.status} fullForm={false} />
+                    {data.status &&
+                        <Status status={data.status} fullForm={false} />
                     }
                 </div>
                 <div style={style.bottomRight}>
                     <div>
-                        <p className="font-medium opacity-50 text-sm">{data.optional.date}</p>
+                        <p className="font-medium opacity-50 text-sm">{data.date}</p>
                     </div>
                 </div>
             </div>
