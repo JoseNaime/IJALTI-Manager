@@ -12,50 +12,63 @@ const style = {
     },
     icon: {
         height: '55px',
-            width: '55px',
-        },
-        mainContent: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-        },
-        description:{
-            textOverflow: "ellipsis",
-            wordWrap: "break-word",
-            width: "80%",
-            overflow: "hidden",
-            display: "block"
-        },
-        info: {
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
+        width: '55px',
+    },
+    mainContent: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    description: {
+        textOverflow: "ellipsis",
+        wordWrap: "break-word",
+        width: "80%",
+        overflow: "hidden",
+        display: "block"
+    },
+    info: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
 
-        },
-        optionals: {
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-        },
-        topRight: {
-            position: 'absolute',
-            top: '8px',
-            right: '15px',
-            alignItems: 'center',
-        },
-        bottomRight: {
-            position: 'absolute',
-            bottom: '5px',
-            right: '15px',
-        },
+    },
+    optionals: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+    },
+    topRight: {
+        position: 'absolute',
+        top: '8px',
+        right: '15px',
+        alignItems: 'center',
+    },
+    bottomRight: {
+        position: 'absolute',
+        bottom: '5px',
+        right: '15px',
+    },
+    isSelected: {
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        top: "0",
+        left: "0",
+        backgroundColor: "rgba(0,128,255,0.2)",
     }
+}
 
 function Card({isActive = true, isSelected = false, data, handleCardClick}) {
 
     return (
         <div style={style.container}
-             className={(!isActive ? "opacity-60" : " ") + (isSelected ? "bg-primary" : " ")}
+             className={(!isActive ? "opacity-60" : " ")}
              onClick={(e) => handleCardClick(data.id)}>
+
+            {isSelected &&
+                <div style={style.isSelected} />
+            }
+
             <div style={style.mainContent}>
                 <img style={style.icon} className={"mx-4"} src={data.icon} alt={data.title + "_icon"} />
                 <div style={style.info} className="text-left py-2 justify-around">
