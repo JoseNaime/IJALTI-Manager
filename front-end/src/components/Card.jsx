@@ -70,7 +70,7 @@ function Card({isActive = true, isSelected = false, data, handleCardClick}) {
             }
 
             <div style={style.mainContent}>
-                <img style={style.icon} className={"mx-4"} src={data.icon} alt={data.title + "_icon"} />
+                <img style={style.icon} className={"mx-4 rounded-full"} src={data.icon} alt={data.title + "_icon"} />
                 <div style={style.info} className="text-left py-2 justify-around">
                     <h3 className="font-bold max-h-fit">{data.title}</h3>
                     <h4 className="font-medium opacity-40">{data.subTitle}</h4>

@@ -16,7 +16,7 @@ const CardDetails = ({cardInfo, fieldNames = {}}) => {
             opacity: "0.5"
         },
         icon: {
-          width: '100px',  
+            width: '100px',
         },
         bottomContainer: {
             display: 'flex',
@@ -38,75 +38,77 @@ const CardDetails = ({cardInfo, fieldNames = {}}) => {
             fontSize: '13px'
         }
     }
-  
-    return (
-    <div className='flex flex-col basis-1/2'>
-        <div className='w-auto h-full mx-5 relative'>
-            <div className='my-10  flex flex-row gap-x-5'>
-                <div>
-                    <img style={style.icon}
-                         className={""}
-                         src={CompanyIconTest}
-                         alt={cardInfo[fieldNames.title] + "_icon"} />
-                </div>
 
-                <div className='flex flex-row justify-between w-full'>
-                    <div className='flex flex-col justify-center text-left w-full'>
-                        <div className='flex flex-row justify-between'>
-                            <h1 style={style.h1}>{cardInfo[fieldNames.title]}</h1>
-                            {cardInfo[fieldNames.status] &&
-                                <div className='mt-auto mb-auto'>
-                                    <Status status={cardInfo[fieldNames.status]} fullForm={true} />
+    return (
+        <div className='flex flex-col basis-1/2'>
+            <div className='w-auto h-full mx-5 relative'>
+                <div className='mt-10 mb-5 flex flex-row gap-x-5'>
+                    <div>
+                        <img style={style.icon}
+                             className={""}
+                             src={CompanyIconTest}
+                             alt={cardInfo[fieldNames.title] + "_icon"} />
+                    </div>
+
+                    <div className='flex flex-row justify-between w-full'>
+                        <div className='flex flex-col justify-center text-left w-full'>
+                            <div className='flex flex-row justify-between'>
+                                <h1 style={style.h1}>{cardInfo[fieldNames.title]}</h1>
+                                {cardInfo[fieldNames.status] &&
+                                    <div className='mt-auto mb-auto'>
+                                        <Status status={cardInfo[fieldNames.status]} fullForm={true} />
+                                    </div>
+                                }
+                            </div>
+                            <h2 className="font-medium opacity-40">{cardInfo[fieldNames.subTitle]}</h2>
+
+                            {(cardInfo[fieldNames.firstSpace] || cardInfo[fieldNames.secondSpace] || cardInfo[fieldNames.date]) &&
+                                <div style={style.details} className='flex flex-row gap-2'>
+                                    {!!cardInfo[fieldNames.firstSpace] && <p>{cardInfo[fieldNames.firstSpace]}</p>}
+                                    {!!cardInfo[fieldNames.secondSpace] && <p> | {cardInfo[fieldNames.secondSpace]}</p>}
+                                    {!!fieldNames.date &&
+                                        <p>{new Date(cardInfo[fieldNames.date]).toLocaleDateString()} </p>
+                                    }
+
                                 </div>
                             }
                         </div>
-                        <h2 className="font-medium opacity-40">{cardInfo[fieldNames.subTitle]}</h2>
 
-                        <div style={style.details} className='flex flex-row gap-2'>
-                            <p>{cardInfo[fieldNames.firstSpace]} | </p>
-                            <p>{cardInfo[fieldNames.secondSpace]} | </p>
-                            {!!fieldNames.date &&
-                                <p>{new Date(cardInfo[fieldNames.date]).toLocaleDateString()} </p>
-                            }
 
-                        </div>
                     </div>
-
-
                 </div>
-            </div>
 
-            <hr className='mb-8 mt-5 opacity-25' />
+                <hr className='mb-2 opacity-25' />
 
-            <div className="flex flex-col gap-5">
-                {cardInfo[fieldNames.skills].length > 0 &&
-                    <SkillsContainer
-                        skills={cardInfo[fieldNames.skills]}
-                    />
-                }
-                {cardInfo[fieldNames.description] &&
-                    <div className='mt-3 flex flex-col gap-4 text-left'>
-                        <h2 className="text-xl">Descripción</h2>
-                        <p>{cardInfo[fieldNames.description]}</p>
-                    </div>
-                }
-            </div>
-            {/* TODO: Add dynamic button */}
-            {!!cardInfo[fieldNames.buttonText] &&
-                <div style={style.bottomContainer}>
-                    {cardInfo[fieldNames.counter] &&
-                        <div className='mb-5 m-2' style={style.counterText}>
-                            <p>Solicitudes: {cardInfo[fieldNames.counter]}</p>
+                <div className="flex flex-col gap-5">
+                    {cardInfo[fieldNames.skills].length > 0 &&
+                        <SkillsContainer
+                            skills={cardInfo[fieldNames.skills]}
+                        />
+                    }
+                    {cardInfo[fieldNames.description] &&
+                        <div className='mt-3 flex flex-col gap-2 text-left'>
+                            <h2 className="font-medium text-xl">Descripción</h2>
+                            <p className="opacity-60">{cardInfo[fieldNames.description]}</p>
                         </div>
                     }
-                    <div className='mr-5 mb-4 p-2 pl-6 pr-6 rounded-full' style={style.botonFondo}>
-                        <p>{cardInfo[fieldNames.buttonText]}</p>
-                    </div>
                 </div>
-            }
+                {/* TODO: Add dynamic button */}
+                {!!cardInfo[fieldNames.buttonText] &&
+                    <div style={style.bottomContainer}>
+                        {cardInfo[fieldNames.counter] &&
+                            <div className='mb-5 m-2' style={style.counterText}>
+                                <p>Solicitudes: {cardInfo[fieldNames.counter]}</p>
+                            </div>
+                        }
+                        <div className='mr-5 mb-4 p-2 pl-6 pr-6 rounded-full' style={style.botonFondo}>
+                            <p>{cardInfo[fieldNames.buttonText]}</p>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default CardDetails

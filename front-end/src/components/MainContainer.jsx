@@ -42,7 +42,6 @@ function MainContainer({children}) {
     const [menuOptions, setMenuOptions] = useState([]);
 
     useEffect(() => {
-            console.log("Menu Options: " + JSON.stringify(MENU_OPTIONS_BY_ROLE[user.role]))
             setMenuOptions(MENU_OPTIONS_BY_ROLE[user.role]);
         }, [user.role]);
 

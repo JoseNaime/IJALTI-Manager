@@ -86,10 +86,7 @@ function App() {
                                               title: 'nombrecompleto',
                                               subTitle: 'rolactual',
                                               description: 'biografia',
-                                              date: '',
                                               skills: 'habilidades',
-                                              firstSpace: 'correocontacto',
-                                              secondSpace: 'rolactual',
                                           }} />
                         } />
 

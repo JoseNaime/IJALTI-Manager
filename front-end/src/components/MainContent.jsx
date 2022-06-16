@@ -22,21 +22,21 @@ function MainContent({apiUrl, params, fieldNames}) {
     }
 
     useEffect(() => {
+        console.log("is any data: " + !!data)
         if (data && cardsInfo.length === 0) {
             console.log("Data from " + apiUrl)
             console.log(data)
             setCardsInfo(data);
-            setSelectedCardInfo(data[0]);
         }
 
-        if (cardsInfo.length > 0) {
-            setAuxCardsInfo(cardsInfo);
+        if (data && cardsInfo.length > 0) {
+            setAuxCardsInfo(data);
         }
 
-        if (auxCardsInfo.length > 0) {
+        if (auxCardsInfo.length > 0 && selectedCardInfo === null) {
             setSelectedCardInfo(auxCardsInfo[0]);
         }
-    }, [data, cardsInfo, auxCardsInfo, setCardsInfo, apiUrl]);
+    }, [data, auxCardsInfo, cardsInfo, selectedCardInfo, apiUrl, setCardsInfo]);
 
     return (
         <>
@@ -65,7 +65,6 @@ function MainContent({apiUrl, params, fieldNames}) {
                         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                             <div className="text-center">
                                 <h1 style={style.h1} className="font-bold opacity-50">NO HAY DATOS PARA MOSTRAR</h1>
-                                <p className="opacity-50">Si cree que esto se trata de un error, recargue la pagina</p>
                             </div>
                         </div>
                     </>
