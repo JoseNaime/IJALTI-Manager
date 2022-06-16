@@ -10,7 +10,7 @@ const style = {
     }
 }
 
-function MainContent({apiUrl, params, fieldNames}) {
+function MainContent({apiUrl, params, fieldNames, noDataButton}) {
     const {data, isLoading, error} = useFetch({url: apiUrl, method: "GET", params: params});
     const [auxCardsInfo, setAuxCardsInfo] = useState([]);
     const [selectedCardInfo, setSelectedCardInfo] = useState(null);
@@ -65,6 +65,7 @@ function MainContent({apiUrl, params, fieldNames}) {
                         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                             <div className="text-center">
                                 <h1 style={style.h1} className="font-bold opacity-50">NO HAY DATOS PARA MOSTRAR</h1>
+                                {}
                             </div>
                         </div>
                     </>

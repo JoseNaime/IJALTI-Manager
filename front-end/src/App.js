@@ -15,99 +15,88 @@ function App() {
 
     const RoutesByRole = () => {
         if (!user) {
-            return (
-                <Routes>
+            return (<Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="*" element={<Navigate to={'/login'} redirect />} />
-                </Routes>
-            )
+                </Routes>)
         }
 
         switch (user.role) {
             case 'usuario':
-                return (
-                    <Routes>
-                        <Route path="/ofertas" element={
-                            <DynamicRoute apiUrl={"/buscarEmpleos"}
-                                          fieldNames={{
-                                              id: 'empleoid',
-                                              title: 'titulo',
-                                              description: 'descripcion',
-                                              company: 'empresa',
-                                              firstSpace: 'nombrecomercial',
-                                              secondSpace: 'estado',
-                                              date: 'postdate',
-                                              skills: 'habilidades',
+                return (<Routes>
+                    <Route path="/ofertas" element={<DynamicRoute apiUrl={"/buscarEmpleos"}
+                                                                  fieldNames={{
+                                                                      id: 'empleoid',
+                                                                      title: 'titulo',
+                                                                      description: 'descripcion',
+                                                                      company: 'empresa',
+                                                                      firstSpace: 'nombrecomercial',
+                                                                      secondSpace: 'estado',
+                                                                      date: 'postdate',
+                                                                      skills: 'habilidades',
 
-                                          }} />
-                        } />
+                                                                  }} />} />
 
-                        <Route path="/mis-aplicaciones" element={
-                            <DynamicRoute apiUrl={"/aplicacionesUsuario"}
-                                          params={{"email": user && user.email}}
-                                          headers={{}}
-                                          fieldNames={{
-                                              id: 'empleoid',
-                                              title: 'titulo',
-                                              description: 'descripcion',
-                                              company: 'empresa',
-                                              firstSpace: 'nombrecomercial',
-                                              secondSpace: 'estado',
-                                              date: 'aplicacionfecha',
-                                              skills: 'habilidades',
-                                              status: 'status'
-                                          }} />
-                        } />
-                        <Route path="*" element={<Navigate to={'/ofertas'} redirect />} />
-                    </Routes>)
+                    <Route path="/mis-aplicaciones" element={<DynamicRoute apiUrl={"/aplicacionesUsuario"}
+                                                                           params={{"email": user && user.email}}
+                                                                           headers={{}}
+                                                                           fieldNames={{
+                                                                               id: 'empleoid',
+                                                                               title: 'titulo',
+                                                                               description: 'descripcion',
+                                                                               company: 'empresa',
+                                                                               firstSpace: 'nombrecomercial',
+                                                                               secondSpace: 'estado',
+                                                                               date: 'aplicacionfecha',
+                                                                               skills: 'habilidades',
+                                                                               status: 'status'
+                                                                           }} />} />
+                    <Route path="*" element={<Navigate to={'/ofertas'} redirect />} />
+                </Routes>)
             case 'empresa':
-                return (
-                    <Routes>
-                        <Route path="/mis-empleos" element={
-                            <DynamicRoute apiUrl={"/empleosEmpresa"}
-                                          params={{"email": user && user.email}}
-                                          headers={{}} f
-                                          ieldNames={{
-                                              id: 'empleoid',
-                                              title: 'titulo',
-                                              description: 'descripcion',
-                                              date: 'postdate',
-                                              skills: 'habilidades',
-                                              firstSpace: 'ciudad',
-                                              secondSpace: 'estado',
-                                          }} />
-                        } />
+                return (<Routes>
+                    <Route path="/mis-empleos" element={<DynamicRoute apiUrl={"/empleosEmpresa"}
+                                                                      params={{"email": user && user.email}}
+                                                                      headers={{}} f
+                                                                      ieldNames={{
+                                                                          id: 'empleoid',
+                                                                          title: 'titulo',
+                                                                          description: 'descripcion',
+                                                                          date: 'postdate',
+                                                                          skills: 'habilidades',
+                                                                          firstSpace: 'ciudad',
+                                                                          secondSpace: 'estado',
+                                                                      }}
+                                                                      noDataButton={{
+                                                                          title: 'Crear Empleo +',
+                                                                          handleClick: () => console.log("CreateFunction")
+                                                                      }}/>} />
 
-                        <Route path="/buscar-usuarios" element={
-                            <DynamicRoute apiUrl={"/buscarUsuarios"}
-                                          fieldNames={{
-                                              id: 'username',
-                                              title: 'nombrecompleto',
-                                              subTitle: 'rolactual',
-                                              description: 'biografia',
-                                              skills: 'habilidades',
-                                          }} />
-                        } />
+                    <Route path="/buscar-usuarios" element={<DynamicRoute apiUrl={"/buscarUsuarios"}
+                                                                          fieldNames={{
+                                                                              id: 'username',
+                                                                              title: 'nombrecompleto',
+                                                                              subTitle: 'rolactual',
+                                                                              description: 'biografia',
+                                                                              skills: 'habilidades',
+                                                                          }}
+                                                                           />} />
 
-                        <Route path="*" element={<Navigate to={'/mis-empleos'} redirect />} />
-                    </Routes>)
+                    <Route path="*" element={<Navigate to={'/mis-empleos'} redirect />} />
+                </Routes>)
             default:
-                return (
-                    <Routes>
+                return (<Routes>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="*" element={<Navigate to={'/login'} redirect />} />
-                    </Routes>
-                )
+                    </Routes>)
         }
     }
 
-    return (
-        <>
+    return (<>
             <RoutesByRole />
-        </>
-    );
+        </>);
 }
 
 export default App;

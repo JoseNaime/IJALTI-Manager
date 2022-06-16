@@ -16,7 +16,12 @@ function useFetch({url, method, body = null, params = null, headers = null}) {
                     method,
                     body: body,
                     params: params,
-                    headers: headers
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                        ...headers,
+
+                    }
                 });
                 if (response.data.length > 0) {
                     setData(response.data)

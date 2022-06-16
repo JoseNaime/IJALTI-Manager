@@ -43,6 +43,7 @@ function AddSkillContainer(props) {
     }, [data, skills]);
 
     return (
+        !error &&
         <div style={style.skillsGrid}>
             {skills && skills.map((skill, i) =>
                 <div onClick={(e) => handleDeleteSkill(skill)}>
@@ -56,6 +57,7 @@ function AddSkillContainer(props) {
             </div>
 
         </div>
+
     );
 }
 

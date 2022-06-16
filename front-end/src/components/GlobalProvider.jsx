@@ -73,6 +73,8 @@ export const GlobalProvider = ({children}) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET'
             },
             params: data
 
@@ -86,6 +88,8 @@ export const GlobalProvider = ({children}) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST'
             },
             data: body
         }
@@ -98,6 +102,8 @@ export const GlobalProvider = ({children}) => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'PUT'
             },
             data: body
         }
