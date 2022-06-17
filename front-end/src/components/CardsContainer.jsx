@@ -1,6 +1,7 @@
 import React from 'react';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import Card from "./Card";
+import SearchBarPremium from "./SearchBarPremium";
 
 
 const style = {
@@ -15,6 +16,7 @@ function CardsContainer({
                             handleCardClick,
                             fieldNames = {},
                             extraComponents = {},
+                            setFilters,
                             extraFunctions = {}
                         }) {
 
@@ -45,12 +47,21 @@ function CardsContainer({
         />)
     });
 
-    return (<div className="basis-1/2 flex flex-col">
-        {extraFunctions.ToggleCreateOfferContainer &&
-            <div style={style.toggleCreateOfferContainer} className="flex flex-row justify-center">
-                <button className="w-full h-full opacity-70" onClick={extraFunctions.ToggleCreateOfferContainer}>Crear Nuevo Empleo</button>
-            </div>}
-        {cards}
+    return (<div className="basis-1/2 flex flex-col relative">
+        <div className="w-full h-full mt-10">
+            {extraFunctions.ToggleCreateOfferContainer &&
+                <div style={style.toggleCreateOfferContainer} className="flex flex-row justify-center">
+                    <button className="w-full h-full opacity-70"
+                            onClick={extraFunctions.ToggleCreateOfferContainer}>Crear
+                                                                                Nuevo
+                                                                                Empleo
+                    </button>
+                </div>
+            }
+
+            {cards}
+        </div>
+        <SearchBarPremium setFilters={setFilters}/>
     </div>);
 }
 

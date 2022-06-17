@@ -13,6 +13,7 @@ const style = {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
         gap: "10px 20px",
+        width: "100%",
     }
 }
 

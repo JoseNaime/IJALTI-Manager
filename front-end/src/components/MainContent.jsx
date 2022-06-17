@@ -12,8 +12,10 @@ const style = {
 }
 
 function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}) {
+    const [filters, setFilters] = useState({firstField: {value: ''}, secondField: {value: ''}});
     const {data, isLoading} = useFetch({url: apiUrl, method: "GET", params: params});
     const [auxCardsInfo, setAuxCardsInfo] = useState([]);
+    const [filteredCardsInfo, setFilteredCardsInfo] = useState([]);
     const [selectedCardInfo, setSelectedCardInfo] = useState(null);
     const {cardsInfo, setCardsInfo} = useContext(GlobalContext);
 
@@ -21,6 +23,39 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}
         console.log(cardInfo)
         setSelectedCardInfo(cardInfo)
     }
+
+    const filterByFirstField = (name, value) => {
+        console.log("filterByFirstField", name, value)
+
+        if (value === '') {
+            return auxCardsInfo
+        }
+
+        return auxCardsInfo.filter(cardInfo => cardInfo.titulo.toLowerCase().includes(value.toLowerCase()));
+    }
+
+    const filterBySecondField = (name, value) => {
+        console.log("filterBySecondField", name, value)
+        const valuesToSearch = value.split(",");
+        console.log(valuesToSearch)
+
+        if (value === '') {
+            return auxCardsInfo
+        }
+
+
+        return auxCardsInfo.filter(cardInfo => {
+            return auxCardsInfo.some(cardInfo => cardInfo[name].includes(valuesToSearch));
+        })
+
+    }
+
+    useEffect(() => {
+        console.log(filters)
+
+        setFilteredCardsInfo(filterByFirstField(filters.firstField.name, filters.firstField.value))
+
+    }, [filters])
 
     const [isCreateOfferContainerVisible, setIsCreateOfferContainerVisible] = useState(false);
 
@@ -50,11 +85,12 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}
         <>
             {(selectedCardInfo && auxCardsInfo.length > 0) ?
                 <>
-                    <CardsContainer data={auxCardsInfo}
+                    <CardsContainer data={filteredCardsInfo.length > 0 ? filteredCardsInfo : auxCardsInfo}
                                     selectedCardInfoId={selectedCardInfo[fieldNames.id]}
                                     handleCardClick={handleCardClick}
                                     fieldNames={fieldNames}
-                                    extraFunctions={{ToggleCreateOfferContainer: extraComponents.card_CreateOffer && handleToggleCreateOfferContainer}}/>
+                                    setFilters={setFilters}
+                                    extraFunctions={{ToggleCreateOfferContainer: extraComponents.card_CreateOffer && handleToggleCreateOfferContainer}} />
                     <CardDetails
                         cardInfo={selectedCardInfo}
                         fieldNames={fieldNames}
@@ -88,7 +124,8 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}
                     </>
 
             }
-            {<CreateOfferContainer isOpen={isCreateOfferContainerVisible} handleClose={handleToggleCreateOfferContainer}/>}
+            {<CreateOfferContainer isOpen={isCreateOfferContainerVisible}
+                                   handleClose={handleToggleCreateOfferContainer} />}
         </>
     )
 }
