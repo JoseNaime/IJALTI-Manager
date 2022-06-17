@@ -1,1 +1,2 @@
 # IJALTI Manager
+*Bajo construcción.*
