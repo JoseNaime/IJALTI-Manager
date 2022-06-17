@@ -30,7 +30,6 @@ function SearchBar() {
             backgroundColor: '#4E4E4E',
             boxShadow: '0 0 10px 0 rgba(0,0,0,0.1)',
             position: 'absolute',
-            top: '0',
             left: '0',
             right: '0',
             marginLeft: 'auto',
