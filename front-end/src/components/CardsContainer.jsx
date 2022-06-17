@@ -2,7 +2,7 @@ import React from 'react';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import Card from "./Card";
 
-function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= {}}) {
+function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= {}, children}) {
 
 
     const cards = data.map((card, i) => {
@@ -29,7 +29,8 @@ function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= 
     });
 
     return (
-        <div className="basis-1/2 flex flex-col">
+        <div className="basis-1/2 flex flex-col mt-36 relative">
+            {children}
             {cards}
         </div>
     );

@@ -4,6 +4,8 @@ import CardsContainer from "./CardsContainer";
 import CardDetails from "./CardDetails";
 import {GlobalContext} from "./GlobalProvider";
 import CreateOfferContainer from "./CreateOfferContainer";
+import SearchBarPremium from './SearchBarPremium';
+import SearchBar from './SearchBar';
 
 const style = {
     h1: {
@@ -53,7 +55,10 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}
                     <CardsContainer data={auxCardsInfo}
                                     selectedCardInfoId={selectedCardInfo[fieldNames.id]}
                                     handleCardClick={handleCardClick}
-                                    fieldNames={fieldNames} />
+                                    fieldNames={fieldNames}> 
+                        <SearchBarPremium/>
+                            {/* <SearchBar/> */}
+                    </CardsContainer>
                     <CardDetails
                         cardInfo={selectedCardInfo}
                         fieldNames={fieldNames}
