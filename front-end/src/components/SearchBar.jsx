@@ -21,7 +21,8 @@ function SearchBar() {
             color: '#FFFFFF',
             transition: 'top 1s',
             borderRadius: '6px',
-            display: 'inline-block'
+            display: 'inline-block',
+            zIndex: '80'
         },
         containerHidden: {
             backgroundColor: '#4E4E4E',
@@ -33,7 +34,8 @@ function SearchBar() {
             transform: 'TranslateX(70%)',
             color: '#FFFFFF',
             transition: 'top 1s',
-            borderRadius: '6px'
+            borderRadius: '6px',
+            zIndex: '80'
         },
         tab: {
             backgroundColor: '#4E4E4E',
