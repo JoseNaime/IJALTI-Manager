@@ -2,7 +2,7 @@ import React from 'react';
 import MainContainer from "../components/MainContainer";
 import MainContent from "../components/MainContent";
 
-function DynamicRoute({apiUrl, params, headers, fieldNames, extraComponents={}}) {
+function DynamicRoute({apiUrl, params, headers, fieldNames, noDataButton, extraComponents={}}) {
     return (
         <>
             <MainContainer>
@@ -10,6 +10,7 @@ function DynamicRoute({apiUrl, params, headers, fieldNames, extraComponents={}})
                              params={params}
                              headers={headers}
                              fieldNames={fieldNames}
+                             noDataButton={noDataButton}
                              extraComponents={extraComponents} />
             </MainContainer>
         </>

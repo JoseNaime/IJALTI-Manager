@@ -11,6 +11,11 @@ const style = {
         bottom: 0,
         borderTop: 'solid 1px rgba(0,0,0,0.25)'
     },
+    content:{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
     button: {
         backgroundColor: '#4064AC',
         color: 'white',
@@ -22,17 +27,20 @@ const style = {
     }
 }
 
-function CardDetailExtraContainer({counter ,buttonText, handleClick}) {
+function CardDetailExtraContainer({counter, buttonText, handleClick, children}) {
     return (
         <div style={style.bottomContainer}>
-            {counter &&
-                <div className='mb-5 m-2' style={style.counterText}>
-                    <p className='text-sm opacity-50'>{counter.title}: {counter.count}</p>
-                </div>
-            }
-            <button onClick={handleClick} className='mr-5 mb-4 p-2 pl-6 pr-6 rounded-full' style={style.button}>
-                <p className="text-sm">{buttonText}</p>
-            </button>
+            <div style={style.content} className="relative w-full h-full">
+                {counter &&
+                    <div className='mb-5 m-2' style={style.counterText}>
+                        <p className='text-sm opacity-50'>{counter.title}: {counter.count}</p>
+                    </div>
+                }
+                <button onClick={handleClick} className='mr-5 mb-4 p-2 pl-6 pr-6 rounded-full' style={style.button}>
+                    <p className="text-sm">{buttonText}</p>
+                </button>
+                {children}
+            </div>
         </div>
     );
 }
