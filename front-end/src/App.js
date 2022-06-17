@@ -4,6 +4,7 @@ import Login from "./routes/Login";
 import {GlobalContext} from "./components/GlobalProvider";
 import Register from "./routes/Register";
 import DynamicRoute from "./routes/DynamicRoute";
+import ApplyToOffer from "./components/CardDetailsExtras/ApplyToOffer";
 
 
 function App() {
@@ -39,7 +40,11 @@ function App() {
                                                  date: 'postdate',
                                                  skills: 'habilidades',
 
-                                             }} />} />
+                                             }}
+                                             extraComponents={{
+                                                 cardDetail_ApplyToOffer: true
+                                             }}
+                               />} />
 
                     <Route path="/mis-aplicaciones"
                            element={
@@ -56,7 +61,10 @@ function App() {
                                                  date: 'aplicacionfecha',
                                                  skills: 'habilidades',
                                                  status: 'status'
-                                             }} />} />
+                                             }}
+
+                               />
+                           } />
                     <Route path="*" element={<Navigate to={'/ofertas'} redirect />} />
                 </Routes>)
             case 'empresa':
@@ -79,8 +87,8 @@ function App() {
                                                  test: false,
                                                  title: 'Crear Empleo +',
                                                  handleButtonClick: 'handleToggleCreateOfferContainer'
-                                             }}/>
-                    }/>
+                                             }} />
+                           } />
 
                     <Route path="/buscar-usuarios"
                            element={

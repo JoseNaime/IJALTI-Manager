@@ -11,7 +11,7 @@ const style = {
     }
 }
 
-function MainContent({apiUrl, params, fieldNames, noDataButton, children}) {
+function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}) {
     const {data, isLoading} = useFetch({url: apiUrl, method: "GET", params: params});
     const [auxCardsInfo, setAuxCardsInfo] = useState([]);
     const [selectedCardInfo, setSelectedCardInfo] = useState(null);
@@ -23,6 +23,7 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, children}) {
     }
 
     const [isCreateOfferContainerVisible, setIsCreateOfferContainerVisible] = useState(false);
+
     const handleToggleCreateOfferContainer = () => {
         console.log("handleToggleCreateOfferContainer")
         setIsCreateOfferContainerVisible(!isCreateOfferContainerVisible)
@@ -56,6 +57,7 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, children}) {
                     <CardDetails
                         cardInfo={selectedCardInfo}
                         fieldNames={fieldNames}
+                        extraComponents={extraComponents}
                     />
                 </>
                 :
