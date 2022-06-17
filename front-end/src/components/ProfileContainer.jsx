@@ -1,10 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import PatronFondo from "../assets/images/patron_fondo.png";
-import Menu from "./Menu";
-import ProfileIcon from "./ProfileIcon";
-import {MENU_OPTIONS_BY_ROLE} from "../json/MENU_OPTIONS_BY_ROLE";
-import {GlobalContext} from "./GlobalProvider";
-import ProfileContent from './ProfileContent';
 import useFetch from "../customHooks/useFetch";
 
 const style = {
@@ -37,22 +32,9 @@ const style = {
     },
 }
 
-function ProfileContainer({children, apiUrl, params}) {
+function ProfileContainer({children}) {
 
-    const {user} = useContext(GlobalContext);
-    const {data, isLoading, error} = useFetch({url: apiUrl, method: "GET", params: params});
-    const [profileInfo, setProfileInfo] = useState([]);
-    const [menuOptions, setMenuOptions] = useState([]);
-
-    useEffect(() => {
-        if (data) {
-            setProfileInfo(data);
-        }
-    }, [data]);
-
-    useEffect(() => {
-        setMenuOptions(MENU_OPTIONS_BY_ROLE[user.role]);
-    }, [user.role]);
+    //console.log(profileInfo[0].username);
 
     return (
         <div style={style.background} className="w-full h-full bg-gray">
@@ -60,8 +42,6 @@ function ProfileContainer({children, apiUrl, params}) {
                 <div className={"h-full w-full text-center"}>
                     <hr style={style.verticalLine} />
                     {children}
-                    <Menu menuOptions={menuOptions} />
-                    <ProfileContent />
                 </div>
             </div>
         </div>

@@ -23,7 +23,7 @@ function useFetch({url, method, body = null, params = null, headers = null}) {
 
                     }
                 });
-                if (response.data.length > 0) {
+                if (response.data != null) {
                     setData(response.data)
                 } else {
                     setData(null)

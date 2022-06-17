@@ -3,7 +3,7 @@ import SkillsContainer from './SkillsContainer';
 import ProfilePicture from "../assets/images/employee_profileIcon.png";
 import Status from './Status';
 
-const ProfileContent = () => {
+const ProfileContent = ({userInfo}) => {
 
     // console.log(data);
 
@@ -58,7 +58,7 @@ const ProfileContent = () => {
                 <img style={style.icon} className={""} src={ProfilePicture} alt= "_icon" />
                 <div className='flex flex-col justify-center text-left'>
                     <h1 style={style.h1}>John Doe</h1>
-                    <h2 className="font-medium opacity-40">Software Engineer</h2>
+                    <h2 className="font-medium opacity-40">{userInfo.rolactual}</h2>
                 </div>
                 {/* <ContactsContainer /> */}
             </div>
@@ -80,6 +80,7 @@ const ProfileContent = () => {
 
                 <div id='skills' style={style.rightContainer}>
                     <h2 className="font-medium text-xl opacity-60">Habilidades (Años):</h2> 
+                    <SkillsContainer skills={userInfo.habilidades}/> 
                 </div>
             </div>
         </>
