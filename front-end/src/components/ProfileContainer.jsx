@@ -1,6 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import PatronFondo from "../assets/images/patron_fondo.png";
-import useFetch from "../customHooks/useFetch";
 
 const style = {
     background: {
@@ -21,15 +20,7 @@ const style = {
         display: 'flex',
         flexDirection: 'row',
     },
-    verticalLine: {
-        height: "79%",
-        border: "none",
-        borderLeft: "1px solid #A6A6A6",
-        width: "1px",
-        position: "absolute",
-        opacity: "0.35",
-        transform: 'TranslateX(72000%) TranslateY(24%)'
-    },
+
 }
 
 function ProfileContainer({children}) {
@@ -39,8 +30,7 @@ function ProfileContainer({children}) {
     return (
         <div style={style.background} className="w-full h-full bg-gray">
             <div style={style.container} className={"w-full h-full bg-slate-50"}>
-                <div className={"h-full w-full text-center"}>
-                    <hr style={style.verticalLine} />
+                <div className={"h-full w-full text-left"}>
                     {children}
                 </div>
             </div>

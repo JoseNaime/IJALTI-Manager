@@ -4,6 +4,7 @@ import Login from "./routes/Login";
 import {GlobalContext} from "./components/GlobalProvider";
 import Register from "./routes/Register";
 import DynamicRoute from "./routes/DynamicRoute";
+import Account from "./routes/Account";
 
 
 function App() {
@@ -62,12 +63,15 @@ function App() {
                                                  skills: 'habilidades',
                                                  status: 'status'
                                              }}
-                                             extraComponents={{
-
-                                             }}
+                                             extraComponents={{}}
 
                                />
                            } />
+                    <Route path="/perfil"
+                           element={
+                               <Account />
+                           } />
+
                     <Route path="*" element={<Navigate to={'/ofertas'} redirect />} />
                 </Routes>)
             case 'empresa':
