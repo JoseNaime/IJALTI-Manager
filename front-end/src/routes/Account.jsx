@@ -7,9 +7,9 @@ import ProfileContainer from "../components/ProfileContainer";
 import ProfileContent from "../components/ProfileContent";
 import Menu from "../components/Menu";
 
-function Account() {
+function Account({apiUrl}) {
     const {user} = useContext(GlobalContext);
-    const {data, isLoading} = useFetch({url: "/userInfo", method: "GET", params: {email: user.email}});
+    const {data, isLoading} = useFetch({url: apiUrl, method: "GET", params: {email: user.email}});
     //const [userInfo, setUserInfo] = useState(null);
     const [menuOptions, setMenuOptions] = useState([]);
 

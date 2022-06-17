@@ -69,7 +69,7 @@ function App() {
                            } />
                     <Route path="/perfil"
                            element={
-                               <Account />
+                               <Account apiUrl={"/userInfo"}/>
                            } />
 
                     <Route path="*" element={<Navigate to={'/ofertas'} redirect />} />
@@ -119,6 +119,10 @@ function App() {
                                                  skills: 'habilidades',
                                              }}
                                />} />
+                    <Route path="/perfil"
+                           element={
+                               <Account apiUrl={'/empresaInfo'}/>
+                           } />
 
                     <Route path="*" element={<Navigate to={'/mis-empleos'} redirect />} />
                 </Routes>)
