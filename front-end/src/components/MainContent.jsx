@@ -24,6 +24,7 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}
         setSelectedCardInfo(cardInfo)
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const filterByFirstField = (name, value) => {
         console.log("filterByFirstField", name, value)
 
@@ -34,6 +35,7 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}
         return auxCardsInfo.filter(cardInfo => cardInfo.titulo.toLowerCase().includes(value.toLowerCase()));
     }
 
+    // eslint-disable-next-line no-unused-vars
     const filterBySecondField = (name, value) => {
         console.log("filterBySecondField", name, value)
         const valuesToSearch = value.split(",");
@@ -55,7 +57,7 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}
 
         setFilteredCardsInfo(filterByFirstField(filters.firstField.name, filters.firstField.value))
 
-    }, [filters])
+    }, [filterByFirstField, filters])
 
     const [isCreateOfferContainerVisible, setIsCreateOfferContainerVisible] = useState(false);
 

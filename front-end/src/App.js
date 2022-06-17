@@ -41,7 +41,8 @@ function App() {
 
                                              }}
                                              extraComponents={{
-                                                 cardDetail_ApplyToOffer: true
+                                                 cardDetail_ApplyToOffer: true,
+                                                 card_CreateOffer: false
                                              }}
                                />} />
 
@@ -60,6 +61,9 @@ function App() {
                                                  date: 'aplicacionfecha',
                                                  skills: 'habilidades',
                                                  status: 'status'
+                                             }}
+                                             extraComponents={{
+
                                              }}
 
                                />
