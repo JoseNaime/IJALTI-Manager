@@ -17,14 +17,15 @@ function ApplyToOffer({cardInfo}) {
             if (response.status === 201) {
                 alert("Aplicación enviada!")
             }
-
+            if (response.status === 404){
+                alert("Ya has aplicado a este empleo")
+            }
         })
-
     }
 
     return (
         <CardDetailExtraContainer
-            counter={{title: cardInfo.title, count: 20}}
+            counter={{title: "Solicitudes", count: cardInfo.numsolicitudes}}
             buttonText={"Aplicar"}
             handleClick={handleButtonClick}
         />

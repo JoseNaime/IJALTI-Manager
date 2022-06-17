@@ -3,6 +3,7 @@ import SkillsContainer from './SkillsContainer'
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png"
 import Status from './Status'
 import ApplyToOffer from "./CardDetailsExtras/ApplyToOffer";
+import SeeOfferApplications from "./CardDetailsExtras/SeeOfferApplications";
 
 const style = {
     h1: {
@@ -61,10 +62,13 @@ const CardDetails = ({cardInfo, fieldNames = {}, extraComponents}) => {
                     <p className="opacity-60">{cardInfo[fieldNames.description]}</p>
                 </div>}
             </div>
-            {extraComponents.cardDetail_ApplyToOffer &&
-                <ApplyToOffer cardInfo={cardInfo}
 
-                />}
+            {extraComponents.cardDetail_ApplyToOffer &&
+                <ApplyToOffer cardInfo={cardInfo} />
+            }
+            {extraComponents.cardDetail_SeeOfferApplications &&
+                <SeeOfferApplications cardInfo={cardInfo} />
+            }
 
         </div>
     </div>)

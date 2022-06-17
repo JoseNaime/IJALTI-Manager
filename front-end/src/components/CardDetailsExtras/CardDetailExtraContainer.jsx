@@ -27,7 +27,7 @@ function CardDetailExtraContainer({counter ,buttonText, handleClick}) {
         <div style={style.bottomContainer}>
             {counter &&
                 <div className='mb-5 m-2' style={style.counterText}>
-                    <p>{counter.title}: {counter.count}</p>
+                    <p className='text-sm opacity-50'>{counter.title}: {counter.count}</p>
                 </div>
             }
             <button onClick={handleClick} className='mr-5 mb-4 p-2 pl-6 pr-6 rounded-full' style={style.button}>
