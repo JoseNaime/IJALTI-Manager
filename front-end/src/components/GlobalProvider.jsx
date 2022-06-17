@@ -24,6 +24,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     function login(user) {
+        console.log(user);
         dispatch({
             type: 'LOGIN',
             payload: user
