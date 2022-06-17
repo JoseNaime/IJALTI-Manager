@@ -38,6 +38,7 @@ function FilterForm({title, type, toggleSearch, setFilters, placeHolders}) {
                 }
                 setFilters(filters);
                 toggleSearch();
+
             }}
 
             initialValues={{firstField: '', secondField: ''}}

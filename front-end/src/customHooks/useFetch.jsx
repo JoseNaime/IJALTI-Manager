@@ -11,7 +11,7 @@ function useFetch({url, method, body = null, params = null, headers = null}) {
         (async () => {
             try {
                 setIsLoading(true)
-                const response = await axios({
+                const res = await axios({
                     url: process.env.REACT_APP_API_URL + url,
                     method,
                     body: body,
@@ -20,21 +20,17 @@ function useFetch({url, method, body = null, params = null, headers = null}) {
                         'Access-Control-Allow-Origin': '*',
                         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
                         ...headers,
-
                     }
                 });
-                if (response.data.length > 0) {
-                    setData(response.data)
-                } else {
-                    setData(null)
-                }
+                res.data && setData(res.data);
             } catch (err) {
                 setError(err)
             } finally {
                 setIsLoading(false)
             }
         })();
-    }, [url, method, body, headers, params]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         {data, isLoading, error}

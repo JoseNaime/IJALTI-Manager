@@ -9,6 +9,9 @@ export const MENU_OPTIONS_BY_ROLE = {
             name: 'Mis Aplicaciones',
             apiUrl: '/misAplicaciones',
             url: '/mis-aplicaciones',
+        }, {
+            name: 'Perfil',
+            url: '/perfil',
         }],
     'empresa': [
         {
@@ -20,6 +23,9 @@ export const MENU_OPTIONS_BY_ROLE = {
             name: 'Usuarios',
             apiUrl: '/buscarUsuarios',
             url: '/buscar-usuarios',
+        }, {
+            name: 'Mi Empresa',
+            url: '/perfil',
         }
     ]
 }

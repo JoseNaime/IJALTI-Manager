@@ -17,7 +17,10 @@ function CardsContainer({
                             fieldNames = {},
                             extraComponents = {},
                             setFilters,
-                            extraFunctions = {}
+                            extraFunctions = {},
+                            showFilters = true,
+                            canSelect = true,
+                            noTopPadding = false,
                         }) {
 
     const getCount = (card, fieldToCount) => {
@@ -26,7 +29,7 @@ function CardsContainer({
 
     const cards = data.map((card, i) => {
         return (<Card key={i}
-                      isSelected={selectedCardInfoId === card[fieldNames.id]}
+                      isSelected={canSelect && selectedCardInfoId === card[fieldNames.id]}
                       isActive={true}
                       data={{
                           id: card[fieldNames.id],
@@ -48,7 +51,7 @@ function CardsContainer({
     });
 
     return (<div className="basis-1/2 flex flex-col relative">
-        <div className="w-full h-full mt-10">
+        <div className={"w-full h-full " + (noTopPadding ? "" : "mt-10")}>
             {extraFunctions.ToggleCreateOfferContainer &&
                 <div style={style.toggleCreateOfferContainer} className="flex flex-row justify-center">
                     <button className="w-full h-full opacity-70"
@@ -61,7 +64,7 @@ function CardsContainer({
 
             {cards}
         </div>
-        <SearchBarPremium setFilters={setFilters}/>
+        {showFilters && <SearchBarPremium setFilters={setFilters} />}
     </div>);
 }
 
