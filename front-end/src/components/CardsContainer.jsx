@@ -4,6 +4,9 @@ import Card from "./Card";
 
 function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= {}, children}) {
 
+    const getCount = (card, fieldToCount) => {
+        return card[fieldToCount].length > 0 ? card[fieldToCount].length : 0;
+    }
 
     const cards = data.map((card, i) => {
         return (<Card key={i}
@@ -18,8 +21,8 @@ function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= 
                           date: !!fieldNames.date ? new Date(card[fieldNames.date]).toLocaleDateString() : null,
                           status: card.status,
                           counter: !!fieldNames.counter && {
-                                title: card[fieldNames.counter.title],
-                                count: card[fieldNames.counter.count]
+                                title: fieldNames.counter.title,
+                                count: fieldNames.counter.dynamicCount ? getCount(card, fieldNames.counter.count):card[fieldNames.counter.count]
                           }
 
 

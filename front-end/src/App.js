@@ -4,7 +4,6 @@ import Login from "./routes/Login";
 import {GlobalContext} from "./components/GlobalProvider";
 import Register from "./routes/Register";
 import DynamicRoute from "./routes/DynamicRoute";
-import ApplyToOffer from "./components/CardDetailsExtras/ApplyToOffer";
 
 
 function App() {
@@ -82,12 +81,22 @@ function App() {
                                                  skills: 'habilidades',
                                                  firstSpace: 'ciudad',
                                                  secondSpace: 'estado',
+                                                 counter: {
+                                                     dynamicCount: true,
+                                                     title: "Aplicaciones",
+                                                     count: "solicitudes"
+                                                 }
                                              }}
                                              noDataButton={{
                                                  test: false,
                                                  title: 'Crear Empleo +',
                                                  handleButtonClick: 'handleToggleCreateOfferContainer'
-                                             }} />
+                                             }}
+                                             extraComponents={{
+                                                 cardDetail_SeeOfferApplications: true
+                                             }}
+                               />
+
                            } />
 
                     <Route path="/buscar-usuarios"
