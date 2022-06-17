@@ -1,14 +1,16 @@
 import React from 'react';
+import CompanyIconTest from "../assets/images/icons/skills/js.png";
 
-function Skill({icon, name, color}) {
+function Skill({icon= CompanyIconTest, name, color, canAddSkill = false}) {
     const style = {
         container: {
             display: 'flex',
             flexDirection: 'row',
+            height: "28px",
         },
         icon: {
-            width: "24px",
-            height: "24px",
+            width: "28px",
+            height: "28px",
         },
         content: {
             display: 'flex',
@@ -18,11 +20,23 @@ function Skill({icon, name, color}) {
     }
 
     return (
-        <div style={style.container}>
-            <img style={style.icon} src={icon} alt={name + "_icon"} />
-            <div style={style.content} className="px-3 flex items-center">
-                <p className="h-fit text-xs opacity-70">{name}</p>
-            </div>
+        <div style={style.container} className="w-full">
+            {!canAddSkill ? (
+                    <>
+                        <img style={style.icon} src={icon} alt={name + "_icon"} />
+                        <div style={style.content} className="px-3 flex items-center w-full">
+                            <p className="h-fit text-xs opacity-50 font-bold">{name}</p>
+                        </div>
+                    </>
+                )
+                : (
+                    <>
+                        <div style={style.content} className="px-3 flex items-center w-full rounded-full">
+                            <p className="h-fit text-xs opacity-70">Add Skill +</p>
+                        </div>
+                    </>
+                )}
+
         </div>
     );
 }

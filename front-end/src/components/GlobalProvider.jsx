@@ -1,9 +1,11 @@
-import React, {createContext, useReducer} from 'react';
+import React, {createContext, useEffect, useReducer} from 'react';
 import {AppReducer} from './AppReducer';
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const initialState = {
-    user: null
+    user: null,
+    cardsInfo: [],
 }
 
 export const GlobalContext = createContext(initialState);
@@ -11,20 +13,51 @@ export const GlobalContext = createContext(initialState);
 export const GlobalProvider = ({children}) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
+    useEffect(() => {
+        const user = Cookies.get('user');
+        console.log("GlobalProvider User: " + user);
+        if (user) {
+            dispatch({
+                type: 'SET_USER',
+                payload: user
+            });
+        }
+    }, []);
+
+    function setCardsInfo(cardsInfo) {
+        console.log("GlobalProvider setCardsInfo: ");
+        console.log(cardsInfo);
+        dispatch({
+            type: 'SET_CARDS_INFO',
+            payload: cardsInfo
+        });
+    }
+
+    function clearCardsInfo() {
+        console.log("GlobalProvider clearCardsInfo");
+        dispatch({
+            type: 'CLEAR_CARDS_INFO'
+        });
+    }
+
     function getUser() {
-        const storedUser = localStorage.getItem('user');
+        const storedUser = Cookies.get('user');
         if (storedUser) {
             console.log("GlobalContext: " + storedUser);
             dispatch({
                 type: 'SET_USER',
-                payload: JSON.parse(storedUser)
+                payload: storedUser
             })
         }
         return storedUser;
     }
 
     function login(user) {
+<<<<<<< HEAD
         console.log(user);
+=======
+        console.log(JSON.stringify(user))
+>>>>>>> d38ab66e5dd525f617351d838085627e0f492599
         dispatch({
             type: 'LOGIN',
             payload: user
@@ -32,6 +65,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     function logout() {
+        clearCardsInfo();
         dispatch({
             type: 'LOGOUT',
         });
@@ -43,9 +77,11 @@ export const GlobalProvider = ({children}) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET'
             },
             params: data
-            
+
         }
         return axios(requestUrl, requestOptions);
     }
@@ -56,6 +92,8 @@ export const GlobalProvider = ({children}) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST'
             },
             data: body
         }
@@ -68,6 +106,8 @@ export const GlobalProvider = ({children}) => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'PUT'
             },
             data: body
         }
@@ -75,7 +115,18 @@ export const GlobalProvider = ({children}) => {
     }
 
     return (
-        <GlobalContext.Provider value={{user: state.user, getUser, login, logout, getRequest, postRequest, putRequest}}>
+        <GlobalContext.Provider value={{
+            user: state.user,
+            cardsInfo: state.cardsInfo,
+            getUser,
+            login,
+            logout,
+            setCardsInfo,
+            clearCardsInfo,
+            getRequest,
+            postRequest,
+            putRequest
+        }}>
             {children}
         </GlobalContext.Provider>
     )

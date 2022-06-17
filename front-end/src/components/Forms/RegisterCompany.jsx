@@ -14,41 +14,7 @@ const RegisterCompany = ({registerType}) => {
     <div className='ml-10 mr-10'>
         <Formik
             initialValues={{nombreComercial: '', nombreFiscal: '', correoCuenta: '', password: '', passwordConfirm: '', telefonoContacto: '', estado: '', ciudad: ''}}
-            validate={values => {
-                //const errors = {};
 
-                // if (!values.nombreComercial)
-                //     errors.nombreComercial = 'Name Required';
-
-                // if (!values.nombreFiscal)
-                //     errors.nombreFiscal = 'Name Required';
-
-                // if (!values.correoCuenta)
-                //     errors.correoCuenta = 'Email Required';
-                // else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email))
-                //     errors.email = 'Invalid email address';
-
-                // if (!values.password)
-                //     errors.password = 'Password Required';
-
-                // if (!values.passwordConfirm)
-                //     errors.passwordConfirm = 'Confirmation Required';
-                // else if (values.passwordConfirm !== values.password)
-                //     errors.passwordConfirm = 'Passwords don\'t match';
-
-                // if (!values.telefonoContacto)
-                //     errors.telefonoContacto = 'Phone Number Required';
-                // // else if(values.telefonoContacto.length !== 10)
-                // //     errors.telefonoContacto = '10 digits Required';
-
-                // if (!values.estado)
-                //     errors.estado = 'State Required';
-                    
-                // if (!values.ciudad)
-                //     errors.ciudad = 'City Required';
-
-                // return errors; 
-            }}
             onSubmit={(values, {setSubmitting}) => {
                 console.log(values);
 

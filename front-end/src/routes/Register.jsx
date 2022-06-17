@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import RegisterType from "../components/RegisterType";
 import Logo from "../components/Logo";
 import RegisterEmployee from "../components/Forms/RegisterEmployee";

@@ -2,25 +2,24 @@ import React from 'react'
 import Skill from "./Skill";
 import CompanyIconTest from "../assets/images/icons/skills/js.png";
 
+const style = {
+    h2: {
+        fontWeight: "bold",
+        fontSize: "16px"
+    },
+    skillsGrid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
+        gap: "10px 20px",
+    }
+}
+
 const SkillsContainer = ({skills}) => {
 
-    const style = {
-        h2: {
-            fontWeight: "bold",
-            fontSize: "16px"
-        },
-        skillsGrid: {
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
-            gap: "10px 0",
-        }
-
-    }
-
-    const skillCards = skills.map((skill,i) => {
+    const skillCards = skills.map((skill, i) => {
         return (<Skill icon={CompanyIconTest}
-                       name={skill}
-                       color={"#FFF8BE"}
+                       name={skill.nombre}
+                       color={skill.color}
         />)
     })
 
