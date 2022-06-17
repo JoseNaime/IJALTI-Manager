@@ -1,5 +1,5 @@
 import React from 'react'
-import CreateOfferForm from './Forms/CreateOfferForm'
+import CreateOfferForm from "./Forms/CreateOfferForm";
 
 const style = {
     container: {
@@ -9,16 +9,21 @@ const style = {
         backgroundColor: '#FFFFFF',
         borderRadius: '35px',
         width: "920px",
-        height: "670px",
-        transform: 'TranslateY(8.2%) TranslateX(4.3%)',
-        //justifyContent: "center"
+        height: "auto",
+        left: "50%",
+        top: "50%",
+        transform: 'Translate(-50%, -50%)',
+        zIndex: "30",
     },
     blur: {
         position: "absolute",
         height: "100%",
-        width: "69%",
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        backdropFilter: "blur(5px)",
+        width: "100%",
+        top: 0,
+        left: 0,
+        backgroundColor: 'rgba(0,0,0,0.25)',
+        backdropFilter: "blur(3px)",
+        zIndex: "20"
     },
     btn: {
         position: "relative",
@@ -29,19 +34,24 @@ const style = {
         height: "30px",
         borderRadius: "5px",
         transform: 'TranslateY(2000%) TranslateX(-10%)',
+
     }
 }
 
-function CreateOfferContainer() {
-  return (
-    <>
-        <div style={style.blur}></div>
-        <div style={style.container}>
-            {/* <button className="primary-squared" style={style.btn}>Crear</button> */}
-            <CreateOfferForm />
-        </div>
-    </>
-  )
+function CreateOfferContainer({isOpen = false, handleClose}) {
+    return (
+        <>
+            {isOpen &&
+                <>
+                    <div style={style.blur}></div>
+                    <div style={style.container}>
+                        <button onClick={handleClose}>X</button>
+                        <CreateOfferForm />
+                    </div>
+                </>
+            }
+        </>
+    )
 }
 
 export default CreateOfferContainer

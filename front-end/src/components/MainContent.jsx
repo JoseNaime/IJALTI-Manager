@@ -3,6 +3,7 @@ import useFetch from "../customHooks/useFetch";
 import CardsContainer from "./CardsContainer";
 import CardDetails from "./CardDetails";
 import {GlobalContext} from "./GlobalProvider";
+import CreateOfferContainer from "./CreateOfferContainer";
 
 const style = {
     h1: {
@@ -10,7 +11,7 @@ const style = {
     }
 }
 
-function MainContent({apiUrl, params, fieldNames, noDataButton}) {
+function MainContent({apiUrl, params, fieldNames, noDataButton, children}) {
     const {data, isLoading} = useFetch({url: apiUrl, method: "GET", params: params});
     const [auxCardsInfo, setAuxCardsInfo] = useState([]);
     const [selectedCardInfo, setSelectedCardInfo] = useState(null);
@@ -19,6 +20,12 @@ function MainContent({apiUrl, params, fieldNames, noDataButton}) {
     const handleCardClick = (cardInfo) => {
         console.log(cardInfo)
         setSelectedCardInfo(cardInfo)
+    }
+
+    const [isCreateOfferContainerVisible, setIsCreateOfferContainerVisible] = useState(false);
+    const handleToggleCreateOfferContainer = () => {
+        console.log("handleToggleCreateOfferContainer")
+        setIsCreateOfferContainerVisible(!isCreateOfferContainerVisible)
     }
 
     useEffect(() => {
@@ -62,15 +69,23 @@ function MainContent({apiUrl, params, fieldNames, noDataButton}) {
                     </>
                     :
                     <>
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-light-gray px-10 py-8 shadow-2xl">
                             <div className="text-center">
                                 <h1 style={style.h1} className="font-bold opacity-50">NO HAY DATOS PARA MOSTRAR</h1>
-                                {}
+                                {noDataButton &&
+                                    <div className="bg-gray mt-3 px-7 py-3 rounded-full w-fit m-auto">
+                                        {/* eslint-disable-next-line no-eval */}
+                                        <button className="" onClick={eval(noDataButton.handleButtonClick)}>
+                                            <p className="opacity-50 font-medium">{noDataButton.title}</p>
+                                        </button>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </>
 
             }
+            {<CreateOfferContainer isOpen={isCreateOfferContainerVisible} handleClose={handleToggleCreateOfferContainer}/>}
         </>
     )
 }
