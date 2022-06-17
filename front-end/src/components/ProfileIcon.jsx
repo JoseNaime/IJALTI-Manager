@@ -12,7 +12,7 @@ function ProfileIcon() {
             width: '4.5rem',
             height: '4.5rem',
             background: '#FFFFFF',
-            'border-radius': '50%'
+            borderRadius: '50%'
         }
     }
     return (

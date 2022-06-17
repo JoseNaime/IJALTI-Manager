@@ -4,14 +4,15 @@ import MainContent from "../components/MainContent";
 
 function DynamicRoute({apiUrl, params, headers, fieldNames, noDataButton}) {
     return (
-        <MainContainer>
-            <MainContent apiUrl={apiUrl}
-                         params={params}
-                         headers={headers}
-                         fieldNames={fieldNames}
-                         noDataButton={noDataButton} />
-            />
-        </MainContainer>
+        <>
+            <MainContainer>
+                <MainContent apiUrl={apiUrl}
+                             params={params}
+                             headers={headers}
+                             fieldNames={fieldNames}
+                             noDataButton={noDataButton} />
+            </MainContainer>
+        </>
     );
 }
 

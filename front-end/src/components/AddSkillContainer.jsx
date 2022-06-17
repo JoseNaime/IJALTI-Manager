@@ -16,20 +16,25 @@ const style = {
     }
 }
 
-function AddSkillContainer(props) {
-    const {data, isLoading, error} = useFetch({url: "/habilidades", method: "GET"});
+function AddSkillContainer({setSelectedSkills = (skills) => {}}) {
+    const {data, error} = useFetch({url: "/habilidades", method: "GET"});
 
     const [skills, setSkills] = useState([]);
     const [allSkills, setAllSkills] = useState([]);
     const [isSkillSelectorOpen, setIsSkillSelectorOpen] = useState(false);
 
     const handleAddSkill = (skill) => {
-        setSkills([...skills, skill]);
+        const newSkills = [...skills, skill];
+
+        setSelectedSkills(newSkills);
+        setSkills(newSkills);
         setIsSkillSelectorOpen(false);
     }
 
     const handleDeleteSkill = (skill) => {
-        setSkills(skills.filter(s => s.nombre !== skill.nombre));
+        const newSkills = skills.filter(s => s.habilidadid !== skill.habilidadid);
+        setSelectedSkills(newSkills);
+        setSkills(newSkills);
     }
 
     const toggleSkillSelector = () => {
@@ -46,7 +51,7 @@ function AddSkillContainer(props) {
         !error &&
         <div style={style.skillsGrid}>
             {skills && skills.map((skill, i) =>
-                <div onClick={(e) => handleDeleteSkill(skill)}>
+                <div key={skill.habilidadid} onClick={(e) => handleDeleteSkill(skill)}>
                     <Skill name={skill.nombre} color={skill.color} />
                 </div>
             )}

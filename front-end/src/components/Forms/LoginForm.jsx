@@ -29,15 +29,23 @@ function LoginForm() {
                 return errors;
             }}
             onSubmit={(values, {setSubmitting}) => {
+                let newUser = {email: values.email}
                 
                 signInWithEmailAndPassword(auth, values.email, values.password)
                     .then((userCredential) => {
-                        getRequest("/getRol", {email: values.email}).then(res => {
+                        getRequest("/getRol", {email: values.email}).then(async res => {
+                            const rol = res.data.rol;
                             if (res.status === 200) {
-                                const newUser = {
-                                    email:values.email,
-                                    role:res.data.rol
-                                };
+                                // Add role to user
+                                newUser = {...newUser, role: rol}
+
+                                // If user rol is "empresa" get its id
+                                if (rol === "empresa") {
+                                    const infoEmpresa = await getRequest("/empresaInfo", {email: values.email})
+                                    newUser = {...newUser, id: infoEmpresa.data.empresaid}
+                                }
+
+                                // Add user to context
                                 login(newUser);
                             } else {
                                 setSubmitError(res.data);

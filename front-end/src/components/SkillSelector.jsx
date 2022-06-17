@@ -13,6 +13,7 @@ const style = {
         boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
         borderRadius: "15px",
         overflowY: "scroll",
+        zIndex: "100",
     },
     content: {
         display: "flex",
