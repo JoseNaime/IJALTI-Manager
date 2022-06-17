@@ -53,7 +53,8 @@ function MainContent({apiUrl, params, fieldNames, noDataButton, extraComponents}
                     <CardsContainer data={auxCardsInfo}
                                     selectedCardInfoId={selectedCardInfo[fieldNames.id]}
                                     handleCardClick={handleCardClick}
-                                    fieldNames={fieldNames} />
+                                    fieldNames={fieldNames}
+                                    extraFunctions={{ToggleCreateOfferContainer: extraComponents.card_CreateOffer && handleToggleCreateOfferContainer}}/>
                     <CardDetails
                         cardInfo={selectedCardInfo}
                         fieldNames={fieldNames}

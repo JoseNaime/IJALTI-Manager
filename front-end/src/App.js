@@ -93,7 +93,8 @@ function App() {
                                                  handleButtonClick: 'handleToggleCreateOfferContainer'
                                              }}
                                              extraComponents={{
-                                                 cardDetail_SeeOfferApplications: true
+                                                 cardDetail_SeeOfferApplications: true,
+                                                 card_CreateOffer: true
                                              }}
                                />
 

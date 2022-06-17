@@ -2,7 +2,21 @@ import React from 'react';
 import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 import Card from "./Card";
 
-function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= {}}) {
+
+const style = {
+    toggleCreateOfferContainer: {
+        height: "50px",
+    }
+}
+
+function CardsContainer({
+                            selectedCardInfoId,
+                            data,
+                            handleCardClick,
+                            fieldNames = {},
+                            extraComponents = {},
+                            extraFunctions = {}
+                        }) {
 
     const getCount = (card, fieldToCount) => {
         return card[fieldToCount].length > 0 ? card[fieldToCount].length : 0;
@@ -21,8 +35,8 @@ function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= 
                           date: !!fieldNames.date ? new Date(card[fieldNames.date]).toLocaleDateString() : null,
                           status: card.status,
                           counter: !!fieldNames.counter && {
-                                title: fieldNames.counter.title,
-                                count: fieldNames.counter.dynamicCount ? getCount(card, fieldNames.counter.count):card[fieldNames.counter.count]
+                              title: fieldNames.counter.title,
+                              count: fieldNames.counter.dynamicCount ? getCount(card, fieldNames.counter.count) : card[fieldNames.counter.count]
                           }
 
 
@@ -31,11 +45,13 @@ function CardsContainer({selectedCardInfoId, data, handleCardClick, fieldNames= 
         />)
     });
 
-    return (
-        <div className="basis-1/2 flex flex-col">
-            {cards}
-        </div>
-    );
+    return (<div className="basis-1/2 flex flex-col">
+        {extraFunctions.ToggleCreateOfferContainer &&
+            <div style={style.toggleCreateOfferContainer} className="flex flex-row justify-center">
+                <button className="w-full h-full opacity-70" onClick={extraFunctions.ToggleCreateOfferContainer}>Crear Nuevo Empleo</button>
+            </div>}
+        {cards}
+    </div>);
 }
 
 export default CardsContainer;

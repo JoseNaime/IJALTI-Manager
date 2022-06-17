@@ -1,6 +1,8 @@
 import React from 'react';
+import Card from "./Card";
+import CompanyIconTest from "../assets/images/icons/company_icon_test.png";
 
-const style= {
+const style = {
     container: {
         position: 'absolute',
         backgroundColor: 'white',
@@ -15,7 +17,21 @@ const style= {
 
 function OfferApplicationsContainer({offerApplications}) {
     return (
-        <div style={style.container} className="rounded-t-xl">
+        <div style={style.container} className="rounded-t-xl overflow-y-scroll">
+            <div>
+                {offerApplications.length>0 && offerApplications.map((offerApplication, index) => {
+                    return (
+                        <div key={index}>
+                            <Card data={{
+                                title: offerApplication.nombre + ' ' + offerApplication.apellido,
+                                icon: CompanyIconTest,
+                                subTitle: offerApplication.rolactual,
+                                date: new Date(offerApplication.aplicacionfecha).toLocaleDateString(),
+                            }} />
+                        </div>
+                    )
+                })}
+            </div>
 
         </div>
     );
